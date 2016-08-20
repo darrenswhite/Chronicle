@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ComboSimulator:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ComboSimulator_jar</output-path>
+    <root id="root">
+      <element id="archive" name="ComboSimulator.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/ComboSimulator_jar/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="Chronicle" />
+      </element>
+    </root>
+  </artifact>
+</component>
