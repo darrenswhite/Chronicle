@@ -110,16 +110,4 @@ public class Simulation implements Runnable {
 
 		return endRank != null && currRank.compareTo(endRank) < 0;
 	}
-
-	public void setLosses(long losses) {
-		this.losses = losses;
-	}
-
-	public void setTotal(long total) {
-		this.total = total;
-	}
-
-	public void setWins(long wins) {
-		this.wins = wins;
-	}
 }

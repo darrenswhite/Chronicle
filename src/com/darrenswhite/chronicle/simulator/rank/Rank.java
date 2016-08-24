@@ -128,5 +128,10 @@ public class Rank extends Number implements Comparable<Rank>, Cloneable {
 		public int getStartPosition() {
 			return startPosition;
 		}
+
+		@Override
+		public String toString() {
+			return name().toUpperCase().charAt(0) + name().substring(1).toLowerCase();
+		}
 	}
 }

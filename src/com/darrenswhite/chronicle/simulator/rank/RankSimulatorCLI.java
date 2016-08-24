@@ -56,7 +56,8 @@ public class RankSimulatorCLI {
 
 		sim.run();
 
-		System.out.println(sim.getOutput());
+		System.out.println(sim.getCSVOutput());
+
 	}
 
 	private static int parseInteger(String s) {

@@ -2,6 +2,8 @@ package com.darrenswhite.chronicle.simulator.rank;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 /**
@@ -107,31 +109,68 @@ public class Simulator implements Runnable {
 		StringBuilder sb = new StringBuilder();
 
 		if (games == -1) {
-			sb.append("Average: ").append(getAverageGames()).append("\n");
-			sb.append("Minimum: ").append(getPercentileGames(0)).append("\n");
-			sb.append("Maximum: ").append(getPercentileGames(1)).append("\n");
-			sb.append("10%: ").append(getPercentileGames(0.10)).append("\n");
-			sb.append("25%: ").append(getPercentileGames(0.25)).append("\n");
-			sb.append("50%: ").append(getPercentileGames(0.50)).append("\n");
-			sb.append("75%: ").append(getPercentileGames(0.75)).append("\n");
-			sb.append("90%: ").append(getPercentileGames(0.90)).append("\n");
+			sb.append("Average: ").append(getAverageGames()).append('\n');
+			sb.append("Minimum: ").append(getPercentileGames(0.00)).append('\n');
+			sb.append("Maximum: ").append(getPercentileGames(1.00)).append('\n');
+			sb.append("10%: ").append(getPercentileGames(0.10)).append('\n');
+			sb.append("25%: ").append(getPercentileGames(0.25)).append('\n');
+			sb.append("50%: ").append(getPercentileGames(0.50)).append('\n');
+			sb.append("75%: ").append(getPercentileGames(0.75)).append('\n');
+			sb.append("90%: ").append(getPercentileGames(0.90)).append('\n');
 		} else if (endRank == null) {
-			sb.append("Minimum: ").append(getPercentileRank(1)).append("\n");
-			sb.append("Maximum: ").append(getPercentileRank(0)).append("\n");
-			sb.append("10%: ").append(getPercentileRank(0.10)).append("\n");
-			sb.append("25%: ").append(getPercentileRank(0.25)).append("\n");
-			sb.append("50%: ").append(getPercentileRank(0.50)).append("\n");
-			sb.append("75%: ").append(getPercentileRank(0.75)).append("\n");
-			sb.append("90%: ").append(getPercentileRank(0.90)).append("\n");
+			sb.append("Minimum: ").append(getPercentileRank(1.00)).append('\n');
+			sb.append("Maximum: ").append(getPercentileRank(0.00)).append('\n');
+			sb.append("10%: ").append(getPercentileRank(0.10)).append('\n');
+			sb.append("25%: ").append(getPercentileRank(0.25)).append('\n');
+			sb.append("50%: ").append(getPercentileRank(0.50)).append('\n');
+			sb.append("75%: ").append(getPercentileRank(0.75)).append('\n');
+			sb.append("90%: ").append(getPercentileRank(0.90)).append('\n');
 		} else if (winRate == -1) {
-			sb.append("Average: ").append(getAverageWinRate()).append("\n");
-			sb.append("Minimum: ").append(getPercentileWinRate(0)).append("\n");
-			sb.append("Maximum: ").append(getPercentileWinRate(1)).append("\n");
-			sb.append("10%: ").append(getPercentileWinRate(0.10)).append("\n");
-			sb.append("25%: ").append(getPercentileWinRate(0.25)).append("\n");
-			sb.append("50%: ").append(getPercentileWinRate(0.50)).append("\n");
-			sb.append("75%: ").append(getPercentileWinRate(0.75)).append("\n");
-			sb.append("90%: ").append(getPercentileWinRate(0.90)).append("\n");
+			sb.append("Average: ").append(getAverageWinRate()).append('\n');
+			sb.append("Minimum: ").append(getPercentileWinRate(0.00)).append('\n');
+			sb.append("Maximum: ").append(getPercentileWinRate(1.00)).append('\n');
+			sb.append("10%: ").append(getPercentileWinRate(0.10)).append('\n');
+			sb.append("25%: ").append(getPercentileWinRate(0.25)).append('\n');
+			sb.append("50%: ").append(getPercentileWinRate(0.50)).append('\n');
+			sb.append("75%: ").append(getPercentileWinRate(0.75)).append('\n');
+			sb.append("90%: ").append(getPercentileWinRate(0.90)).append('\n');
+		}
+
+		return sb.toString();
+	}
+
+	public String getCSVOutput() {
+		StringBuilder sb = new StringBuilder();
+
+		if (games == -1) {
+			sb.append("Result,# of Games").append('\n');
+			sb.append("Average,").append(getAverageGames()).append('\n');
+			sb.append("Minimum,").append(getPercentileGames(0.00)).append('\n');
+			sb.append("Maximum,").append(getPercentileGames(1.00)).append('\n');
+			sb.append("10%,").append(getPercentileGames(0.10)).append('\n');
+			sb.append("25%,").append(getPercentileGames(0.25)).append('\n');
+			sb.append("50%,").append(getPercentileGames(0.50)).append('\n');
+			sb.append("75%,").append(getPercentileGames(0.75)).append('\n');
+			sb.append("90%,").append(getPercentileGames(0.90)).append('\n');
+		} else if (endRank == null) {
+			sb.append("Result,End Rank").append('\n');
+			sb.append("Minimum,").append(getPercentileRank(0.00)).append('\n');
+			sb.append("Maximum,").append(getPercentileRank(1.00)).append('\n');
+			sb.append("10%,").append(getPercentileRank(0.10)).append('\n');
+			sb.append("25%,").append(getPercentileRank(0.25)).append('\n');
+			sb.append("50%,").append(getPercentileRank(0.50)).append('\n');
+			sb.append("75%,").append(getPercentileRank(0.75)).append('\n');
+			sb.append("90%,").append(getPercentileRank(0.90)).append('\n');
+		} else if (winRate == -1) {
+			sb.append("Result,Win Rate %").append('\n');
+			sb.append("Average,").append(getAverageWinRate()).append('\n');
+			sb.append("Minimum,").append(getPercentileWinRate(0.00)).append('\n');
+			sb.append("Maximum,").append(getPercentileWinRate(1.00)).append('\n');
+			sb.append("10%,").append(getPercentileWinRate(0.10)).append('\n');
+			sb.append("25%,").append(getPercentileWinRate(0.25)).append('\n');
+			sb.append("50%,").append(getPercentileWinRate(0.50)).append('\n');
+			sb.append("75%,").append(getPercentileWinRate(0.75)).append('\n');
+			sb.append("90%,").append(getPercentileWinRate(0.90)).append('\n');
 		}
 
 		return sb.toString();
@@ -139,14 +178,18 @@ public class Simulator implements Runnable {
 
 	@Override
 	public void run() {
+		ExecutorService executor = Executors.newCachedThreadPool();
+
 		simulations = new Simulation[runs];
 
 		for (int i = 0; i < runs; i++) {
 			Simulation s = new Simulation(startRank, endRank, winRate, games);
 
-			s.run();
+			executor.execute(s);
 
 			simulations[i] = s;
 		}
+
+		executor.shutdown();
 	}
 }
