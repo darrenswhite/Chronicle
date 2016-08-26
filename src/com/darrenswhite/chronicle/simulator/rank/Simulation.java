@@ -13,13 +13,13 @@ public class Simulation implements Runnable {
 	private Rank currRank;
 	private Rank endRank;
 	private double winRate;
-	private long games;
+	private int games;
 
-	private long total = 0;
-	private long wins = 0;
-	private long losses = 0;
+	private int total = 0;
+	private int wins = 0;
+	private int losses = 0;
 
-	public Simulation(Rank startRank, Rank endRank, double winRate, long games) {
+	public Simulation(Rank startRank, Rank endRank, double winRate, int games) {
 		this.startRank = startRank;
 		this.endRank = endRank;
 		this.winRate = winRate;
@@ -30,11 +30,11 @@ public class Simulation implements Runnable {
 		return currRank;
 	}
 
-	public long getLosses() {
+	public int getLosses() {
 		return losses;
 	}
 
-	public long getTotalGames() {
+	public int getTotalGames() {
 		return total;
 	}
 
@@ -42,13 +42,13 @@ public class Simulation implements Runnable {
 		return (double) getWins() / (double) getTotalGames();
 	}
 
-	public long getWins() {
+	public int getWins() {
 		return wins;
 	}
 
 	@Override
 	public void run() {
-		long streak = 0;
+		int streak = 0;
 
 		if (winRate == -1) {
 			winRate = rnd.nextDouble();

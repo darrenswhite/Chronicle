@@ -12,7 +12,7 @@ public class RankSimulatorCLI {
 
 		Rank startRank = null, endRank = null;
 		double winRate = -1;
-		long games = -1;
+		int games = -1;
 		int runs = 100;
 
 		for (int i = 0; i < args.length; i++) {
@@ -43,7 +43,7 @@ public class RankSimulatorCLI {
 					break;
 				case "-g":
 				case "--games-played":
-					games = value == null ? -1 : Long.parseLong(value);
+					games = value == null ? -1 : Integer.parseInt(value);
 					break;
 				case "-n":
 				case "--simulations":
@@ -57,7 +57,6 @@ public class RankSimulatorCLI {
 		sim.run();
 
 		System.out.println(sim.getCSVOutput());
-
 	}
 
 	private static int parseInteger(String s) {

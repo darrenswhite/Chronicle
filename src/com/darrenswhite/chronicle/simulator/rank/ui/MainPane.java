@@ -49,7 +49,7 @@ public class MainPane extends GridPane {
 			Rank startRank = new Rank(startLeague.getValue(), Integer.parseInt(startPosition.getText()));
 			Rank endRank = endLeague.getValue() == Rank.League.NONE || endLeague.getValue() == null ? null : new Rank(endLeague.getValue(), endPosition.getText().trim().isEmpty() ? -1 : Integer.parseInt(endPosition.getText()));
 			double winRate = txtWinRate.getText().trim().isEmpty() ? -1 : (Double.parseDouble(txtWinRate.getText()) / 100D);
-			long games = txtGames.getText().trim().isEmpty() ? -1 : Long.parseLong(txtGames.getText());
+			int games = txtGames.getText().trim().isEmpty() ? -1 : Integer.parseInt(txtGames.getText());
 			int runs = Integer.parseInt(txtRuns.getText());
 
 			results.clear();

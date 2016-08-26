@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact build-on-make="true" name="RankSimulatorCLI:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/RankSimulatorCLI_jar</output-path>
+    <output-path>$PROJECT_DIR$/RankSimulatorCLI</output-path>
     <root id="root">
       <element id="archive" name="RankSimulatorCLI.jar">
         <element id="module-output" name="Chronicle" />
