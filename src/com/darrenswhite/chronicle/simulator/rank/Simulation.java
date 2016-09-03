@@ -46,6 +46,14 @@ public class Simulation implements Runnable {
 		return wins;
 	}
 
+	private void reset() {
+		currRank = startRank.copy();
+		winRate = rnd.nextDouble();
+		total = 0;
+		wins = 0;
+		losses = 0;
+	}
+
 	@Override
 	public void run() {
 		int streak = 0;
@@ -80,14 +88,6 @@ public class Simulation implements Runnable {
 
 	public void setCurrentRank(Rank currRank) {
 		this.currRank = currRank;
-	}
-
-	private void reset() {
-		currRank = startRank.copy();
-		winRate = rnd.nextDouble();
-		total = 0;
-		wins = 0;
-		losses = 0;
 	}
 
 	private boolean shouldRun() {

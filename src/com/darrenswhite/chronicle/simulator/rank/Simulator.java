@@ -1,30 +1,25 @@
 package com.darrenswhite.chronicle.simulator.rank;
 
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Darren White
  */
 public class Simulator implements Runnable {
 
+	private final Number[] predictions;
 	private final Rank startRank;
 	private final int runs;
-
+	private final Prediction prediction;
+	private final AtomicInteger index = new AtomicInteger();
 	private Rank endRank;
 	private double winRate;
 	private int games;
-
-	private Simulation[] simulations;
-
-	private Path tmp;
-
 	private int averageGames;
 	private double averageWinRate;
 
@@ -34,12 +29,18 @@ public class Simulator implements Runnable {
 		this.winRate = winRate;
 		this.runs = runs;
 		this.games = games;
-	}
 
-	private void checkSimulations() {
-		if (simulations == null) {
-			throw new IllegalStateException("Must run simulator first!");
+		if (games == -1) {
+			prediction = Prediction.TOTAL_GAMES;
+		} else if (endRank == null) {
+			prediction = Prediction.END_RANK;
+		} else if (winRate == -1) {
+			prediction = Prediction.WIN_RATE;
+		} else {
+			throw new IllegalArgumentException("We have nothing to predict!");
 		}
+
+		predictions = new Number[runs];
 	}
 
 	public long getAverageGames() {
@@ -53,35 +54,39 @@ public class Simulator implements Runnable {
 	public String getCSVOutput() {
 		StringBuilder sb = new StringBuilder();
 
-		if (games == -1) {
-			sb.append("Result,# of Games").append('\n');
-			sb.append("Average,").append(getAverageGames()).append('\n');
-			sb.append("Minimum,").append(getPercentileGames(0.00)).append('\n');
-			sb.append("Maximum,").append(getPercentileGames(1.00)).append('\n');
-			sb.append("10%,").append(getPercentileGames(0.10)).append('\n');
-			sb.append("25%,").append(getPercentileGames(0.25)).append('\n');
-			sb.append("50%,").append(getPercentileGames(0.50)).append('\n');
-			sb.append("75%,").append(getPercentileGames(0.75)).append('\n');
-			sb.append("90%,").append(getPercentileGames(0.90)).append('\n');
-		} else if (endRank == null) {
-			sb.append("Result,End Rank").append('\n');
-			sb.append("Minimum,").append(getPercentileRank(0.00)).append('\n');
-			sb.append("Maximum,").append(getPercentileRank(1.00)).append('\n');
-			sb.append("10%,").append(getPercentileRank(0.10)).append('\n');
-			sb.append("25%,").append(getPercentileRank(0.25)).append('\n');
-			sb.append("50%,").append(getPercentileRank(0.50)).append('\n');
-			sb.append("75%,").append(getPercentileRank(0.75)).append('\n');
-			sb.append("90%,").append(getPercentileRank(0.90)).append('\n');
-		} else if (winRate == -1) {
-			sb.append("Result,Win Rate %").append('\n');
-			sb.append("Average,").append(getAverageWinRate()).append('\n');
-			sb.append("Minimum,").append(getPercentileWinRate(0.00)).append('\n');
-			sb.append("Maximum,").append(getPercentileWinRate(1.00)).append('\n');
-			sb.append("10%,").append(getPercentileWinRate(0.10)).append('\n');
-			sb.append("25%,").append(getPercentileWinRate(0.25)).append('\n');
-			sb.append("50%,").append(getPercentileWinRate(0.50)).append('\n');
-			sb.append("75%,").append(getPercentileWinRate(0.75)).append('\n');
-			sb.append("90%,").append(getPercentileWinRate(0.90)).append('\n');
+		switch (prediction) {
+			case TOTAL_GAMES:
+				sb.append("Result,# of Games").append('\n');
+				sb.append("Average,").append(getAverageGames()).append('\n');
+				sb.append("Minimum,").append(getPercentileGames(0.00)).append('\n');
+				sb.append("Maximum,").append(getPercentileGames(1.00)).append('\n');
+				sb.append("10%,").append(getPercentileGames(0.10)).append('\n');
+				sb.append("25%,").append(getPercentileGames(0.25)).append('\n');
+				sb.append("50%,").append(getPercentileGames(0.50)).append('\n');
+				sb.append("75%,").append(getPercentileGames(0.75)).append('\n');
+				sb.append("90%,").append(getPercentileGames(0.90)).append('\n');
+				break;
+			case END_RANK:
+				sb.append("Result,End Rank").append('\n');
+				sb.append("Minimum,").append(getPercentileRank(0.00)).append('\n');
+				sb.append("Maximum,").append(getPercentileRank(1.00)).append('\n');
+				sb.append("10%,").append(getPercentileRank(0.10)).append('\n');
+				sb.append("25%,").append(getPercentileRank(0.25)).append('\n');
+				sb.append("50%,").append(getPercentileRank(0.50)).append('\n');
+				sb.append("75%,").append(getPercentileRank(0.75)).append('\n');
+				sb.append("90%,").append(getPercentileRank(0.90)).append('\n');
+				break;
+			case WIN_RATE:
+				sb.append("Result,Win Rate %").append('\n');
+				sb.append("Average,").append(getAverageWinRate()).append('\n');
+				sb.append("Minimum,").append(getPercentileWinRate(0.00)).append('\n');
+				sb.append("Maximum,").append(getPercentileWinRate(1.00)).append('\n');
+				sb.append("10%,").append(getPercentileWinRate(0.10)).append('\n');
+				sb.append("25%,").append(getPercentileWinRate(0.25)).append('\n');
+				sb.append("50%,").append(getPercentileWinRate(0.50)).append('\n');
+				sb.append("75%,").append(getPercentileWinRate(0.75)).append('\n');
+				sb.append("90%,").append(getPercentileWinRate(0.90)).append('\n');
+				break;
 		}
 
 		return sb.toString();
@@ -90,86 +95,98 @@ public class Simulator implements Runnable {
 	public String getOutput() {
 		StringBuilder sb = new StringBuilder();
 
-		if (games == -1) {
-			sb.append("Average: ").append(getAverageGames()).append('\n');
-			sb.append("Minimum: ").append(getPercentileGames(0.00)).append('\n');
-			sb.append("Maximum: ").append(getPercentileGames(1.00)).append('\n');
-			sb.append("10%: ").append(getPercentileGames(0.10)).append('\n');
-			sb.append("25%: ").append(getPercentileGames(0.25)).append('\n');
-			sb.append("50%: ").append(getPercentileGames(0.50)).append('\n');
-			sb.append("75%: ").append(getPercentileGames(0.75)).append('\n');
-			sb.append("90%: ").append(getPercentileGames(0.90)).append('\n');
-		} else if (endRank == null) {
-			sb.append("Minimum: ").append(getPercentileRank(1.00)).append('\n');
-			sb.append("Maximum: ").append(getPercentileRank(0.00)).append('\n');
-			sb.append("10%: ").append(getPercentileRank(0.10)).append('\n');
-			sb.append("25%: ").append(getPercentileRank(0.25)).append('\n');
-			sb.append("50%: ").append(getPercentileRank(0.50)).append('\n');
-			sb.append("75%: ").append(getPercentileRank(0.75)).append('\n');
-			sb.append("90%: ").append(getPercentileRank(0.90)).append('\n');
-		} else if (winRate == -1) {
-			sb.append("Average: ").append(getAverageWinRate()).append('\n');
-			sb.append("Minimum: ").append(getPercentileWinRate(0.00)).append('\n');
-			sb.append("Maximum: ").append(getPercentileWinRate(1.00)).append('\n');
-			sb.append("10%: ").append(getPercentileWinRate(0.10)).append('\n');
-			sb.append("25%: ").append(getPercentileWinRate(0.25)).append('\n');
-			sb.append("50%: ").append(getPercentileWinRate(0.50)).append('\n');
-			sb.append("75%: ").append(getPercentileWinRate(0.75)).append('\n');
-			sb.append("90%: ").append(getPercentileWinRate(0.90)).append('\n');
+		switch (prediction) {
+			case TOTAL_GAMES:
+				sb.append("Average: ").append(getAverageGames()).append('\n');
+				sb.append("Minimum: ").append(getPercentileGames(0.00)).append('\n');
+				sb.append("Maximum: ").append(getPercentileGames(1.00)).append('\n');
+				sb.append("10%: ").append(getPercentileGames(0.10)).append('\n');
+				sb.append("25%: ").append(getPercentileGames(0.25)).append('\n');
+				sb.append("50%: ").append(getPercentileGames(0.50)).append('\n');
+				sb.append("75%: ").append(getPercentileGames(0.75)).append('\n');
+				sb.append("90%: ").append(getPercentileGames(0.90)).append('\n');
+				break;
+			case END_RANK:
+				sb.append("Minimum: ").append(getPercentileRank(1.00)).append('\n');
+				sb.append("Maximum: ").append(getPercentileRank(0.00)).append('\n');
+				sb.append("10%: ").append(getPercentileRank(0.10)).append('\n');
+				sb.append("25%: ").append(getPercentileRank(0.25)).append('\n');
+				sb.append("50%: ").append(getPercentileRank(0.50)).append('\n');
+				sb.append("75%: ").append(getPercentileRank(0.75)).append('\n');
+				sb.append("90%: ").append(getPercentileRank(0.90)).append('\n');
+				break;
+			case WIN_RATE:
+				sb.append("Average: ").append(getAverageWinRate()).append('\n');
+				sb.append("Minimum: ").append(getPercentileWinRate(0.00)).append('\n');
+				sb.append("Maximum: ").append(getPercentileWinRate(1.00)).append('\n');
+				sb.append("10%: ").append(getPercentileWinRate(0.10)).append('\n');
+				sb.append("25%: ").append(getPercentileWinRate(0.25)).append('\n');
+				sb.append("50%: ").append(getPercentileWinRate(0.50)).append('\n');
+				sb.append("75%: ").append(getPercentileWinRate(0.75)).append('\n');
+				sb.append("90%: ").append(getPercentileWinRate(0.90)).append('\n');
+				break;
 		}
 
 		return sb.toString();
 	}
 
-	public <T extends Number> T getPercentile(double percent, Comparator<Simulation> cmp, Function<Simulation, T> f) {
-		checkSimulations();
-
-		Arrays.sort(simulations, cmp);
-
-		int i, n = simulations.length - 1;
+	public Number getPercentile(double percent) {
+		int i, n = predictions.length - 1;
 		long sum, total;
 
+		Arrays.parallelSort(predictions, (p, q) -> Long.compare(p.longValue(), q.longValue()));
+
 		for (i = 0, total = 0; i < n; i++) {
-			total += f.apply(simulations[i]).longValue();
+			total += predictions[i].longValue();
 		}
 
 		for (i = 0, sum = 0; i < n && sum < percent * total; i++) {
-			sum += f.apply(simulations[i]).longValue();
+			sum += predictions[i].longValue();
 		}
 
-		return f.apply(simulations[i]);
+		return predictions[i];
 	}
 
 	public int getPercentileGames(double percent) {
-		return getPercentile(percent, (s1, s2) -> Long.compare(s1.getWins(), s2.getWins()), Simulation::getTotalGames);
+		return (int) getPercentile(percent);
 	}
 
 	public Rank getPercentileRank(double percent) {
-		return getPercentile(percent, (s1, s2) -> (s2.getCurrentRank().compareTo(s1.getCurrentRank())), Simulation::getCurrentRank);
+		return (Rank) getPercentile(percent);
 	}
 
 	public double getPercentileWinRate(double percent) {
-		return getPercentile(percent, (s1, s2) -> (Double.compare(s1.getWinRate(), s2.getWinRate())), s -> s.getWinRate() * 100D);
+		return (double) getPercentile(percent);
 	}
 
 	@Override
 	public void run() {
-		ExecutorService executor = Executors.newCachedThreadPool();
+		ExecutorService executor = Executors.newWorkStealingPool();
 		AtomicInteger totalGames = new AtomicInteger();
 		AtomicReference<Double> totalWinRate = new AtomicReference<>(0D);
-
-		simulations = new Simulation[runs];
+		ReentrantLock lock = new ReentrantLock();
 
 		for (int i = 0; i < runs; i++) {
 			Simulation s = new Simulation(startRank, endRank, winRate, games);
 
 			executor.execute(() -> {
 				s.run();
+
 				totalGames.accumulateAndGet(s.getTotalGames(), (l, r) -> l + r);
 				totalWinRate.accumulateAndGet(s.getWinRate(), (l, r) -> l + r);
-			});
 
-			simulations[i] = s;
+				switch (prediction) {
+					case TOTAL_GAMES:
+						predictions[index.getAndIncrement()] = s.getTotalGames();
+						break;
+					case END_RANK:
+						predictions[index.getAndIncrement()] = s.getCurrentRank();
+						break;
+					case WIN_RATE:
+						predictions[index.getAndIncrement()] = s.getWinRate();
+						break;
+				}
+			});
 		}
 
 		executor.shutdown();
@@ -183,5 +200,9 @@ public class Simulator implements Runnable {
 
 		averageGames = totalGames.get() / runs;
 		averageWinRate = (totalWinRate.get() / runs) * 100D;
+	}
+
+	private enum Prediction {
+		TOTAL_GAMES, END_RANK, WIN_RATE
 	}
 }

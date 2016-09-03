@@ -45,6 +45,7 @@ public class MainPane extends GridPane {
 		results.setEditable(false);
 		btnRun.setOnAction(e -> new Thread(() -> {
 			btnRun.setDisable(true);
+			results.clear();
 
 			Rank startRank = new Rank(startLeague.getValue(), Integer.parseInt(startPosition.getText()));
 			Rank endRank = endLeague.getValue() == Rank.League.NONE || endLeague.getValue() == null ? null : new Rank(endLeague.getValue(), endPosition.getText().trim().isEmpty() ? -1 : Integer.parseInt(endPosition.getText()));
@@ -52,14 +53,11 @@ public class MainPane extends GridPane {
 			int games = txtGames.getText().trim().isEmpty() ? -1 : Integer.parseInt(txtGames.getText());
 			int runs = Integer.parseInt(txtRuns.getText());
 
-			results.clear();
-
 			Simulator sim = new Simulator(startRank, endRank, winRate, games, runs);
 
 			sim.run();
 
 			results.setText(sim.getOutput());
-
 			btnRun.setDisable(false);
 		}).start());
 		btnRun.setDefaultButton(true);
