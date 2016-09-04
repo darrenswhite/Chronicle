@@ -22,6 +22,10 @@ public class Game {
 	private Player rival;
 	private int index;
 
+	public Game() {
+		this(2, 0, 30, 0, null);
+	}
+
 	public Game(int base, int gold, int health, int armour, Weapon weapon) {
 		this.base = base;
 		this.gold = gold;
@@ -34,6 +38,12 @@ public class Game {
 
 	public void addCard(Card c) {
 		cards.add(c.getBuilder().create());
+	}
+
+	public void addCards(Card[] cards) {
+		for (Card c : cards) {
+			addCard(c);
+		}
 	}
 
 	public void addCards(Collection<Card> cards) {
@@ -60,18 +70,6 @@ public class Game {
 		return health;
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
-
-	public Player getRival() {
-		return rival;
-	}
-
-	public Weapon getWeapon() {
-		return weapon;
-	}
-
 	public <T extends Card> Optional<T> getNextCard() {
 		return getNextCard(card -> true);
 	}
@@ -90,6 +88,18 @@ public class Game {
 		}
 
 		return Optional.empty();
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public Player getRival() {
+		return rival;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
 	}
 
 	public void reset() {
@@ -120,7 +130,6 @@ public class Game {
 
 	public void start() {
 		Iterator<Card> it = cards.iterator();
-		boolean tempAttack = false;
 
 		index = 0;
 
@@ -133,15 +142,8 @@ public class Game {
 
 			c.encounter(Game.this);
 
-			if (tempAttack) {
-				player.setBase(player.getBase() - player.getTemporaryAttack());
-				player.setTemporaryAttack(0);
-				tempAttack = false;
-			}
-
 			if (player.getTemporaryAttack() > 0) {
-				player.setBase(player.getBase() + player.getTemporaryAttack());
-				tempAttack = true;
+				player.setTemporaryAttack(0);
 			}
 
 			if (player.getWeapon() != null && player.getWeapon().getDurability() == 0) {

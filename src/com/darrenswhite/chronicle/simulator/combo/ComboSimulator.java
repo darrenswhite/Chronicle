@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class ComboSimulator {
 
-	private final Game game = new Game(2, 0, 30, 0, null);
+	private final Game game = new Game();
 	private final List<List<Card>> combos = new LinkedList<List<Card>>() {{
 		add(new LinkedList<>());
 	}};
@@ -75,22 +75,27 @@ public class ComboSimulator {
 	public static void main(String[] args) {
 		ComboSimulator sim = new ComboSimulator();
 
-		sim.addCards("Sergeant Slimetoes", "Worthy Opponent", "Worthy Opponent", "Grotworm", "Yelps", "Vampyre Power", "Gluttonous Behemoth");
+		sim.addCards("Tormented Demon", "Shug", "Tenebra", "Alpha Werewolf");
 		sim.simulate();
 
-		System.out.println();
+		/*System.out.println();
 		System.out.println("--------------------------------------------------------------------------------------------------------");
 		System.out.println();
 
 		sim.reset();
-		sim.addCards("Kalphite Soldier", "Kalphite Soldier", "Strength Potion", "Tenebra");
+		sim.addCards("Sergeant Slimetoes", "Mithril Dragon", "Fight Cauldron", "Kalphite Soldier");
 		sim.simulate();
 
 		System.out.println();
 		System.out.println("--------------------------------------------------------------------------------------------------------");
 		System.out.println();
 
-		sim.simulate(0);
+		sim.simulate(0);*/
+	}
+
+	public void reset() {
+		combos.add(new LinkedList<>());
+		index = combos.size() - 1;
 	}
 
 	public void simulate() {
@@ -102,7 +107,6 @@ public class ComboSimulator {
 		System.out.println("Rival: " + game.getRival());
 		System.out.println();
 
-		game.reset();
 		game.addCards(combos.get(index));
 		game.start();
 
@@ -112,10 +116,5 @@ public class ComboSimulator {
 		System.out.println("Rival: " + game.getRival());
 
 		game.reset();
-	}
-
-	public void reset() {
-		combos.add(new LinkedList<>());
-		index = combos.size() - 1;
 	}
 }

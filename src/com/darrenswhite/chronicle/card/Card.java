@@ -13,13 +13,26 @@ public interface Card {
 
 	Effect getEffect();
 
+	Legend getLegend();
+
 	String getName();
+
+	Rarity getRarity();
 
 	Reward getReward();
 
 	Type getType();
 
+	enum Legend {
+		ALL, ARIANE, LINZA, MORVRAN, OZAN, RAPTOR, VANESCULA
+	}
+
+	enum Rarity {
+		BASIC, SAPPHIRE, EMERALD, RUBY, DIAMOND
+	}
+
 	enum Type {
-		ALLY, BEAST, DEMON, EQUIPMENT, GOBLIN, KALPHITE, POTION, SPELL, TZHAAR, VAMPYRE, NONE
+		ALLY, BEAST, DEMON, EQUIPMENT, FAMILIAR, GOBLIN, LOCATION, KALPHITE,
+		PIRATE, POTION, SPELL, TZHAAR, VAMPYRE, NONE
 	}
 }

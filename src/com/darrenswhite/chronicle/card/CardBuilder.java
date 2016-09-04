@@ -9,7 +9,11 @@ public interface CardBuilder {
 
 	CardBuilder effect(Effect effect);
 
+	CardBuilder legend(Card.Legend legend);
+
 	CardBuilder name(String name);
+
+	CardBuilder rarity(Card.Rarity rarity);
 
 	CardBuilder reward(Reward reward);
 

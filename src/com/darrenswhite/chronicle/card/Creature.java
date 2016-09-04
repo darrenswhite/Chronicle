@@ -11,16 +11,22 @@ public class Creature implements Card {
 	private final Builder builder;
 	private final String name;
 	private final Type type;
+	private final Rarity rarity;
 	private final Effect effect;
 	private final Reward reward;
+	private final Legend legend;
 	private int attack;
 	private int health;
 	private boolean aggressive;
 
-	private Creature(Builder builder, String name, Type type, Effect effect, Reward reward, int attack, int health, boolean aggressive) {
+	private Creature(Builder builder, String name, Type type, Rarity rarity,
+	                 Legend legend, Effect effect, Reward reward, int attack,
+	                 int health, boolean aggressive) {
 		this.builder = builder;
 		this.name = name;
 		this.type = type;
+		this.rarity = rarity;
+		this.legend = legend;
 		this.effect = effect;
 		this.reward = reward;
 		this.attack = attack;
@@ -39,9 +45,8 @@ public class Creature implements Card {
 
 		while (health > 0) {
 			Weapon w = p.getWeapon();
-			wAtk = w != null ? w.getAttack() : 0;
 			wDur = w != null ? w.getDurability() : 0;
-			totalAtk = p.getBase() + wAtk;
+			totalAtk = p.getTotalAttack();
 
 			if (aggressive || hits > 0) {
 				p.dealDamage(attack);
@@ -87,8 +92,18 @@ public class Creature implements Card {
 	}
 
 	@Override
+	public Legend getLegend() {
+		return legend;
+	}
+
+	@Override
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public Rarity getRarity() {
+		return rarity;
 	}
 
 	@Override
@@ -135,6 +150,8 @@ public class Creature implements Card {
 		public static final Builder instance = new Builder();
 		private String name;
 		private Type type = Type.NONE;
+		private Rarity rarity = null;
+		private Legend legend = Legend.ALL;
 		private Effect effect = Effect.none();
 		private Reward reward = Reward.NONE;
 		private int attack = -1;
@@ -161,7 +178,11 @@ public class Creature implements Card {
 				throw new IllegalArgumentException("Creature must have attack and health values!");
 			}
 
-			return new Creature(this, name, type, effect, reward, attack, health, aggressive);
+			if (rarity == null) {
+				throw new IllegalArgumentException("Creatue must have a rarity!");
+			}
+
+			return new Creature(this, name, type, rarity, legend, effect, reward, attack, health, aggressive);
 		}
 
 		@Override
@@ -176,8 +197,20 @@ public class Creature implements Card {
 		}
 
 		@Override
+		public Builder legend(Legend legend) {
+			this.legend = legend;
+			return this;
+		}
+
+		@Override
 		public Builder name(String name) {
 			this.name = name;
+			return this;
+		}
+
+		@Override
+		public Builder rarity(Rarity rarity) {
+			this.rarity = rarity;
 			return this;
 		}
 

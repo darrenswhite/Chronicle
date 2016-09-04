@@ -1,12 +1,19 @@
 package com.darrenswhite.chronicle.player;
 
+import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.card.Weapon;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * @author Darren White
  */
 public class Player {
 
+	private final List<Card> cards = new ArrayList<>();
 	private int base;
 	private int gold;
 	private int health;
@@ -23,6 +30,12 @@ public class Player {
 		this.weapon = weapon;
 	}
 
+	public void addCard(Card c) {
+		if (cards.size() < 10) {
+			cards.add(c);
+		}
+	}
+
 	public void dealDamage(int amount) {
 		int hit = amount;
 
@@ -31,7 +44,9 @@ public class Player {
 			armour = Math.max(0, armour - amount);
 		}
 
-		removeHealth(hit);
+		if (hit > 0) {
+			removeHealth(hit);
+		}
 	}
 
 	public int getArmour() {
@@ -40,6 +55,10 @@ public class Player {
 
 	public int getBase() {
 		return base;
+	}
+
+	public Optional<Card> getCard(Predicate<Card> filter) {
+		return cards.stream().filter(filter).findAny();
 	}
 
 	public int getGold() {
@@ -58,6 +77,16 @@ public class Player {
 		return temporaryAttack;
 	}
 
+	public int getTotalAttack() {
+		int total = base + temporaryAttack;
+
+		if (weapon != null && weapon.getDurability() > 0) {
+			total += weapon.getAttack();
+		}
+
+		return total;
+	}
+
 	public Weapon getWeapon() {
 		return weapon;
 	}
@@ -66,8 +95,20 @@ public class Player {
 		return health <= 15 && health > 0;
 	}
 
+	public void removeCard(Predicate<Card> filter) {
+		cards.removeIf(filter);
+	}
+
+	public void removeCard(Card c) {
+		if (cards.contains(c)) {
+			cards.remove(c);
+		}
+	}
+
 	public void removeHealth(int amount) {
-		health = Math.max(0, health - amount);
+		if (amount > 0) {
+			health = Math.max(0, health - amount);
+		}
 	}
 
 	public void setArmour(int armour) {
