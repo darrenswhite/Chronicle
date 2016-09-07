@@ -89,8 +89,8 @@ public class ComboMaker implements Runnable {
 
 	@Override
 	public void run() {
-		int priority = ComboComparator.ARMOUR;
-		int minHealth = 1;
+		int priority = ComboComparator.GOLD;
+		int minHealth = 30;
 		int limit = 5;
 		int numCards = 4;
 

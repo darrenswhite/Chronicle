@@ -75,7 +75,7 @@ public class ComboSimulator {
 	public static void main(String[] args) {
 		ComboSimulator sim = new ComboSimulator();
 
-		sim.addCards("Tormented Demon", "Shug", "Tenebra", "Alpha Werewolf");
+		sim.addCards("Worthy Opponent", "Worthy Opponent", "Commander Zilyana");
 		sim.simulate();
 
 		/*System.out.println();

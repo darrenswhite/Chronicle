@@ -18,6 +18,14 @@ public class CardCollection {
 
 	static {
 		add(new Support.Builder()
+				.name("Adamant Armour")
+				.rarity(Card.Rarity.BASIC)
+				.type(Card.Type.EQUIPMENT)
+				.cost(1)
+				.reward(new Reward.Builder()
+						.armour(5)
+						.create()));
+		add(new Support.Builder()
 				.name("Ali Morrisane")
 				.rarity(Card.Rarity.BASIC)
 				.cost(0)
@@ -34,6 +42,26 @@ public class CardCollection {
 				.reward(new Reward.Builder()
 						.gold(1)
 						.create()));
+		add(new Support.Builder()
+				.name("Anticipation")
+				.rarity(Card.Rarity.SAPPHIRE)
+				.type(Card.Type.SPELL)
+				.cost(0)
+				.effect(g -> g.getPlayer().setHealth(g.getPlayer().getHealth() + g.getRival().getTotalAttack()))
+				.reward(new Reward.Builder()
+						.health(2)
+						.create()));
+		add(new Support.Builder()
+				.name("Assault")
+				.rarity(Card.Rarity.BASIC)
+				.type(Card.Type.SPELL)
+				.cost(0)
+				.effect(g -> {
+					if (g.getPlayer().getArmour() > 2) {
+						g.getPlayer().setArmour(g.getPlayer().getArmour() - 2);
+						g.getRival().dealDamage(4);
+					}
+				}));
 		add(new Support.Builder()
 				.name("Barker Toad")
 				.rarity(Card.Rarity.RUBY)
@@ -150,6 +178,18 @@ public class CardCollection {
 						.gold(2)
 						.create()));
 		add(new Support.Builder()
+				.name("Fight Pit")
+				.rarity(Card.Rarity.SAPPHIRE)
+				.type(Card.Type.LOCATION)
+				.cost(0)
+				.effect(g -> {
+					g.getPlayer().setGold(g.getPlayer().getGold() + g.getPlayer().getArmour());
+					g.getPlayer().setArmour(0);
+				})
+				.reward(new Reward.Builder()
+						.gold(1)
+						.create()));
+		add(new Support.Builder()
 				.name("Frenzy")
 				.rarity(Card.Rarity.EMERALD)
 				.legend(Card.Legend.RAPTOR)
@@ -161,6 +201,15 @@ public class CardCollection {
 
 					next.ifPresent(c -> c.setHealth(c.getHealth() - g.getPlayer().getArmour() / 2));
 				}));
+		add(new Creature.Builder()
+				.name("Giant Spider")
+				.rarity(Card.Rarity.SAPPHIRE)
+				.type(Card.Type.BEAST)
+				.attack(1)
+				.health(2)
+				.reward(new Reward.Builder()
+						.weapon(3, 1)
+						.create()));
 		add(new Creature.Builder()
 				.name("Gluttonous Behemoth")
 				.rarity(Card.Rarity.RUBY)
@@ -203,6 +252,17 @@ public class CardCollection {
 				.reward(new Reward.Builder()
 						.gold(1)
 						.health(2)
+						.create()));
+		add(new Creature.Builder()
+				.name("Ice Nihil")
+				.rarity(Card.Rarity.BASIC)
+				.attack(7)
+				.health(5)
+				.effect(g -> g.getPlayer().setArmour(g.getPlayer().getArmour() +
+						g.getRival().getTotalAttack()))
+				.reward(new Reward.Builder()
+						.gold(1)
+						.armour(4)
 						.create()));
 		add(new Creature.Builder()
 				.name("Kalphite Soldier")
@@ -257,6 +317,23 @@ public class CardCollection {
 				.effect(g -> g.getPlayer().removeHealth(3))
 				.reward(new Reward.Builder()
 						.armour(6)
+						.create()));
+		add(new Creature.Builder()
+				.name("Rolo the Stout")
+				.rarity(Card.Rarity.DIAMOND)
+				.attack(2)
+				.health(3)
+				.reward(new Reward.Builder()
+						.weapon(1, 2)
+						.armour(3)
+						.create()));
+		add(new Support.Builder()
+				.name("Romily Weaklax")
+				.rarity(Card.Rarity.BASIC)
+				.type(Card.Type.ALLY)
+				.cost(2)
+				.reward(new Reward.Builder()
+						.health(7)
 						.create()));
 		add(new Creature.Builder()
 				.name("Rowdy Cannoneer")
@@ -333,6 +410,18 @@ public class CardCollection {
 
 					g.getRival().removeHealth(steal);
 					g.getPlayer().setHealth(endHealth);
+				}));
+		add(new Support.Builder()
+				.name("TokTz-Ket-Em")
+				.rarity(Card.Rarity.SAPPHIRE)
+				.legend(Card.Legend.RAPTOR)
+				.type(Card.Type.EQUIPMENT)
+				.cost(0)
+				.effect(g -> {
+					if (g.getPlayer().getArmour() >= 4) {
+						g.getPlayer().setArmour(g.getPlayer().getArmour() - 4);
+						g.getPlayer().setWeapon(new Weapon(3, 6));
+					}
 				}));
 		add(new Creature.Builder()
 				.name("Tormented Demon")
