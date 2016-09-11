@@ -26,8 +26,8 @@ public class ComboSimulator {
 	}
 
 	public void addCard(String name) {
-		Optional<Card> card = CardCollection.findAny(c -> c.getName().equalsIgnoreCase(name) ||
-				c.getName().toLowerCase().startsWith(name.toLowerCase()));
+		Optional<Card> card = CardCollection.getInstance().findAny(c -> c.name.equalsIgnoreCase(name) ||
+				c.name.toLowerCase().startsWith(name.toLowerCase()));
 
 		card.ifPresent(this::addCard);
 	}
@@ -63,7 +63,7 @@ public class ComboSimulator {
 			}
 
 			if (c != null) {
-				sb.append(c.getName());
+				sb.append(c.name);
 			} else {
 				sb.append('_');
 			}

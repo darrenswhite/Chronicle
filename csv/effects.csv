@@ -1,0 +1,119 @@
+id	internalname	trigger	condition0	condition0value	condition1	condition1value	consequence0	consequence0value	consequence1	consequence1value	desc
+1	QBD_Effect	3					1	30			404
+2	vorago_effect	3					59	39	62	0	405
+3	tztokjad_effect	3					3	6			406
+4	corporealbeast_effect	3					4				407
+5	tormenteddemon_effect	3					5	6			408
+6	dragonkin_effect	3					39				409
+7	icenihil_effect	3					7	0			411
+8	trollchucker_effect	3					8	5			413
+9	whitewolf_effect	3					9	2	5	2	414
+10	crassianwarrior_effect	3					9	2			415
+11	dustdevil_effect	3					10	0	15	1	416
+12	alkharidguard_effect	3					11	2			417
+13	varrockguard_effect	3					12				418
+14	penguinsheep_effect	3					13	1			419
+15	kgp_agent_effect	3					14	4			420
+16	mischievous_imp_effect	3					9	1			421
+17	giantrat_effect	3					43	2		1	422
+18	imp_effect	3					3	2			423
+19	barfight_effect	1					16	1	17	1	424
+20	alimorrisane_effect	1					10				425
+21	artisanworkshop_effect	1					18	3			426
+22	bartakanvil_effect	1					19				427
+23	burntmeat_effect	1					9	4			429
+24	death_effect	1					20	15			430
+25	doric_effect	1					8	4			431
+26	dragonforge_effect	1					21				432
+27	mimic_effect	1					22	5			433
+28	highwayman_effect	1					23				434
+29	yelps_effect	3	1	7			24	0			435
+30	steeltitan_effect	1					8	5			436
+31	stackofsharks_effect	1	5	15			25				437
+32	rockcake_effect	1					22	3			438
+33	partyhat_effect	1					24				439
+34	restorepotion_efffect	1					9	2			440
+35	thurgo_effect	1					26	3			441
+36	bandit_camp_effect	1					27				445
+37	barrelchest_effect	3					26	2	18	2	447
+38	bash_effect	1					8	3	43	2	450
+39	bounty_hunt_effect	1					16	1	29	1	452
+40	deadshot_effect	1	3	21			8	10			454
+41	assault_effect	1					30	4	31	3	456
+42	automaton_effect	3					30	4	8	4	457
+43	customs_officer_effect	3					32	0			458
+44	preparation_effect	1					33		22	3	461
+45	brugsen_bursen_effect	1					34	4			463
+46	bunyip_effect	1					35	3			465
+47	captainrovin_effect	3					36				467
+48	daren_lightfinger_effect	1					29	1	37		469
+49	death_lotus_assassin_effect	1					8	8			471
+50	defence_potion_effect	1					35	5			472
+51	dondakan_cannon_effect	1					38				473
+52	dragonbone_upgrade_effect	1					26	1	18	1	476
+53	duel_tournament_effect	1					16	1	17	1	478
+54	fight_cauldron_effect	1					22	8			480
+55	fight_pit_effect	1					40	0			482
+56	frenzy_effect	1					41	0	22	2	484
+57	wilderness_effect	1					16	1	17	1	487
+58	watchtower_guard_effect	3					16	1			489
+59	void_brawler_effect	3					22	5			491
+60	varrock_museum_effect	1					42		10		493
+61	tzhaar_mej_kah_effect	3					17	1	16	1	495
+62	toolbelt_effect	1					43	3			498
+63	snap_shot_effect	1					44	0		1	501
+64	slice_effect	1					45	0	63	3	503
+65	skeleton_champion_effect	3					8	5			505
+66	scorpion_effect	3					8	4			507
+67	saradomin_brew_effect	1					68	0			509
+68	safe_spot_effect	1					30	5	29	1	511
+69	rogues_den_effect	1					29	1			513
+70	ringofcharos_effect	1					47	3			515
+71	revenant_effect	3					16	1			517
+72	repurpose_effect	1	4	0			48	10	10	1	519
+73	pyramid_plunder_effect	1					14	2			521
+74	possessed_priest_effect	3					49	4			523
+75	ogre_chieftain_effect	3					50				525
+76	monolith_effect	1					31	5	10	1	527
+77	mithril_dragon_effect	3					30	2	26	4	529
+78	majormaryrancour_effect	1					51	10		0	531
+79	mageofzamorak_effect	1					16	1			533
+80	karam_effect	1	4	0			15	2	10		535
+81	hurlweapon_effect	1					52	0	10	1	538
+82	hobgoblin_effect	3					6	5			540
+83	fulldharok_effect	1	5	10			53	2			544
+84	eruni_ayuni_leeuni_effect	3					30	50			546
+85	elvarg_effect	3					55	0	5	7	547
+86	bobthecat_effect	1					11	4	17	1	548
+87	hexhunter_bow_effect	1					30	50			550
+88	work_order_effect	1					61	0	10	1	552
+89	traiborn_effect	1					49	4	57	4	553
+90	ogre_effect	3					15	1	5	4	559
+91	skeletal_wyvern_effect	3					2	10			561
+92	ring_of_recoil_Effect	1					64	0	8	5	565
+93	heist_effect	1					65	5			569
+94	reese_effect	3					9	1			571
+95	caitlin_effect	3					8	3	49	3	573
+96	ling_effect	1					66	0	67	0	577
+97	amascut_templeguard_effect	3					5	8	24	0	579
+98	exiled_kalphite_paragon_effect	3					18	3			587
+99	kalphite_spitter_effect	3					6	6	2	4	589
+100	slam_effect	3					8	5	43	4	581
+101	obsidian_golem_effect	3					69	4			602
+102	rock_golem_effect	3					69	2			604
+103	sergeant_grimspike_effect	3					8	6			606
+104	south_sea_pillager_effect	3					70	2			609
+105	armadylean_golem_effect	3					71	0	48	3	611
+106	living_rock_brawler_effect	3					26	1	18	1	613
+107	miner_ancestor_effect	3					18	2	9	1	615
+108	revenant_orc_effect	3					16	2	9	1	617
+109	drunken_dwarf_effect	1					72	0			619
+110	bandit_king_effect	3					73	1	74	1	621
+111	desert_snake_effect	3					22	2	2	5	623
+112	dazing_shot_effect	1					75	0			626
+113	chaos_dwarf_effect	3					69	1			628
+114	goblin_brute_effect	3					8	2			630
+115	revenant_dark_beast_effect	3					16	2			632
+116	troll_general_effect	3					69	2	35	4	634
+117	anticipation_effect	1					76	0			636
+118	berserker_shield_effect	1	6	10			53	1			638

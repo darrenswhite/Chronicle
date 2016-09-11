@@ -10,7 +10,7 @@ public class RankSimulatorCLI {
 			return;
 		}
 
-		Rank startRank = null, endRank = null;
+		PlayerRank startRank = null, endRank = null;
 		double winRate = -1;
 		int games = -1;
 		int runs = 100;
@@ -27,7 +27,7 @@ public class RankSimulatorCLI {
 						throw new IllegalArgumentException("Start rank must have a league!");
 					}
 
-					startRank = new Rank(Rank.League.valueOf(value.toUpperCase()), value2 == null ? -1 : parseInteger(value2));
+					startRank = new PlayerRank(RankedBracket.fromInternalName(value), parseInteger(value2) - 1);
 					break;
 				case "-d":
 				case "--desired-rank":
@@ -35,7 +35,7 @@ public class RankSimulatorCLI {
 						throw new IllegalArgumentException("Desired rank must have a league!");
 					}
 
-					endRank = new Rank(Rank.League.valueOf(value.toUpperCase()), value2 == null ? -1 : parseInteger(value2));
+					endRank = new PlayerRank(RankedBracket.fromInternalName(value), parseInteger(value2) - 1);
 					break;
 				case "-w":
 				case "--win-rate":

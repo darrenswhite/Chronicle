@@ -5,14 +5,13 @@ import java.util.*;
 /**
  * @author Darren White
  */
-public class Permutation<T> implements Iterator<List<T>> {
+public class Permutation<T> implements Iterable<List<T>> {
 
+	private final List<T> permutation = new LinkedList<>();
 	private final List<T> elements;
-	private final List<T> result;
 	private final int n;
 	private final int r;
 	private Comparator<? super T> cmp;
-	private boolean hasNext = true;
 
 	public Permutation(List<T> elements, int r) {
 		this(elements, r, null);
@@ -25,7 +24,6 @@ public class Permutation<T> implements Iterator<List<T>> {
 		this.n = elements.size();
 		this.r = r;
 		this.cmp = cmp;
-		result = new LinkedList<>();
 
 		if (n < 1) {
 			throw new IllegalArgumentException("Need at least 1 element!");
@@ -46,7 +44,7 @@ public class Permutation<T> implements Iterator<List<T>> {
 		}
 	}
 
-	private void computeNext() {
+	private boolean computeNext() {
 		int i = r - 1;
 		int j = r;
 
@@ -65,8 +63,7 @@ public class Permutation<T> implements Iterator<List<T>> {
 			}
 
 			if (i < 0) {
-				hasNext = false;
-				return;
+				return false;
 			}
 
 			--j;
@@ -78,21 +75,56 @@ public class Permutation<T> implements Iterator<List<T>> {
 			swap(i, j);
 			reverseRightOf(i);
 		}
+
+		return true;
 	}
 
 	@Override
-	public boolean hasNext() {
-		return hasNext;
+	public Iterator<List<T>> iterator() {
+		return new Iterator<List<T>>() {
+
+			private List<T> current;
+
+			@Override
+			public boolean hasNext() {
+				if (current == null) {
+					current = nextPermuation();
+				}
+
+				return current != null;
+			}
+
+			@Override
+			public List<T> next() {
+				List<T> next = current;
+				current = null;
+
+				if (next == null) {
+					next = nextPermuation();
+					if (next == null) {
+						throw new NoSuchElementException("No more CSV records available");
+					}
+				}
+
+				return next;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 
-	@Override
-	public List<T> next() {
-		result.clear();
-		result.addAll(0, elements.subList(0, r));
+	private List<T> nextPermuation() {
+		permutation.clear();
+		permutation.addAll(0, elements.subList(0, r));
 
-		computeNext();
+		if (!computeNext()) {
+			return null;
+		}
 
-		return result;
+		return permutation;
 	}
 
 	private void reverseRightOf(final int start) {

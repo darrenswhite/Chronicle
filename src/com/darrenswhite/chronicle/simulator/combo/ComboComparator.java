@@ -29,28 +29,28 @@ public class ComboComparator implements Comparator<Game> {
 		Player p2 = g2.getPlayer();
 		int compare;
 
-		if (p1.getHealth() < minHealth) {
-			if (p2.getHealth() < minHealth) {
+		if (p1.health < minHealth) {
+			if (p2.health < minHealth) {
 				return 0;
 			} else {
 				return 1;
 			}
-		} else if (p2.getHealth() < minHealth) {
+		} else if (p2.health < minHealth) {
 			return -1;
 		}
 
 		switch (priority) {
 			case ARMOUR:
-				compare = Integer.compare(p2.getArmour(), p1.getArmour());
+				compare = Integer.compare(p2.armour, p1.armour);
 				break;
 			case BASE:
-				compare = Integer.compare(p2.getBase(), p1.getBase());
+				compare = Integer.compare(p2.base, p1.base);
 				break;
 			case DAMAGE:
-				compare = Integer.compare(g1.getRival().getHealth(), g2.getRival().getHealth());
+				compare = Integer.compare(g1.getRival().health, g2.getRival().health);
 				break;
 			case GOLD:
-				compare = Integer.compare(p2.getGold(), p1.getGold());
+				compare = Integer.compare(p2.gold, p1.gold);
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown priority value: " + priority);
@@ -65,7 +65,7 @@ public class ComboComparator implements Comparator<Game> {
 			return compare;
 		}
 
-		compare = Integer.compare(p2.getHealth(), p1.getHealth());
+		compare = Integer.compare(p2.health, p1.health);
 		if (compare != 0) {
 			return compare;
 		}

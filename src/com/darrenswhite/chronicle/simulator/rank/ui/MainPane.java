@@ -1,6 +1,7 @@
 package com.darrenswhite.chronicle.simulator.rank.ui;
 
-import com.darrenswhite.chronicle.simulator.rank.Rank;
+import com.darrenswhite.chronicle.simulator.rank.PlayerRank;
+import com.darrenswhite.chronicle.simulator.rank.RankedBracket;
 import com.darrenswhite.chronicle.simulator.rank.Simulation;
 import com.darrenswhite.chronicle.simulator.rank.Simulator;
 import javafx.collections.FXCollections;
@@ -27,11 +28,12 @@ public class MainPane extends GridPane {
 		setVgap(10);
 
 		Label lblStartRank = new Label("Start Rank");
-		ComboBox<Rank.League> startLeague = new ComboBox<>(FXCollections.observableArrayList(Rank.League.values()).filtered(l -> l != Rank.League.NONE));
-		startLeague.setValue(Rank.League.BRONZE);
+		ComboBox<RankedBracket> startLeague = new ComboBox<>(FXCollections.observableArrayList(RankedBracket.GetAllBrackets()));
+		startLeague.setValue(RankedBracket.BRONZE);
 		TextField startPosition = new TextField("10");
 		Label lblEndRank = new Label("Desired Rank");
-		ComboBox<Rank.League> endLeague = new ComboBox<>(FXCollections.observableArrayList(Rank.League.values()));
+		ComboBox<RankedBracket> endLeague = new ComboBox<>(FXCollections.observableArrayList(RankedBracket.GetAllBrackets()));
+		endLeague.getItems().add(null);
 		TextField endPosition = new TextField();
 		Label lblWinRate = new Label("Win Rate %");
 		TextField txtWinRate = new TextField();
@@ -47,8 +49,8 @@ public class MainPane extends GridPane {
 			btnRun.setDisable(true);
 			results.clear();
 
-			Rank startRank = new Rank(startLeague.getValue(), Integer.parseInt(startPosition.getText()));
-			Rank endRank = endLeague.getValue() == Rank.League.NONE || endLeague.getValue() == null ? null : new Rank(endLeague.getValue(), endPosition.getText().trim().isEmpty() ? -1 : Integer.parseInt(endPosition.getText()));
+			PlayerRank startRank = new PlayerRank(startLeague.getValue(), Integer.parseInt(startPosition.getText()) - 1);
+			PlayerRank endRank = endLeague.getValue() == null ? null : new PlayerRank(endLeague.getValue(), Integer.parseInt(endPosition.getText()) - 1);
 			double winRate = txtWinRate.getText().trim().isEmpty() ? -1 : (Double.parseDouble(txtWinRate.getText()) / 100D);
 			int games = txtGames.getText().trim().isEmpty() ? -1 : Integer.parseInt(txtGames.getText());
 			int runs = Integer.parseInt(txtRuns.getText());

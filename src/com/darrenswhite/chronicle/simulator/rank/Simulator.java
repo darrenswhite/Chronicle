@@ -1,5 +1,6 @@
 package com.darrenswhite.chronicle.simulator.rank;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,17 +14,18 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Simulator implements Runnable {
 
 	private final Number[] predictions;
-	private final Rank startRank;
+	private final PlayerRank startRank;
 	private final int runs;
 	private final Prediction prediction;
 	private final AtomicInteger index = new AtomicInteger();
-	private Rank endRank;
+	private PlayerRank endRank;
 	private double winRate;
 	private int games;
 	private int averageGames;
+	private int averageRank;
 	private double averageWinRate;
 
-	public Simulator(Rank startRank, Rank endRank, double winRate, int games, int runs) {
+	public Simulator(PlayerRank startRank, PlayerRank endRank, double winRate, int games, int runs) {
 		this.startRank = startRank;
 		this.endRank = endRank;
 		this.winRate = winRate;
@@ -45,6 +47,10 @@ public class Simulator implements Runnable {
 
 	public long getAverageGames() {
 		return averageGames;
+	}
+
+	public int getAverageRank() {
+		return averageRank;
 	}
 
 	public double getAverageWinRate() {
@@ -107,23 +113,23 @@ public class Simulator implements Runnable {
 				sb.append("90%: ").append(getPercentileGames(0.90)).append('\n');
 				break;
 			case END_RANK:
-				sb.append("Minimum: ").append(getPercentileRank(1.00)).append('\n');
-				sb.append("Maximum: ").append(getPercentileRank(0.00)).append('\n');
-				sb.append("10%: ").append(getPercentileRank(0.10)).append('\n');
-				sb.append("25%: ").append(getPercentileRank(0.25)).append('\n');
+				sb.append("Minimum: ").append(getPercentileRank(0.00)).append('\n');
+				sb.append("Maximum: ").append(getPercentileRank(1.00)).append('\n');
+				sb.append("10%: ").append(getPercentileRank(0.90)).append('\n');
+				sb.append("25%: ").append(getPercentileRank(0.75)).append('\n');
 				sb.append("50%: ").append(getPercentileRank(0.50)).append('\n');
-				sb.append("75%: ").append(getPercentileRank(0.75)).append('\n');
-				sb.append("90%: ").append(getPercentileRank(0.90)).append('\n');
+				sb.append("75%: ").append(getPercentileRank(0.25)).append('\n');
+				sb.append("90%: ").append(getPercentileRank(0.10)).append('\n');
 				break;
 			case WIN_RATE:
-				sb.append("Average: ").append(getAverageWinRate()).append('\n');
-				sb.append("Minimum: ").append(getPercentileWinRate(0.00)).append('\n');
-				sb.append("Maximum: ").append(getPercentileWinRate(1.00)).append('\n');
-				sb.append("10%: ").append(getPercentileWinRate(0.10)).append('\n');
-				sb.append("25%: ").append(getPercentileWinRate(0.25)).append('\n');
-				sb.append("50%: ").append(getPercentileWinRate(0.50)).append('\n');
-				sb.append("75%: ").append(getPercentileWinRate(0.75)).append('\n');
-				sb.append("90%: ").append(getPercentileWinRate(0.90)).append('\n');
+				sb.append("Average: ").append(getAverageWinRate()).append('%').append('\n');
+				sb.append("Minimum: ").append(getPercentileWinRate(0.00)).append('%').append('\n');
+				sb.append("Maximum: ").append(getPercentileWinRate(1.00)).append('%').append('\n');
+				sb.append("10%: ").append(getPercentileWinRate(0.10)).append('%').append('\n');
+				sb.append("25%: ").append(getPercentileWinRate(0.25)).append('%').append('\n');
+				sb.append("50%: ").append(getPercentileWinRate(0.50)).append('%').append('\n');
+				sb.append("75%: ").append(getPercentileWinRate(0.75)).append('%').append('\n');
+				sb.append("90%: ").append(getPercentileWinRate(0.90)).append('%').append('\n');
 				break;
 		}
 
@@ -151,8 +157,8 @@ public class Simulator implements Runnable {
 		return (int) getPercentile(percent);
 	}
 
-	public Rank getPercentileRank(double percent) {
-		return (Rank) getPercentile(percent);
+	public PlayerRank getPercentileRank(double percent) {
+		return new PlayerRank(new ArrayList<>(), (int) getPercentile(percent), 0, 0, 0);
 	}
 
 	public double getPercentileWinRate(double percent) {
@@ -163,6 +169,7 @@ public class Simulator implements Runnable {
 	public void run() {
 		ExecutorService executor = Executors.newWorkStealingPool();
 		AtomicInteger totalGames = new AtomicInteger();
+		AtomicInteger totalRank = new AtomicInteger();
 		AtomicReference<Double> totalWinRate = new AtomicReference<>(0D);
 		ReentrantLock lock = new ReentrantLock();
 
@@ -173,6 +180,7 @@ public class Simulator implements Runnable {
 				s.run();
 
 				totalGames.accumulateAndGet(s.getTotalGames(), (l, r) -> l + r);
+				totalRank.accumulateAndGet(s.getCurrentRank().getAbsoluteRating(), (l, r) -> l + r);
 				totalWinRate.accumulateAndGet(s.getWinRate(), (l, r) -> l + r);
 
 				switch (prediction) {
@@ -180,10 +188,10 @@ public class Simulator implements Runnable {
 						predictions[index.getAndIncrement()] = s.getTotalGames();
 						break;
 					case END_RANK:
-						predictions[index.getAndIncrement()] = s.getCurrentRank();
+						predictions[index.getAndIncrement()] = s.getCurrentRank().getAbsoluteRating();
 						break;
 					case WIN_RATE:
-						predictions[index.getAndIncrement()] = s.getWinRate();
+						predictions[index.getAndIncrement()] = s.getWinRate() * 100D;
 						break;
 				}
 			});
@@ -199,6 +207,7 @@ public class Simulator implements Runnable {
 		}
 
 		averageGames = totalGames.get() / runs;
+		averageRank = totalRank.get() / runs;
 		averageWinRate = (totalWinRate.get() / runs) * 100D;
 	}
 

@@ -32,12 +32,12 @@ public class ComboMaker implements Runnable {
 
 	private List<Card> getAllCards() {
 		List<Card> allCards = new ArrayList<>();
-		List<Card> cards = CardCollection.findAll(c -> true);
+		List<Card> cards = CardCollection.getInstance().findAll(c -> true);
 
 		cards.forEach(c -> {
 			allCards.add(c);
 
-			if (c.getRarity() != Card.Rarity.DIAMOND) {
+			if (c.rarity != Card.RARITY_DIAMOND) {
 				allCards.add(c);
 			}
 		});
@@ -54,7 +54,7 @@ public class ComboMaker implements Runnable {
 			}
 
 			if (c != null) {
-				sb.append(c.getName());
+				sb.append(c.name);
 			} else {
 				sb.append('_');
 			}
@@ -64,16 +64,16 @@ public class ComboMaker implements Runnable {
 	}
 
 	private static boolean isComboValid(List<Card> combo) {
-		Card.Legend legend = null;
+		int archetype = -1;
 
 		for (Card c : combo) {
-			if (c.getLegend() == Card.Legend.ALL) {
+			if (c.archetype == Card.ARCHETYPE_ALL) {
 				continue;
 			}
 
-			if (legend == null) {
-				legend = c.getLegend();
-			} else if (c.getLegend() != legend) {
+			if (archetype == -1) {
+				archetype = c.archetype;
+			} else if (c.archetype != archetype) {
 				return false;
 			}
 		}
@@ -89,17 +89,16 @@ public class ComboMaker implements Runnable {
 
 	@Override
 	public void run() {
-		int priority = ComboComparator.GOLD;
-		int minHealth = 30;
-		int limit = 5;
+		int priority = ComboComparator.DAMAGE;
+		int minHealth = 1;
+		int limit = 10;
 		int numCards = 4;
 
 		TreeSet<Game> games = new TreeSet<>(new ComboComparator(priority, minHealth));
 		List<Card> cards = getAllCards();
-		Permutation<Card> it = new Permutation<>(cards, numCards, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+		Permutation<Card> permutation = new Permutation<>(cards, numCards, (o1, o2) -> o1.name.compareTo(o2.name));
 
-		while (it.hasNext()) {
-			List<Card> combo = it.next();
+		for (List<Card> combo : permutation) {
 			Game game = executeCombo(combo);
 
 			if (game == null) {

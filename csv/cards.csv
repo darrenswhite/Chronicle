@@ -1,0 +1,428 @@
+﻿id	nameid	name	archetype	type	family	image	attack	health	goldcost	reward0value0	reward0value1	reward0type	reward1value0	reward1value1	reward1type	reward2value0	reward2value1	reward2type	rarity	descid	effectdesc	source	artist	hitsplat	refund	aggressive
+0	0	Open Road	0	0		OpenRoad				0		0	0		0	0		0	0	0		0		0	False	False
+1	1	Customs Officer	0	2	0	customs_officer	2	5		0		2	0		0	0		0	1	32	458	3		5	False	False
+2	2	Goblin Flashmob	0	2	8	Goblins	1	9		3		2	0		0	0		0	0	33		1		5	False	False
+3	3	Yelps	0	2	8	Yelps	4	3		0		0	4		0	0		0	3	34	435	3		0	False	False
+4	4	General Graardor	0	2	11	Grardor	8	13		6	2	6	2	4	0	0		0	2	35		3		1	False	False
+5	5	Ogre Brute	0	2	10	Ogre	6	6		0		0	0		0	0		0	0	36	559	3		4	False	False
+6	136	Black Arm Bandit	0	2	0	BlackArmBandit	2	2		1		2	0		0	0		0	0	137		1		5	False	False
+7	138	Elvarg	0	2	3	Elvarg	12	8		3	3	0	4		0	0		0	2	139	547	4		0	False	False
+8	8	Troll Chucker	0	2	17	TrollChucker	6	3		0		2	0		0	0		0	0	39	413	1		4	False	False
+9	9	Gluttonous Behemoth	0	2	1	gluttonous_behemouth	6	19		2		2	0		0	0		0	2	40	404	3		0	False	False
+10	10	Vorago	0	2	0	Vorago	7	14		5		0	0		0	0		0	3	41	405	3		4	False	False
+11	11	TzTok-Jad	0	2	18	tztok_jad	15	7		3		5	0		4	0		0	2	42		3		0	False	False
+12	12	Penguin Sheep	0	2	1	PenguinSheep	1	3		4	2	0	2		0	0		0	1	43	419	3		0	False	False
+13	13	KGP Agent	0	2	1	KgpAgent	1	2		0		4	0		0	0		0	0	44	420	1		0	False	False
+14	14	Jubbly Bird	0	2	1	JubblyBird	1	3		0		2	2		3	0		0	0	45		1		0	False	False
+15	15	Mischievous Imp	0	2	2	Imp	1	2		0		2	0		0	0		0	0	46	421	1		5	False	False
+16	16	Combat Academy	0	1	4	CombatAcademy			1	1	1	6	0		0	0		0	0	47		1		0	False	False
+17	142	Romily Weaklax	0	1	20	RomilyWeaklax			2	6		3	0		0	0		0	0	143		1		0	False	False
+20	20	Bar Fight	0	1	0	bar_fight			0	0		0	5		0	0		0	0	51	424	3		0	False	False
+21	146	Mimic	0	1	0	mimic			0	3	2	2	3		0	0		0	0	147	433	1		0	False	False
+23	150	Death	0	1	20	Death			9	0		0	0		0	0		0	3	151	430	3		0	False	False
+24	24	Cabbage	0	1	0	Cabbage			0	3		3	0		0	0		0	0	55		1		0	False	False
+25	152	Partyhat	0	1	5	PartyHat			0	0		0	0		0	0		0	3	153	439	3		0	False	False
+26	26	Solomon Madini	0	1	20	Solomon			4	3	3	5	2	2	6	2		0	0	57		1		0	False	False
+27	27	Gorajo Hoardstalker	0	1	6	GorajoHoardstalker			6	5	1	3	4	1	6	6		0	1	58		3		0	False	False
+28	154	Highwayman	4	1	20	Highwayman			8	0		0	0		0	0		0	2	155	434	3		0	False	False
+29	29	Ali Morrisane	0	1	20	AliMorrisane			0	2		2	0		0	0		0	0	60	425	1		0	False	False
+30	30	Nastroth	0	1	20	nastroth			4	0		4	0		0	0		0	0	61		1		0	False	False
+31	109	Artisan's Workshop	1	1	4	ArtisansWorkshop			2	0	1	0	0		0	0		0	0	110	426	1		0	False	False
+32	111	Dragon Forge	1	1	4	DragonForge			0	0		0	0		0	0		0	2	112	432	3		0	False	False
+33	113	Bartak's Anvil	1	1	4	BartaksAnvil			4	0		0	0		0	0		0	0	114	427	2		0	False	False
+34	166	Miner Ancestor	1	2	19	miner_ancestor	3	4		0		0	0		0	0		0	0	167	416	2		0	False	False
+35	117	Golden Hammer	0	1	5	GoldenHammer			2	1	3	6	0		0	0		0	0	118		3		0	False	False
+36	119	Defence Potion	2	1	13	ExtremeDefencePotion			2	3		0	0		0	0		0	0	120	472	1		0	False	False
+37	121	Full Tetsu	0	1	5	FullTetsu			5	4		5	4		3	0		0	1	122		3		0	False	False
+38	123	Stack o' Sharks	0	1	0	StackOfSharks			3	0		0	0		0	0		0	1	124	437	3		0	False	False
+39	125	Dondakan's Cannon	2	1	5	DondakansCannon			2	0		0	0		0	0		0	0	126	473	2		0	False	False
+40	127	Rock Cake	0	1	0	RockCake			0	5		5	0		0	0		0	0	128	438	3		0	False	False
+41	140	Raging Kalphite	1	2	9	raging_kalphite	3	10		0		0	0		0	0		0	1	141	409	3		0	False	False
+42	22	Burntmeat	0	1	20	BurntMeat			3	1		0	0		0	0		0	2	53	429	3		0	False	False
+43	156	Steel Titan	2	1	6	SteelTitan			6	0		4	0		0	0		0	0	157	436	2		0	False	False
+44	158	Restore Potion	0	1	13	RestorePotion			3	4		3	0		0	0		0	0	159	440	1		0	False	False
+45	115	Doric	0	1	20	Doric			3	3	3	5	0		0	0		0	0	116	431	3		0	False	False
+46	212	Skeleton Warrior	0	2	19	skeleton_warrior	4	3		2		2	0		0	0		0	0	213		1		5	False	False
+47	214	Giant Rat	0	2	1	GiantRat	2	2		1		0	0		0	0		0	1	215	422	3		0	False	False
+48	216	White Wolf	0	2	1	Wolf	3	4		1		2	0		0	0		0	0	217	414	1		3	False	False
+49	218	Al Kharid Warrior	4	2	0	AlKharidGuard	2	5		0		2	1		0	0		0	0	219	417	1		5	False	False
+51	222	Barbarian Warrior	0	2	0	Barbarian	5	3		0	2	2	1	2	6	0		0	0	223		1		1	False	False
+52	224	Crassian Warrior	0	2	0	CrassianWarrior	7	3		0		2	0		0	0		0	1	225	415	3		0	False	False
+53	226	Grotworm	0	2	1	grotworm	5	10		6	1	2	2	1	0	0		0	0	227		1		0	False	False
+54	228	Ice Nihil	2	2	0	NihilIce	7	5		0		2	3		5	0		0	0	229	411	1		0	False	False
+55	230	Automaton Guardian	0	2	0	automaton_guardian	4	10		0		2	0		0	0		0	2	231	457	3		4	False	False
+56	232	Corporeal Beast	2	2	1	CorporealBeast	7	14		4		0	7		0	0		0	3	233	407	3		0	False	False
+57	234	Tormented Demon	0	2	2	TormentedDemon	4	10		3	1	6	0		4	0		0	2	235	408	3		0	False	False
+58	236	Thurgo	1	1	20	Thurgo			2	2	3	0	0		0	0		0	0	237	441	1		0	False	False
+59	396	Varrock Guard	2	2	0	Varrock Guard	2	5		0		2			0			0	1	50	418	3		5	False	False
+60	443	Amulet of Fury	2	1	5	amulet_of_fury			8	1		4			0			0	1	50		3		0	False	False
+61	444	Bandit Camp	4	1	4	BanditCamp			2			0			0			0	0	231	445	1		0	False	False
+62	446	Barrelchest	1	2	19	Barrelchest	8	5				0			0			0	0	231	447	1		4	False	False
+63	449	Bash	2	1	16	Bash			1			0			0			0	0	223	450	1		0	False	False
+64	451	Bounty Hunt	0	1	0	bounty_hunt			0	0		0			0			0	0	223	452	3		0	False	False
+65	453	Deadshot	4	1	16	dead_shot			3			0			0			0	0	53	454	2		0	False	False
+66	455	Assault	2	1	16	assault			0			0			0			0	0	53	456	1		0	False	False
+67	460	Preparation	2	1	16	preparation			0			0			0			0	2	53	461	3		0	False	False
+68	462	Brugsen Bursen	0	1	20	brugsen_bursen			3			0			0			0	1	32	463	3		0	False	False
+69	464	Bunyip	0	1	6	bunyip			1			0			0			0	0	53	465	3		0	False	False
+70	466	Captain Rovin	4	2	0	Captain_Rovin	3	10		2		0			0			0	1	139	467	3		5	False	False
+71	468	Darren Lightfinger	4	1	20	darren_lightfinger			0	0		2			0			0	1	61	469	3		0	False	False
+72	470	Death Lotus Assassin	0	1	20	DeathLotusAssasin			5			0			0			0	0	139	471	1		0	False	False
+73	474	Dragon Longsword	0	1	5	DragonLongsword			5	4	2	6			0			0	0	221		1		0	False	False
+74	475	Dragonbone Upgrade	1	1	5	dragonbone_upgrade			3	4		5			0			0	0	151	476	3		0	False	False
+75	477	Duel Tournament	0	1	4	duel_tournament			1	0		0			0			0	0	52	478	1		0	False	False
+76	479	Fight Cauldron	2	1	4	Fight_Cauldron			0	6		5	1		2			0	0	229	480	2		0	False	False
+77	481	Fight Pit	2	1	4	fight_pit			0	0		2			0			0	0	227	482	3		0	False	False
+78	483	Frenzy	2	1	16	frenzy			0			0			0			0	1	229	484	3		0	False	False
+79	485	Armoured Zombie	2	2	19	ArmouredZombie	1	3		3		5			0			0	0	51		1		1	False	False
+80	486	Wilderness	0	1	4	wilderness			1			0			0			0	0	43	487	3		0	False	False
+81	488	Watchtower Guard	0	2	0	watchtower_guard	5	3		1		5	1	1	6			0	0	110		3		5	False	False
+82	490	Void Brawler	2	2	0	VoidBrawler	7	2		7		5	0		0			0	0	49	491	1		4	False	False
+83	492	Varrock Museum	1	1	4	VarrockMuseum			0	1		2			0			0	0	31	493	3		0	False	False
+84	494	Mej-Kah	0	2	18	Tzhaar_Mej_Kah	4	10		2	2	6	4		5			0	2	159	495	3		0	False	False
+85	497	Toolbelt	1	1	5	tool_belt			0			0			0			0	0	41	498	3		0	False	False
+86	499	Tetsu Katana	1	1	5	Tetsu_Katana			7	7	2	6			0			0	3	147		3		0	False	False
+87	500	Snap Shot	4	1	16	Snapshot			1			0			0			0	0	237	501	1		0	False	False
+88	502	Pulverise	1	1	16	pulverise			2			0			0			0	0	235	503	1		0	False	False
+89	504	Skeleton Champion	4	2	19	skeleton_champion	8	5		5	0	6			0			0	0	157	505	3		2	False	False
+90	506	Scorpion	0	2	1	Scorpion	2	2				0			0			0	0	217	507	1		0	False	False
+91	508	Saradomin Brew	2	1	13	Saradomin_Brew			4	1		3			0			0	0	116	509	1		0	False	False
+92	510	Safe Spot	4	1	4	safe_spot			0			0			0			0	0	31	511	2		0	False	False
+93	512	Rogues' Den	4	1	4	rogues_den			0	3		2			0			0	0	52	513	3		0	False	False
+94	514	Ring of Charos	0	1	5	ring_of_charos			0			0			0			0	0	126	515	3		0	False	False
+95	516	Revenant Demon	0	2	19	Revenant_Demon	4	4		0		0			0			0	0	54	517	3		0	False	False
+96	518	Repurpose	1	1	16	repurpose			0			0			0			0	2	126	519	3		0	False	False
+97	520	Pyramid Plunder	4	1	4	PyramidPlunder			0	3		2			0			0	0	34	521	1		0	False	False
+98	522	Fern	0	2	0	fern	4	5				0			0			0	2	169	523	3		0	False	False
+99	524	Ogre Chieftain	0	2	10	Chieftain_Ogre	5	10		1		2			0			0	1	124	525	3		4	False	False
+100	526	Monolith Chamber	2	1	4	monolithic_chamber			0	0		0			0			0	0	128	527	1		0	False	False
+101	528	Rune Dragon	1	2	3	rune_dragon	7	14		3		2			0			0	2	157	529	3		0	False	False
+102	530	Major Mary Rancour	1	1	20	MajorMaryRancour			1	0	0	6			0			0	1	225	531	3		0	False	False
+103	532	Mage of Zamorak	0	1	20	MageOfZamorak			4			0			0			0	0	110	533	1		0	False	False
+104	534	Karam	1	1	20	karam			7			0			0			0	0	57	535	3		0	False	False
+105	536	Ice Warrior	1	2	0	IceWarrior	3	4		0		2	0	3	6			0	0	39		1		5	False	False
+106	537	Hurl Weapon	1	1	16	Throw			0			0			0			0	0	221	538	1		0	False	False
+107	539	Hobgoblin	0	2	8	hobgoblin	4	3		1		2			0			0	0	40	540	1		1	False	False
+108	541	Goblin Raider	1	2	8	GoblinRaider	2	2		1		5	0	2	6			0	0	43		2		1	False	False
+109	542	Gnome Guard	4	2	0	GnomeGuard	3	2		2		2			0			0	0	235		1		5	False	False
+110	543	Full Dharok	0	1	5	full_dharok			2			0			0			0	3	124	544	3		0	False	False
+111	545	Eruni, Ayuni & Leeuni	4	2	1	eruni_ayuni_leeuni	5	13		5		2			0			0	2	54	546	3		4	False	False
+112	148	Bob the Cat	4	1	20	Bob			1			0			0			0	0	116	548	3		0	False	False
+113	549	Deathtouched Darts	4	1	5	deathtouched_darts			10	5	1	6			0			0	2	58	550	3		0	False	False
+114	551	Work Order	1	1	0	work_order			0	0		2	1		0			0	1	61	552	3		0	False	False
+115	19	Wizard Traiborn	0	1	20	Trailborn			2			0			0			0	1	51	553	3		0	False	False
+116	560	Undead Dragon	0	2	19	undead_dragon	6	13		1		2			0			0	0	108	561	1		0	False	False
+117	562	King Black Dragon	0	2	3	king_black_dragon	8	14		10		2			0			0	1	108		3		0	False	False
+118	563	Giant Spider	0	2	1	giant_spider	1	2		2	0	6			0			0	0	108		3		3	False	False
+119	564	Ring of Recoil	0	1	5	ring_of_recoil			0			0			0			0	0	108	565	3		0	False	False
+120	566	Gravite Longsword	1	1	5	gravite_longsword			0	3	0	6			0			0	0	108		2		0	False	False
+121	567	Chaotic Longsword	1	1	5	chaotic_longsword			4	5	1	6			0			0	1	108		3		0	False	False
+122	568	Heist	4	1	16	heist			1	1		5	1		0			0	1	108	569	3		0	False	False
+123	570	Rolo the Stout	0	2	0	rolo_the_stout	3	2		2		5	0	1	6			0	3	108	571	3		5	False	False
+124	572	Kayle	0	2	0	kayle	3	2		2	1	5			0			0	3	108	2584	3		2	False	False
+125	574	Morwenna	0	2	19	morwenna	2	2				0			0			0	3	108	573	3		0	False	False
+126	576	Ling, the Assassin	4	1	20	Ling_The_Assassin			0			0			0			0	1	108	577	3		0	False	False
+127	578	Amascut Templeguard	4	2	0	AmascutTempleGuard	8	5				0			0			0	0	108	579	1		5	False	False
+128	582	Culinaromancer	0	2	0	culinaromancer	8	6		3		3			0			0	0	108	2660	3		5	False	False
+129	586	Exiled Kalphite Paragon	0	2	9	kalphite_paragon	5	9		0		2	4		5			0	0	655	1176	3		0	False	False
+130	588	Oozing Kalphite	0	2	9	oozing_kalphite	8	5				0			0			0	0	108	589	1		0	False	False
+131	585	Kalphite Soldier	0	2	9	kalphite_soldier	2	6		2		2	1		5			0	0	108		3		0	False	False
+132	591	Kalphite Worker	0	2	9	kalphite_worker	1	4		1		2	0	0	6			0	0	108		1		0	False	False
+133	583	Dagannoth Fledgling	0	2	1	dagannoth_fledgling	4	2		0		3			0			0	0	108	2661	3		3	False	False
+134	592	Slam	2	1	16	slam			4			0			0			0	1	108	581	3		0	False	False
+135	601	Obsidian Golem	0	2	0	obsidian_golem	3	10		2		2			0			0	0	108	602	1		4	False	False
+136	603	Rock Golem	0	2	0	rock_golem	2	5		1		2			0			0	0	108	604	3		4	False	False
+137	605	Sergeant Grimspike	0	2	8	sergeant_grimspike	4	10		1		2	1		5			0	0	231	606	3		5	False	False
+138	607	Sergeant Slimetoes	0	2	8	sergeant_slimetoes	2	6		1		5	2	1	6			0	0	231		3		5	False	False
+139	608	South Sea Pillager	0	2	12	south_sea_pillager	4	3		0	0	6			0			0	0	231	609	1		5	False	False
+140	610	Armadylean Golem	1	2	0	armadylean_golem	5	10		3		2			0			0	0	231	611	1		5	False	False
+141	612	Living Rock Brawler	1	2	0	living_rock_brawler	1	3		0		2			0			0	0	231	613	1		4	False	False
+142	614	Dust Devil	1	2	0	DustDevil	2	7		0		2			0			0	1	231	615	3		0	False	False
+143	618	Drunken Dwarf	1	1	20	drunken_dwarf			0	1		3			0			0	0	231	619	3		0	False	False
+144	620	Bandit King	4	2	0	bandit_king	5	3		1		2			0			0	1	231	621	3		5	False	False
+145	622	Desert Snake	4	2	1	desert_snake	3	1				0			0			0	0	231	623	1		3	False	False
+146	624	Desert Strykewyrm	4	2	1	desert_strykeworm	7	6		4		2	1		5			0	0	231		2		3	False	False
+147	625	Dazing Shot	4	1	16	dazing_shot			1			0			0			0	0	231	626	3		0	False	False
+148	627	Chaos Dwarf	2	2	0	chaos_dwarves	4	4		2		5	1	1	6			0	0	231	628	3		0	False	False
+149	629	Goblin Brute	2	2	8	goblin_brute	3	2		0		2	0		5			0	0	231	630	2		1	False	False
+150	631	Revenant Dark Beast	2	2	19	revenant_dark_beast	8	10		1		5			0			0	0	231	632	3		0	False	False
+151	633	Troll General	2	2	17	troll_general	6	9		2		2			0			0	1	231	634	3		5	False	False
+152	635	Anticipation	2	1	16	anticipation			0	1		3			0			0	0	231	636	3		0	False	False
+153	637	Berserker Shield	2	1	5	berserker_shield			2			0			0			0	0	231	638	3		0	False	False
+154	616	Revenant Ork	1	2	19	revenant_ork	8	10				0			0			0	0	231	617	3		4	False	False
+155	642	Beer	0	1	13	Beer			1	1		5			0			0	0	643	644	1		0	False	False
+156	645	Strength Potion	0	1	13	strength_potion			4			0			0			0	1	646	647	3		0	False	False
+157	648	Prototype	1	1	5	prototype			1			0			0			0	0	649	650	3		0	False	False
+158	651	Khnum	4	2	0	khnum	4	4		1		2			0			0	0	652	653	2		0	False	False
+159	654	Mithril Arrows	4	1	5	mithril_arrows			1			0			0			0	0	655	656	3		0	False	False
+160	657	Ranging Guild	4	1	4	rangeguild			7	0		4			0			0	1	658	659	3		0	False	False
+161	660	Giant Champion	2	2	7	giant_champion	5	10		0		4			0			0	0	661	662	3		4	False	False
+162	663	Zamorak Brew	2	1	13	zamorak_brew			3	0		4			0			0	0	664	665	3		0	False	False
+163	669	Adamant Armour	0	1	5	adamant_armour			1	4		5			0			0	0	643		1		0	False	False
+164	670	Dagannoth Sentinel	0	2	1	DagannothSentinel	8	9		1		3	0		4			0	0	643		1		3	False	False
+165	671	Gee'ka	0	1	20	Aviansee_Engineer			0	0	1	6			0			0	0	643		1		0	False	False
+166	673	Infernal Mage	3	2	19	infernal_mage	3	10		2		0			0			0	0	643	674	1		0	False	False
+167	675	Haunted Soul	3	2	19	HauntedSoul	2	5		1		0			0			0	0	643	676	1		0	False	False
+168	677	Crawling Hand	3	2	19	CrawlingHand	1	3				0			0			0	0	643	678	1		0	False	False
+169	679	Wizard Mindbomb	3	1	13	wizard_mind_bomb			1			0			0			0	0	643	680	1		0	False	False
+170	681	Earth Blast	3	1	16	EarthBlast			6			0			0			0	0	643	682	1		0	False	False
+171	683	Wind Strike	3	1	16	Wind_Strike			0			0			0			0	0	643	684	1		0	False	False
+172	685	Balance Elemental	0	2	0	balance_elemental	6	10		0		0			0			0	3	643	686	3		4	False	False
+173	687	Black Demon	0	2	2	black_demon	9	6				0			0			0	2	643	688	3		0	False	False
+174	689	Cave Slime	0	2	0	cave_slime	3	2				0			0			0	0	643	690	1		0	False	False
+175	691	Commander Zilyana	0	2	0	commander_zilyana	7	13		6		2	11		3			0	2	643		3		5	False	False
+176	692	Greater Demon	0	2	2	greater_demon	8	5		1		2			0			0	1	643	693	3		0	False	False
+177	694	Green Dragon	0	2	3	green_dragon	8	5		2		0			0			0	0	643	695	3		0	False	False
+178	696	Jogre Shaman	0	2	10	jogre_shaman	4	9				0			0			0	1	643	697	3		4	False	False
+179	698	Lesser Demon	0	2	2	lesser_demon	5	3		1		2			0			0	0	643	699	1		0	False	False
+180	700	Mutineer	0	2	12	mutineer	4	3		0		2			0			0	0	643	701	3		0	False	False
+181	702	Ogre Warlord	0	2	10	ogre_warlord	6	10		0		4			0			0	1	643	703	3		4	False	False
+182	704	Redbeard Frank	0	2	12	redbeard_frank	7	3				0			0			0	3	643	705	3		5	False	False
+183	706	Scarface Pete	0	2	12	scarface_pete	4	9		1		0			0			0	2	643	707	3		5	False	False
+184	708	To'Kash	0	2	2	to_kash	6	12				0			0			0	3	643	709	3		0	False	False
+185	710	Wounded Kalphite	0	2	9	wounded_kalphite	1	2		1		5			0			0	0	643	711	3		0	False	False
+186	712	Shug	0	1	20	shug			0			0			0			0	2	643	713	3		0	False	False
+187	714	Ghostship	0	1	14	ghost_ship			3			0			0			0	2	643	715	3		0	False	False
+188	716	Weapon Poison	0	1	13	weapon_poison			0			0			0			0	0	643	717	1		0	False	False
+189	718	Ankou	3	2	19	ankou	7	6		1		2	1	3	6			0	0	643	719	3		0	False	False
+190	720	Chaos Elemental	3	2	0	chaos_elemental	6	16		3		2			0			0	2	643	721	3		0	False	False
+191	722	Unholy Cursebearer	3	2	19	unholy_cursebearer	8	13		2		4			0			0	0	643	723	3		0	False	False
+192	442	Gnome Healer	3	1	20	gnome_healer			0	1		2	3		3			0	0	643	725	3		0	False	False
+193	726	Alchemy	3	1	16	alchemy			0			0			0			0	0	643	727	1		0	False	False
+194	728	Bind	3	1	16	bind			3			0			0			0	0	643	729	3		0	False	False
+195	730	Divine Storm	3	1	16	divine_storm			4			0			0			0	0	643	731	3		0	False	False
+196	732	Earth Wave	3	1	16	earth_wave			5			0			0			0	1	643	733	3		0	False	False
+197	734	Archmage Sedridor	3	1	20	archmage_sedridor			1			0			0			0	0	643	735	3		0	False	False
+198	736	Enfeeble	3	1	16	enfeeble			1			0			0			0	0	643	737	2		0	False	False
+199	738	Fire Surge	3	1	16	fire_surge			3			0			0			0	0	643	739	3		0	False	False
+200	740	Lady Hefin	3	1	20	lady_hefin			2			0			0			0	1	643	741	3		0	False	False
+201	742	Ring of Kinship	3	1	5	ring_of_kinship			2	1	5	6			0			0	1	643	743	3		0	False	False
+202	744	Stagger	3	1	16	stagger			0			0			0			0	1	643	745	3		0	False	False
+203	746	Wind Surge	3	1	16	wind_surge			1			0			0			0	0	643	747	3		0	False	False
+204	748	Adamant Dragon	1	2	3	adamant_dragon	6	13		2		5			0			0	0	643	749	3		0	False	False
+205	750	Kal'Ger	1	2	2	kal_ger	12	8				0			0			0	1	643	751	3		0	False	False
+206	752	TzHaar-Hur	1	2	18	tzhaar_hur	4	10		1		2	3		5			0	1	643	753	3		0	False	False
+207	754	Chaotic Rapier	1	1	5	chaotic_rapier			2			0			0			0	1	643	755	3		0	False	False
+208	756	Flurry	1	1	16	flurry			0			0			0			0	1	643	757	3		0	False	False
+209	758	Hope Devourer	4	2	1	hope_devourer	7	15		2		5			0			0	1	643	759	3		3	False	False
+210	760	Scabarite Assassin	4	2	0	scabarite_assassin	7	6		1		5	4	1	6			0	0	643		3		2	False	False
+211	761	Ullek Mummy	4	2	19	MummyChampion	8	6		1		2			0			0	0	643	762	3		5	False	False
+212	763	Osman	4	2	0	osman	5	13		0		2	2		5			0	0	643	764	3		5	False	False
+213	765	Ugthanki	4	2	1	ugthanki	1	4		3		3	1	0	6			0	0	643		3		3	False	False
+214	766	Donation	4	1	16	donation			0			0			0			0	1	643	767	3		0	False	False
+215	770	Smuggler	4	1	20	smuggler			3	2		0			0			0	0	643	771	3		0	False	False
+216	772	Crazed Whaler	2	2	12	crazed_whaler	6	6		1		2			0			0	1	643	773	3		5	False	False
+217	774	Rock Crab	2	2	1	rock_crab	1	4		3		3	1		5			0	0	643		3		0	False	False
+218	775	TokHaar-Ket	2	2	18	tokhaar_ket	6	10				0			0			0	1	643	776	3		0	False	False
+219	777	Yk'Lagor	2	2	2	yk_lagor	6	13		1		4			0			0	2	643	778	3		0	False	False
+220	779	Destroy	2	1	16	destroy			0			0			0			0	1	643	780	3		0	False	False
+221	781	Reflect	2	1	16	reflect			5	2		0			0			0	2	643	782	3		0	False	False
+222	783	Ogre Trader	2	1	20	ogre_trader			0			0			0			0	0	643	784	3		0	False	False
+223	785	TokTz-Ket-Em	2	1	5	toktz_ket_em			0			0			0			0	0	643	786	3		0	False	False
+224	787	War Tortoise	2	1	6	war_tortoise			0			0			0			0	0	643	788	3		0	False	False
+231	15	Mischievous Imp	0	2	2	Imp	1	2		0		2			0			0	0	31	421	0		0	False	False
+232	958	Bilrach	0	2	21	bilrach	9	17		1		4			0			0	3	643	959	3		0	False	False
+233	960	Ket-Zek	0	2	18	ket_zek	12	7		1		5			0			0	0	643	961	3		0	False	False
+234	962	Kree'arra	0	2	0	kreeara	7	13		5	1	6			0			0	0	643	963	3		0	False	False
+235	964	Tenebra	0	2	22	tenebra	7	13				0			0			0	2	643	965	3		0	False	False
+236	966	Bork	0	2	11	bork	6	10		3		2	1		4			0	3	643		4		1	False	False
+237	967	Kyzaj Tournament	0	1	4	kyzaj_tournament			0	0		4			0			0	3	643	968	3		0	False	False
+238	969	Asphyxiate	3	1	16	asphyxiate			1			0			0			0	1	643	970	4		0	False	False
+239	971	Zamorakian Occultist	3	2	0	zamorakian_occultist	4	5		1		2			0			0	1	643	972	3		0	False	False
+240	973	Amascut Mystic	4	2	0	amascut_mystic	6	4		3		5			0			0	1	643	974	3		0	False	False
+241	975	TzHaar-Ket	2	2	18	tzhaar_ket	5	10		2		2			0			0	1	643	976	3		0	False	False
+242	977	Black Knight Titan	0	2	0	black_knight_titan	7	8		2		0			0			0	3	643	978	3		5	False	False
+243	979	Count Draynor	0	2	22	count_draynor	3	5				0			0			0	2	643	980	3		0	False	False
+244	981	Dr. Fenkenstrain	0	2	0	dr_fenkenstrain	2	6		2		2			0			0	1	643	982	3		0	False	False
+245	983	Grizzly Bear	0	2	1	grizzly_bear	2	6		0		2	1		5			0	0	643	984	1		3	False	False
+246	985	Kalphite Emissary	0	2	9	kalphite_emissary	4	4		0		2			0			0	0	643	986	3		0	False	False
+247	987	Tainted Cabbage	0	1	0	tainted_cabbage			0			0			0			0	2	643	988	4		0	False	False
+248	989	Melzar the Mad	0	2	0	melzar_the_mad	2	5		0		2			0			0	2	643	990	3		0	False	False
+249	991	Tok-Xil	0	2	18	tok_xil	2	5		1		5			0			0	1	643	992	3		0	False	False
+250	993	Skeletal Mage	3	2	19	skeletal_mage	5	4		2		5	2		0			0	1	643	994	3		4	False	False
+251	995	Fremennik Crafter	1	2	0	fremennik_crafter	5	3		0		2			0			0	0	643	996	3		5	False	False
+252	997	Leela	4	2	0	leela	2	5		1		5			0			0	1	643	998	3		5	False	False
+253	999	Animated Armour	2	2	0	animated_armour	2	6		1		2			0			0	1	643	1000	3		5	False	False
+254	1001	Wormbrain	0	2	8	wormbrain	2	2		0	2	6			0			0	2	643	1002	3		4	False	False
+255	1003	Skeletal Peon	3	2	19	skeletal_peon	2	3				0			0			0	0	643	1004	2		2	False	False
+256	1005	Fishing Trawler	0	1	14	fishing_trawler			4			0			0			0	0	643	1006	3		0	False	False
+257	1007	Relicym's Balm	0	1	13	relicyms_balm			4			0			0			0	1	643	1008	3		0	False	False
+258	1009	Blood Barrage	3	1	16	ancient_blood_barrage			0	7		3			0			0	2	643	1019	4		0	False	False
+259	1010	Ice Barrage	3	1	16	ancient_ice_barrage			0			0			0			0	2	643	1020	4		0	False	False
+260	1011	Shadow Barrage	3	1	16	ancient_shadow_barrage			0			0			0			0	2	643	1021	4		0	False	False
+261	1012	Smoke Barrage	3	1	16	ancient_smoke_barrage			0			0			0			0	2	643	1022	4		0	False	False
+262	1013	Ancient Spellbook	3	1	5	ancient_spellbook			8			0			0			0	2	643	1023	3		0	False	False
+263	1014	Boost	3	1	16	lunar_boost			0			0			0			0	2	643	1024	4		0	False	False
+264	1015	Borrowed Power	3	1	16	lunar_borrowed_power			0			0			0			0	2	643	1025	4		0	False	False
+265	1016	Group Heal	3	1	16	lunar_group_heal			0	4		3			0			0	2	643	1026	4		0	False	False
+266	1017	Vengeance	3	1	16	lunar_vengance			0			0			0			0	2	643	1027	4		0	False	False
+267	1018	Lunar Spellbook	3	1	5	lunar_spellbook			8			0			0			0	2	643	1028	3		0	False	False
+275	1135	K'ril Tsutsaroth	0	2	2	kril_tsutsaroth	13	7		4	0	6			0			0	2	643	1136	3		5	False	False
+276	1137	Zemouregal	0	2	21	zemouregal	14	7				0			0			0	3	643	1138	3		0	False	False
+277	1139	Revenant Knight	3	2	19	revenant_knight	8	10				0			0			0	0	643	1140	3		5	False	False
+278	6	Troll Shaman	3	2	17	troll_shaman	8	6		1		0	3		5			0	0	643	1141	2		4	False	False
+279	1142	Weaponmaster	1	2	0	weaponsmaster	8	5		0		0			0			0	1	643	1143	3		5	False	False
+280	1144	Goblin Trickster	0	2	8	goblin_trickster	2	2		0		2			0			0	1	643	1145	3		5	False	False
+281	1146	Animated Book	3	2	0	animated_book	3	1		0		0			0			0	0	643	1147	3		4	False	False
+282	1148	Dwarven Miner	1	2	0	dwarven_miner	2	2				0			0			0	0	643	1149	3		1	False	False
+283	1150	Crumble Undead	3	1	16	crumble_undead			2			0			0			0	1	643	1151	3		0	False	False
+284	477	Duel Tournament	0	1	4	duel_tournament			1	1	2	0			0			0	0	52	478	0		0	False	False
+285	1164	Ramokee Hoarder	1	2	0	ramokee_hoarder	2	7				0			0			0	0	643	1165	3		5	False	False
+286	1166	Lady Keli	4	2	0	lady_keli	8	7		4	1	2			0			0	3	118	1167	3		5	False	False
+287	1168	Stinkears	0	2	8	stinkears	2	5				0			0			0	1	227	1169	3		5	False	False
+288	1170	Drunken Pirate	0	2	12	drunken_pirate	3	2		0		2			0			0	0	155	1171	3		5	False	False
+289	1177	Wizard's Tower	0	1	4	wizards_tower			0			0			0			0	3	643	1178	5		0	False	False
+290	1179	Dominion Tower	0	1	4	dominion_tower			0			0			0			0	3	643	1180	5		0	False	False
+291	1181	Grand Exchange	0	1	4	grand_exchange			0			0			0			0	3	643	1182	5		0	False	False
+292	1183	Amascut Ruins	0	1	4	amascut_ruins			0			0			0			0	3	643	1184	5		0	False	False
+293	1185	Lumbridge Fields	0	1	4	lumbridge_fields			0			0			0			0	3	643	1186	5		0	False	False
+294	1187	Jaldraocht Pyramid	0	1	4	jaldraocht_pyramid			0	2		2			0			0	3	643	1188	5		0	False	False
+295	1289	Saradomin Godsword	0	1	5	saradomin_godsword			7	6	1	6	3		3			0	0	643		1		0	False	False
+296	1313	Lexicus Runewright	3	2	0	lexicus_runewright	9	5		3		2			0			0	3	643	1314	3		4	False	False
+297	1315	Barricade	2	1	23	barricade			4	9		5			0			0	3	643	1316	3		0	False	False
+298	1317	Char	1	2	0	char	11	10				0			0			0	3	643	1318	3		0	False	False
+299	1460	Ellaron	3	2	0	ellaron	5	3				0			0			0	1	1472	1461	3		5	False	False
+300	1462	Lord Iban	3	2	19	lord_iban	5	10				0			0			0	1	1473	1463	3		4	False	False
+301	1464	Silverlight	0	1	5	silverlight			3			0			0			0	0	1474	1465	3		0	False	False
+302	1466	Lumpnose	0	2	8	lumpnose	2	5				0			0			0	0	643	1467	1		2	False	False
+303	1468	Keris	0	1	5	keris			3	0	2	6			0			0	0	643	1469	1		0	False	False
+304	1470	Banshee	3	2	19	banshee	4	4		0		2			0			0	0	1475	1471	1		0	False	False
+305	1482	Monkfish	0	1	0	monkfish			0	7		3			0			0	0	1483	1484	4	Dave Barker	0	False	False
+306	1485	Antifire Potion	0	1	13	antifire_potion			2	1		3			0			0	1	1487	1486	3	Dave Barker	0	False	False
+307	1488	Black Marketeer	4	1	4	black_market			0	0		2			0			0	0	1489	1490	3	Dave Barker	0	False	False
+308	1491	Chaos Druid	0	2	0	chaos_druid	4	3				0			0			0	0	1493	1492	1		4	False	False
+309	1494	Crystal Flask	0	1	5	crystal_flask			0			0			0			0	1	1495	1496	3		0	False	False
+310	1497	Corpse Archer	0	2	19	corpse_archer	1	3		0	2	6			0			0	0	1498		1	Dave Barker	2	False	False
+311	1499	Kaqemeex	0	1	20	kaqemeex			1			0			0			0	1	1500	1501	3		0	False	False
+312	1502	Dragith Nurn	0	2	19	dragith_nurn	3	2				0			0			0	2	1504	1503	3	Dave Barker	4	False	False
+313	1505	Falador Party Room	0	1	4	falador_party_room			0			0			0			0	0	1506	1507	1	Dave Barker	0	False	False
+314	1508	Papa Mambo	0	1	20	papa_mambo			2			0			0			0	3	1509	1510	3		0	False	False
+315	1511	Ice Troll	0	2	17	ice_troll	5	9		1	5	6			0			0	2	1512		3		0	False	False
+316	1513	Kalphite Egg Chamber	0	1	4	kalphite_egg_chamber			2			0			0			0	0	1514	1515	3	Dave Barker	0	False	False
+317	1516	Unstable Concoction	0	1	13	unstable_concoction			0			0			0			0	1	1517	1518	3		0	False	False
+318	1519	50 Ships Mufassah	0	1	20	50_ships_mufassah			0			0			0			0	2	1520	1521	3	Dave Barker	0	False	False
+319	1522	Barker Toad	0	1	6	barker_toad			1			0			0			0	2	643	1527	3	Dave Barker	0	False	False
+320	1523	Cannonball	0	1	5	cannonball			0			0			0			0	0	1525	1526	4	Dave Barker	0	False	False
+321	1528	Cabin Boy	0	1	20	cabin_boy			1			0			0			0	0	1530	1529	1	Dave Barker	0	False	False
+322	1531	Chain Shot Cannon	0	1	5	chain_shot_cannon			0			0			0			0	0	1533	1532	1	Dave Barker	0	False	False
+323	1534	Lady Zay	0	1	14	lady_zay			0			0			0			0	3	1536	1555	3	Dave Barker	0	False	False
+324	1537	Meg	0	2	0	meg	4	3		1		2			0			0	1	1539	1538	3	Dave Barker	5	False	False
+325	1540	Pirates' Hideout	0	1	4	pirates_hideout			1			0			0			0	1	1542	1541	3	Dave Barker	0	False	False
+326	1543	Rowdy Cannoneer	0	2	12	rowdy_cannoneer	2	5				0			0			0	1	1545	1544	3	Dave Barker	5	False	False
+327	1546	Saucy Wench Deckhand	0	2	12	saucy_wench_deckhand	4	3				0			0			0	1	1548	1547	3	Dave Barker	5	False	False
+328	1549	The Adventurous	0	1	14	the_adventurous			4			0			0			0	2	1551	1550	3	Dave Barker	0	False	False
+329	1552	Sticky Sanders	0	1	12	sticky_sanders			0			0			0			0	0	1554	1553	1	Dave Barker	0	False	False
+330	1569	Flying Leech	5	2	1	flying_leech	1	3				0			0			0	0	643	1570	1		3	False	False
+331	1571	Treus Dayth	5	2	19	treus_dayth	5	10		2		5			0			0	0	643	1572	3		0	False	False
+332	1573	Blood Share	5	1	16	blood_share			0			0			0			0	0	643	1574	3		0	False	False
+333	1575	Crypt	5	1	4	crypt			1			0			0			0	2	643	1576	3		0	False	False
+334	1577	Fiyr Shade	5	2	19	fiyr_shade	7	6				0			0			0	1	643	1578	3		3	False	False
+335	1579	Gadderanks	5	1	20	gadderanks			3	4		3	2	0	6			0	0	643		3		0	False	False
+336	1580	Haemalchemist	5	1	20	haemalchamist			10			0			0			0	2	643	1581	3		0	False	False
+337	1583	Haunted Leech	5	2	1	haunted_leech	2	7				0			0			0	0	643	1584	2		3	False	False
+338	1585	Hunger	5	1	16	hunger			2	0		4			0			0	0	643	1586	1		0	False	False
+339	1587	Malak	5	1	20	malak			0			0			0			0	0	643	1588	1		0	False	False
+340	1589	Meiyerditch Prisoner	5	2	0	meirditch_prisoner	1	2		2		3			0			0	0	643	1590	3		0	False	False
+341	1591	Ranis Drakan	5	2	22	ranis_drakan	7	9		11		5	0		4			0	3	643	1592	3		0	False	False
+342	1593	Shade Remains	5	1	0	shade_remains			2	1		4			0			0	0	643	1594	4		0	False	False
+343	1595	Dreadnaut	5	2	19	dreadnaught	5	10		0		2			0			0	0	643	1596	3		4	False	False
+344	1597	Vampyre Power	5	1	16	vampyre_power			13	2		4			0			0	3	643	1598	3		0	False	False
+345	1599	Vampyre Trader	5	1	20	vampire_trader			0	4	0	6			0			0	0	643	1600	2		0	False	False
+346	1601	Vyrewatch	5	1	20	vyrewatch			5			0			0			0	0	643	1602	3		0	False	False
+347	1603	Werewolf Rebel	5	2	1	werewolf_rebel	5	3		1		2			0			0	0	643	1604	1		0	False	False
+348	1605	Worthy Opponent	5	1	16	worthy_opponent			0			0			0			0	0	643	1606	3		0	False	False
+349	1607	Wyrd	5	2	22	wyrd	7	3				0			0			0	0	643	1608	3		0	False	False
+350	1609	Sap Life Force	5	1	16	sap_life_force			1			0			0			0	0	643	1610	1		0	False	False
+351	1611	Rush of Strength	5	1	16	rush_of_strength			0			0			0			0	0	643	1612	2		0	False	False
+352	1613	Safalaan Hallow	5	1	20	safalaan_hallow			2			0			0			0	1	643	1614	3		0	False	False
+353	1615	Mass Drain	5	1	16	mass_drain			1			0			0			0	0	643	1616	3		0	False	False
+354	1617	Alpha Werewolf	5	2	1	alpha_werewolf	8	5		0		2			0			0	0	643	1618	1		0	False	False
+355	1619	Gorge	5	1	16	gorge			4			0			0			0	0	643	1620	2		0	False	False
+356	1621	Gravecreeper	5	2	19	gravekreeper	6	13		1		2	3		5			0	1	643	1622	3		0	False	False
+357	1623	Shadow Stalk	5	1	16	shadow_stalk			3			0			0			0	1	643	1624	3		0	False	False
+358	1625	Terror Dog	5	2	1	terror_dog	4	3				0			0			0	0	643	1626	3		3	False	False
+359	1803	Dragon Set	4	1	5	dragon_set			13	4	2	6	11		5			0	0	643	1806	1	Dave Barker	0	False	False
+360	1804	Dragon Arrows	4	1	0	dragon_arrows			0			0			0			0	0	643	1805	4	Dave Barker	0	False	False
+361	1807	Lady Raven	4	1	20	lady_raven			20			0			0			0	3	643	1808	3	Dave Barker	0	False	False
+362	1812	Ravenous Snail	3	2	0	ravenous_snail	3	2		1		5	1		3			0	0	643		3		3	False	False
+363	1811	Shield Dome	3	1	16	shield_dome			2	1		5	1		3			0	0	643	1815	2		0	False	False
+364	1810	Wise Old Man	3	1	20	wise_old_man			5			0			0			0	3	643	1814	3		0	False	False
+365	1809	Entangle	3	1	16	entangle			3			0			0			0	1	643	1813	3		0	False	False
+366	2093	Dragon Warhammer	0	1	5	dragon_warhammer			5	5	1	6			0			0	0	643	2094	3		0	False	False
+367	2095	Lava Dragon	0	2	3	lava_dragon	15	9		4		2	0		4			0	2	219	2096	3	Dave Barker	3	False	False
+368	2097	Dark Crab	0	1	0	dark_crab			1	5		3			0			0	0	1520	2098	3		0	False	False
+369	2099	Stamina Potion	0	1	13	stamina_potion			6	6		3	0		4			0	0	1520		3		0	False	False
+370	2100	Zulrah	0	2	0	zulrah	6	11		3		2	3		5			0	3	1489	2102	3		3	False	False
+371	2101	Zulrah's Scales	0	1	0	zulrahs_scales			0	7		2			0			0	3	1504	2103	4		0	False	False
+372	2104	Undead Cow	0	2	19	undead_cow	3	2				0			0			0	0	1504	2105	3		4	False	False
+373	2106	Red Chinchompa	0	1	5	red_chinchompa			1	0	1	6			0			0	0	39	2107	3		0	False	False
+374	2108	Toxic Blowpipe	0	1	5	toxic_blowpipe			2	2		3			0			0	0	1495	2109	3		0	False	False
+375	2110	Cerberus	0	2	1	cerberus	7	9		1		2	2		3			0	2	1520	2111	3		3	False	False
+376	2112	Burgh de Rott Citizen	5	2	0	burgh_de_rott_citizen	3	2		1		2			0			0	0	1474	2113	1	Dave Barker	0	False	False
+377	2114	Feral Vampyre	5	2	22	feral_vampire	6	8		0		4			0			0	0	40		1		0	False	False
+378	2115	Sir Tiffy Cashien	0	1	20	sir_tiffy_cashien			3			0			0			0	3	225	2116	3	Dave Barker	0	False	False
+379	2117	Granite Maul	0	1	5	granite_maul			5	3	1	6			0			0	2	47	2118	3		0	False	False
+380	2119	General Wartface	0	2	8	wartface	2	4		2		5			0			0	0	1489	2120	3		0	False	False
+381	2224	Dragon Scimitar	0	1	5	dragon_scimitar			6	4	1	6			0			0	0	643	2230	3	Dave Barker	0	False	False
+382	2225	Lobster	0	2	0	lobster	4	1		3		3			0			0	0	643		3	Dave Barker	0	False	False
+383	2226	Rantz	0	1	20	rantz			2	1	2	6			0			0	1	643	2231	3	Dave Barker	0	False	False
+384	2227	Explosive Potion	0	1	13	explosive_potion			2			0			0			0	0	643	2232	1		0	False	False
+385	2228	Mithril Dragon	0	2	3	mithril_dragon	8	10		11		5			0			0	1	643		3		3	False	False
+386	2229	Abyssal Whip	0	1	5	abyssal_whip			8	5	2	6			0			0	3	643	2233	3		0	False	False
+387	2234	Jerrod	5	2	0	jerrod	2	6				0			0			0	0	643	2235	3	Dave Barker	5	False	False
+388	2236	Afflicted	5	2	0	afflicted	6	4		1		3			0			0	1	643	2237	3	Dave Barker	4	False	False
+389	2238	Bloodveld Leecher	5	2	0	bloodveld_leecher	6	6		1		5			0			0	1	643	2239	3	Dave Barker	0	False	False
+390	2348	Culling the Weak	5	1	16	culling_the_weak			2			0			0			0	1	643	2349	3	Dave Barker	0	False	False
+391	2350	Harold	5	2	0	harold	4	7		0		2	1		3			0	1	643	2351	3	Dave Barker	0	False	False
+392	2352	Blood Tithe	5	1	16	blood_tithe2			2			0			0			0	1	643	2353	3	Dave Barker	0	False	False
+393	2354	Ripper Demon	5	2	2	ripper_demon	11	9				0			0			0	1	643	2355	3	Dave Barker	0	False	False
+394	2408	Necrovarus	5	2	19	necrovarus	6	4				0			0			0	2	643	2409	3	Dave Barker	5	False	False
+395	2436	Traitorous Imp	6	2	2	traiterous_imp	2	1				0			0			0	0	643	2437	1	Dave Barker	4	False	False
+396	2438	Strength in Numbers	6	1	15	slayer_task_strength_in_numbers			0			0			0			0	0	643	2506	2	Dave Barker	0	False	False
+397	2439	Dungeon Spider	6	2	1	dungeon_spider	2	2		1		2	1	1	6			0	0	643	2520	1	Dave Barker	0	False	True
+398	2440	Guard Dog	6	2	1	guard_dog	3	3		1		2			0			0	0	643	2441	1	Dave Barker	3	False	True
+399	2442	Beastmaster	6	1	15	slayer_task_beastmaster			0			0			0			0	0	643	2498	1	Dave Barker	0	False	False
+400	2443	Hollowtoof	6	2	8	hollowtoof	6	4				0			0			0	0	643	2507	2	Dave Barker	1	False	False
+401	2444	Level Up	6	1	15	slayer_task_level_up			0			0			0			0	0	643	2508	1	Dave Barker	0	False	False
+402	2445	Preparing to Hunt	6	1	0	preparing_to_hunt			3	4		5	1	1	6			0	1	643	421	3	Dave Barker	0	False	False
+403	2446	Dragon Two Hander	6	1	5	dragon_2_hander			5	3	3	6			0			0	0	643		1	Dave Barker	0	False	False
+404	2447	Kalphite Egg	6	2	9	kalphite_egg	0	8				0			0			0	0	643	2448	3	Dave Barker	3	False	False
+405	2449	Dung Kalphite	6	2	9	dung_kalphite	4	3		0		2	3		5			0	0	643	2450	2	Dave Barker	3	False	False
+406	2451	Tame	6	1	0	tame_beast			0			0			0			0	1	643	2452	3	Dave Barker	0	False	False
+407	2453	Mazchna	6	1	20	mazchna			0	0		2			0			0	0	643	2509	3	Dave Barker	0	False	False
+408	2454	Mutated Jadinko	6	2	0	mutated_jadinko	4	5		1		2			0			0	0	643	2455	3	Dave Barker	3	False	False
+409	2456	Gorad	6	2	10	gorad	4	2		0		2			0			0	0	643	2457	3		1	False	True
+410	2458	Woven Carapace	6	1	15	slayer_task_woven_carapace			0			0			0			0	0	643	2510	2	Dave Barker	0	False	False
+411	2459	Bunny	6	2	1	bunny	1	1		0		2	0		3			0	0	643		1		0	False	False
+412	2460	Dire Wolf	6	2	1	dire_wolf	7	4				0			0			0	2	643	2461	3	Dave Barker	3	False	False
+413	2462	Set Trap	6	1	16	set_trap			1			0			0			0	0	643	2463	3	Dave Barker	0	False	False
+414	2464	Iorwerth Hellhound	6	2	1	iorwerth_hell_hound	5	2		4		2			0			0	0	643	2465	3	Dave Barker	0	False	True
+415	2466	Zogre Mauler	6	2	10	zogre_mauler	7	4		0		2	0		5			0	0	643	2511	3	Dave Barker	0	False	False
+416	2467	Ogress Champion	6	2	10	ogress_champion	3	5				0			0			0	0	643	2468	3	Dave Barker	1	False	False
+417	2469	Ambushed Hive	6	1	0	ambushed_hive			2			0			0			0	1	643	2470	3	Dave Barker	0	False	False
+418	2471	Unicorn	6	2	1	unicorn	8	7		4		3	4		5			0	0	643		3	Dave Barker	4	False	False
+419	2472	Bouncer	6	2	1	bouncer	2	3				0			0			0	0	643	2473	3	Dave Barker	3	False	True
+420	2474	Grunsh	6	2	10	grunsh	4	4		1		5			0			0	1	643	2475	3	Dave Barker	4	False	False
+421	2476	Rush of Blood	6	1	16	rush_of_blood			2			0			0			0	0	643	2477	1	Dave Barker	0	False	False
+422	2478	Charging Monsters	6	1	0	charging_monsters			0			0			0			0	1	643	2479	3	Dave Barker	0	False	False
+423	2480	Kalphite Acid	6	1	0	kalphite_acid			2	4		5			0			0	1	643	2481	3	Dave Barker	0	False	False
+424	2482	Anger of Delrith	6	1	15	slayer_task_anger_of_delrith			0			0			0			0	1	643	2512	3	Dave Barker	0	False	False
+425	2483	Abyssal Demon	6	2	2	abyssal_demon	4	4		1		2			0			0	1	643	2521	3	Dave Barker	4	False	False
+426	2484	Chaos Dwogre	6	2	10	chaos_dwogre	7	9		1		2	3		5			0	1	643	2485	3	Dave Barker	1	False	False
+428	2487	Toughened Warrior	6	1	15	slayer_task_toughened_warrior			0			0			0			0	1	643	2515	3		0	False	False
+429	2488	Kalphite Marauder	6	2	9	kalphite_marauder	6	6		2		5			0			0	2	643	2489	3	Dave Barker	3	False	False
+430	2490	Dragon Egg	6	1	0	dragon_egg			1			0			0			0	2	643	2491	3	Dave Barker	0	False	False
+431	2493	Kalphite Queen	6	2	9	kalphite_queen	7	10				0			0			0	3	643	2496	3	Dave Barker	3	False	False
+432	2494	Kalphite Guardian	6	2	9	kalphite_guardian	1	4		0		4	1		5			0	3	643		4	Dave Barker	3	False	False
+433	2497	Deadly Prey	6	1	15	slayer_task_deadly_prey			0			0			0			0	3	643	2499	3	Dave Barker	0	False	False
+434	2513	Bones	6	1	0	bone_sack			0			0			0			0	1	643	2514	4		0	False	False
+435	2614	Clairvoyance	3	1	16	Stat_Spy			0			0			0			0	0	643	2615	1		0	False	False
+436	2616	Vampyre Juvinate	5	2	22	vampire_juvinate	2	2				0			0			0	0	643	2617	1		0	False	False
+437	2618	Loot Cache	4	1	5	goblin_cache			0	1		5			0			0	0	643	2619	1		0	False	False
+438	2620	Black Chinchompa	0	2	1	black_chinchompa	1	2		1		5			0			0	0	643	2621	1		0	False	False
+439	2622	Dark Fanatic	1	2	0	dark_fanatic	3	2		1		2			0			0	0	643	2623	1		5	False	False
+440	2624	Zombie Monkey	2	2	19	zombie_monkey	1	2				0			0			0	0	643	2625	1		0	False	False
+441	2626	Zamorakian Recruiter	0	1	0	zamorakian_recruiter			1			0			0			0	0	643	2627	1		0	False	False
+442	2629	Goblin Village	6	1	4	goblin_village			0	1		2			0			0	0	643	2628	1		0	False	False
+443	2630	Test of Might	0	1	0	powerstab			0			0			0			0	0	643	2631	1		0	False	False
+444	2632	Zombie Crew	0	2	19	zombie_crew	3	2				0			0			0	0	643	2633	1		5	False	False

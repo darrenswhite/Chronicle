@@ -1,7 +1,6 @@
 package com.darrenswhite.chronicle;
 
 import com.darrenswhite.chronicle.card.Card;
-import com.darrenswhite.chronicle.card.Weapon;
 import com.darrenswhite.chronicle.player.Player;
 
 import java.util.*;
@@ -13,31 +12,29 @@ import java.util.function.Predicate;
 public class Game {
 
 	private final Set<Card> cards = new LinkedHashSet<>();
-	private int base;
-	private int gold;
-	private int health;
-	private int armour;
-	private Weapon weapon;
+	private final int base;
+	private final int gold;
+	private final int health;
+	private final int armour;
 	private Player player;
 	private Player rival;
 	private int index;
 
 	public Game() {
-		this(2, 0, 30, 0, null);
+		this(2, 0, 30, 0);
 	}
 
-	public Game(int base, int gold, int health, int armour, Weapon weapon) {
+	public Game(int base, int gold, int health, int armour) {
 		this.base = base;
 		this.gold = gold;
 		this.health = health;
 		this.armour = armour;
-		this.weapon = weapon;
 
 		reset();
 	}
 
 	public void addCard(Card c) {
-		cards.add(c.getBuilder().create());
+		cards.add(c.createClone());
 	}
 
 	public void addCards(Card[] cards) {
@@ -98,34 +95,10 @@ public class Game {
 		return rival;
 	}
 
-	public Weapon getWeapon() {
-		return weapon;
-	}
-
 	public void reset() {
-		player = new Player(base, gold, health, armour, weapon);
-		rival = new Player(base, gold, health, armour, weapon);
+		player = new Player(base, gold, health, armour);
+		rival = new Player(base, gold, health, armour);
 		cards.clear();
-	}
-
-	public void setArmour(int armour) {
-		this.armour = armour;
-	}
-
-	public void setBase(int base) {
-		this.base = base;
-	}
-
-	public void setGold(int gold) {
-		this.gold = gold;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
-	}
-
-	public void setWeapon(Weapon weapon) {
-		this.weapon = weapon;
 	}
 
 	public void start() {
@@ -133,21 +106,17 @@ public class Game {
 
 		index = 0;
 
-		while (player.getHealth() > 0 && it.hasNext()) {
+		while (player.health > 0 && it.hasNext()) {
 			Card c = it.next();
 
 			if (c == null) {
 				return;
 			}
 
-			c.encounter(Game.this);
+			c.encounter(this);
 
-			if (player.getTemporaryAttack() > 0) {
-				player.setTemporaryAttack(0);
-			}
-
-			if (player.getWeapon() != null && player.getWeapon().getDurability() == 0) {
-				player.setWeapon(null);
+			if (player.temporaryAttack > 0) {
+				player.temporaryAttack = 0;
 			}
 
 			index++;

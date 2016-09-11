@@ -7,11 +7,12 @@ import java.util.Random;
  */
 public class Simulation implements Runnable {
 
+	private static final double OPPONENT_RISING_STAR = 0.1;
 	private final Random rnd = new Random();
 
-	private Rank startRank;
-	private Rank currRank;
-	private Rank endRank;
+	private PlayerRank startRank;
+	private PlayerRank currRank;
+	private PlayerRank endRank;
 	private double winRate;
 	private int games;
 
@@ -19,14 +20,14 @@ public class Simulation implements Runnable {
 	private int wins = 0;
 	private int losses = 0;
 
-	public Simulation(Rank startRank, Rank endRank, double winRate, int games) {
+	public Simulation(PlayerRank startRank, PlayerRank endRank, double winRate, int games) {
 		this.startRank = startRank;
 		this.endRank = endRank;
 		this.winRate = winRate;
 		this.games = games;
 	}
 
-	public Rank getCurrentRank() {
+	public PlayerRank getCurrentRank() {
 		return currRank;
 	}
 
@@ -34,12 +35,16 @@ public class Simulation implements Runnable {
 		return losses;
 	}
 
+	public int getRandomELO() {
+		return rnd.nextInt(100);
+	}
+
 	public int getTotalGames() {
 		return total;
 	}
 
 	public double getWinRate() {
-		return (double) getWins() / (double) getTotalGames();
+		return winRate;
 	}
 
 	public int getWins() {
@@ -47,7 +52,7 @@ public class Simulation implements Runnable {
 	}
 
 	private void reset() {
-		currRank = startRank.copy();
+		currRank = startRank.createClone();
 		winRate = rnd.nextDouble();
 		total = 0;
 		wins = 0;
@@ -56,51 +61,45 @@ public class Simulation implements Runnable {
 
 	@Override
 	public void run() {
-		int streak = 0;
-
 		if (winRate == -1) {
 			winRate = rnd.nextDouble();
 		}
 
-		currRank = startRank.copy();
+		currRank = startRank.createClone();
 
 		while (shouldRun()) {
-			boolean win = rnd.nextDouble() <= winRate;
+			MatchOutcome outcome = rnd.nextDouble() <= winRate ? MatchOutcome.WIN : MatchOutcome.LOSS;
+			boolean risingStar = rnd.nextDouble() <= OPPONENT_RISING_STAR;
 
+			currRank = currRank.newRankFromMatchResult(outcome, risingStar, getRandomELO());
 			total++;
 
-			if (win) {
-				wins++;
-				streak++;
-				currRank.promote(streak);
-			} else {
-				losses++;
-				streak = 0;
-				currRank.demote();
-				continue;
-			}
-
-			if (currRank.getPosition() == 1 && streak >= 3) {
-				currRank.promoteLeague();
+			switch (outcome) {
+				case WIN:
+					wins++;
+					break;
+				case LOSS:
+					losses++;
+					break;
 			}
 		}
 	}
 
-	public void setCurrentRank(Rank currRank) {
+	public void setCurrentRank(PlayerRank currRank) {
 		this.currRank = currRank;
 	}
 
 	private boolean shouldRun() {
 		if (games != -1) {
 			if (total < games) {
-				if (endRank != null && currRank.compareTo(endRank) >= 0) {
+				if (endRank != null && currRank.getAbsoluteRating() >= endRank.getAbsoluteRating()) {
 					reset();
 				}
 
 				return true;
 			}
 
-			if (endRank != null && currRank.compareTo(endRank) < 0) {
+			if (endRank != null && currRank.getAbsoluteRating() < endRank.getAbsoluteRating()) {
 				reset();
 				return true;
 			}
@@ -108,6 +107,6 @@ public class Simulation implements Runnable {
 			return false;
 		}
 
-		return endRank != null && currRank.compareTo(endRank) < 0;
+		return endRank != null && currRank.getAbsoluteRating() < endRank.getAbsoluteRating();
 	}
 }
