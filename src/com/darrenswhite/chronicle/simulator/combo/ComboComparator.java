@@ -29,13 +29,13 @@ public class ComboComparator implements Comparator<Game> {
 		Player p2 = g2.getPlayer();
 		int compare;
 
-		if (p1.health < minHealth) {
-			if (p2.health < minHealth) {
+		if (p1.getHealth() < minHealth) {
+			if (p2.getHealth() < minHealth) {
 				return 0;
 			} else {
 				return 1;
 			}
-		} else if (p2.health < minHealth) {
+		} else if (p2.getHealth() < minHealth) {
 			return -1;
 		}
 
@@ -44,10 +44,10 @@ public class ComboComparator implements Comparator<Game> {
 				compare = Integer.compare(p2.armour, p1.armour);
 				break;
 			case BASE:
-				compare = Integer.compare(p2.base, p1.base);
+				compare = Integer.compare(p2.attack, p1.attack);
 				break;
 			case DAMAGE:
-				compare = Integer.compare(g1.getRival().health, g2.getRival().health);
+				compare = Integer.compare(g1.getRival().getHealth(), g2.getRival().getHealth());
 				break;
 			case GOLD:
 				compare = Integer.compare(p2.gold, p1.gold);
@@ -65,7 +65,7 @@ public class ComboComparator implements Comparator<Game> {
 			return compare;
 		}
 
-		compare = Integer.compare(p2.health, p1.health);
+		compare = Integer.compare(p2.getHealth(), p1.getHealth());
 		if (compare != 0) {
 			return compare;
 		}

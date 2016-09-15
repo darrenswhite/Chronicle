@@ -2,8 +2,7 @@ package com.darrenswhite.chronicle.simulator.combo;
 
 import com.darrenswhite.chronicle.Game;
 import com.darrenswhite.chronicle.card.Card;
-import com.darrenswhite.chronicle.card.CardBuilder;
-import com.darrenswhite.chronicle.card.CardCollection;
+import com.darrenswhite.chronicle.config.ConfigProvider;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -16,18 +15,20 @@ import java.util.Optional;
 public class ComboSimulator {
 
 	private final Game game = new Game();
-	private final List<List<Card>> combos = new LinkedList<List<Card>>() {{
-		add(new LinkedList<>());
-	}};
+	private final List<List<Card>> combos = new LinkedList<>();
 	private int index = 0;
+
+	public ComboSimulator() {
+		reset();
+	}
 
 	public void addCard(Card c) {
 		combos.get(index).add(c);
 	}
 
 	public void addCard(String name) {
-		Optional<Card> card = CardCollection.getInstance().findAny(c -> c.name.equalsIgnoreCase(name) ||
-				c.name.toLowerCase().startsWith(name.toLowerCase()));
+		Optional<Card> card = ConfigProvider.getInstance().get(c -> c.getName().equalsIgnoreCase(name) ||
+				c.getName().toLowerCase().startsWith(name.toLowerCase()));
 
 		card.ifPresent(this::addCard);
 	}
@@ -48,12 +49,6 @@ public class ComboSimulator {
 		}
 	}
 
-	public void addCards(CardBuilder... cards) {
-		for (CardBuilder c : cards) {
-			addCard(c.create());
-		}
-	}
-
 	private String getCardsString(Collection<Card> cards) {
 		StringBuilder sb = new StringBuilder();
 
@@ -63,7 +58,7 @@ public class ComboSimulator {
 			}
 
 			if (c != null) {
-				sb.append(c.name);
+				sb.append(c.getName());
 			} else {
 				sb.append('_');
 			}
@@ -75,7 +70,7 @@ public class ComboSimulator {
 	public static void main(String[] args) {
 		ComboSimulator sim = new ComboSimulator();
 
-		sim.addCards("Worthy Opponent", "Worthy Opponent", "Commander Zilyana");
+		sim.addCards("Ali Morrisane", "Alpha Werewolf", "Gorge");
 		sim.simulate();
 
 		/*System.out.println();

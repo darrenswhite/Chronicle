@@ -2,7 +2,7 @@ package com.darrenswhite.chronicle.simulator.combo;
 
 import com.darrenswhite.chronicle.Game;
 import com.darrenswhite.chronicle.card.Card;
-import com.darrenswhite.chronicle.card.CardCollection;
+import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.player.Player;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.TreeSet;
  */
 public class ComboMaker implements Runnable {
 
-	private Game executeCombo(List<Card> combo) {
+	private Game executeCombo(Card[] combo) {
 		if (!isComboValid(combo)) {
 			return null;
 		}
@@ -30,19 +30,26 @@ public class ComboMaker implements Runnable {
 		return game;
 	}
 
-	private List<Card> getAllCards() {
+	private Card[] getAllCards() {
 		List<Card> allCards = new ArrayList<>();
-		List<Card> cards = CardCollection.getInstance().findAll(c -> true);
+		List<Card> cards = ConfigProvider.getInstance().getAll(c -> true);
 
 		cards.forEach(c -> {
+			Card.Source s = c.getSource();
+			if (s == Card.Source.NONE ||
+					s == Card.Source.FROM_EFFECT ||
+					s == Card.Source.PAGE_CARD) {
+				return;
+			}
+
 			allCards.add(c);
 
-			if (c.rarity != Card.RARITY_DIAMOND) {
+			if (c.getRarity() != Card.Rarity.DIAMOND) {
 				allCards.add(c);
 			}
 		});
 
-		return allCards;
+		return allCards.toArray(new Card[allCards.size()]);
 	}
 
 	private String getCardsString(Collection<Card> cards) {
@@ -54,7 +61,7 @@ public class ComboMaker implements Runnable {
 			}
 
 			if (c != null) {
-				sb.append(c.name);
+				sb.append(c.getName());
 			} else {
 				sb.append('_');
 			}
@@ -63,17 +70,19 @@ public class ComboMaker implements Runnable {
 		return sb.toString();
 	}
 
-	private static boolean isComboValid(List<Card> combo) {
-		int archetype = -1;
+	private static boolean isComboValid(Card[] combo) {
+		Card.Legend legend = null;
 
 		for (Card c : combo) {
-			if (c.archetype == Card.ARCHETYPE_ALL) {
+			Card.Legend l = c.getLegend();
+
+			if (l == Card.Legend.ALL) {
 				continue;
 			}
 
-			if (archetype == -1) {
-				archetype = c.archetype;
-			} else if (c.archetype != archetype) {
+			if (legend == null) {
+				legend = l;
+			} else if (l != legend) {
 				return false;
 			}
 		}
@@ -92,13 +101,13 @@ public class ComboMaker implements Runnable {
 		int priority = ComboComparator.DAMAGE;
 		int minHealth = 1;
 		int limit = 10;
-		int numCards = 4;
+		int numCards = 2;
 
 		TreeSet<Game> games = new TreeSet<>(new ComboComparator(priority, minHealth));
-		List<Card> cards = getAllCards();
-		Permutation<Card> permutation = new Permutation<>(cards, numCards, (o1, o2) -> o1.name.compareTo(o2.name));
+		Card[] cards = getAllCards();
+		Permutation<Card> permutation = new Permutation<>(cards, numCards, (o1, o2) -> o1.getName().compareTo(o2.getName()));
 
-		for (List<Card> combo : permutation) {
+		for (Card[] combo : permutation) {
 			Game game = executeCombo(combo);
 
 			if (game == null) {

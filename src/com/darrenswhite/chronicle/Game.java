@@ -11,7 +11,7 @@ import java.util.function.Predicate;
  */
 public class Game {
 
-	private final Set<Card> cards = new LinkedHashSet<>();
+	private final List<Card> cards = new LinkedList<>();
 	private final int base;
 	private final int gold;
 	private final int health;
@@ -34,7 +34,7 @@ public class Game {
 	}
 
 	public void addCard(Card c) {
-		cards.add(c.createClone());
+		cards.add(c.copy());
 	}
 
 	public void addCards(Card[] cards) {
@@ -55,7 +55,7 @@ public class Game {
 		return base;
 	}
 
-	public Set<Card> getCards() {
+	public List<Card> getCards() {
 		return cards;
 	}
 
@@ -106,7 +106,7 @@ public class Game {
 
 		index = 0;
 
-		while (player.health > 0 && it.hasNext()) {
+		while (player.getHealth() > 0 && it.hasNext()) {
 			Card c = it.next();
 
 			if (c == null) {
@@ -117,6 +117,10 @@ public class Game {
 
 			if (player.temporaryAttack > 0) {
 				player.temporaryAttack = 0;
+			}
+
+			if (player.getHealth() <= 0 || rival.getHealth() <= 0) {
+				break;
 			}
 
 			index++;

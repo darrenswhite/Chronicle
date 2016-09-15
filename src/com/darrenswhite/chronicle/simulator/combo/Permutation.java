@@ -1,29 +1,34 @@
 package com.darrenswhite.chronicle.simulator.combo;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author Darren White
  */
-public class Permutation<T> implements Iterable<List<T>> {
+public class Permutation<T> implements Iterable<T[]> {
 
-	private final List<T> permutation = new LinkedList<>();
-	private final List<T> elements;
+	private final T[] permutation;
+	private final T[] elements;
 	private final int n;
 	private final int r;
 	private Comparator<? super T> cmp;
+	private boolean hasNext = true;
 
-	public Permutation(List<T> elements, int r) {
+	public Permutation(T[] elements, int r) {
 		this(elements, r, null);
 	}
 
-	public Permutation(List<T> elements, int r, Comparator<? super T> cmp) {
-		Collections.sort(elements, cmp);
-
-		this.elements = elements;
-		this.n = elements.size();
+	public Permutation(T[] elements, int r, Comparator<? super T> cmp) {
+		this.elements = Arrays.copyOf(elements, elements.length);
+		this.n = elements.length;
 		this.r = r;
 		this.cmp = cmp;
+		permutation = Arrays.copyOf(elements, r);
+
+		Arrays.parallelSort(this.elements, cmp);
 
 		if (n < 1) {
 			throw new IllegalArgumentException("Need at least 1 element!");
@@ -44,65 +49,74 @@ public class Permutation<T> implements Iterable<List<T>> {
 		}
 	}
 
-	private boolean computeNext() {
+	private void computeNext() {
 		int i = r - 1;
 		int j = r;
 
-		while (j < n && compare(elements.get(i), elements.get(j)) >= 0) {
-			++j;
+		// Find the smallest j > r - 1 where a[j] > a[r - 1]
+		while (j < n && compare(elements[i], elements[j]) >= 0) {
+			j++;
 		}
 
 		if (j < n) {
 			swap(i, j);
 		} else {
 			reverseRightOf(i);
-			--i;
 
-			while (i >= 0 && compare(elements.get(i), elements.get(i + 1)) >= 0) {
-				--i;
+			// i = (k - 1) - 1
+			i--;
+
+			// Find the largest index i such that a[i] < a[i + 1].
+			while (i >= 0 && compare(elements[i], elements[i + 1]) >= 0) {
+				i--;
 			}
 
+			// If no such index exists, the permutation is the
+			// last permutation.
 			if (i < 0) {
-				return false;
+				hasNext = false;
+				return;
 			}
 
-			--j;
+			// j = n - 1
+			j--;
 
-			while (j > i && compare(elements.get(i), elements.get(j)) >= 0) {
-				--j;
+			// Find the largest index l greater than k such that
+			// a[k] < a[l].
+			while (j > i && compare(elements[i], elements[j]) >= 0) {
+				j--;
 			}
 
+			// Swap the value of a[i] with that of a[j].
 			swap(i, j);
+
+			// Reverse the sequence from a[i + 1] up to and including
+			// the final element a[n].
 			reverseRightOf(i);
 		}
-
-		return true;
 	}
 
 	@Override
-	public Iterator<List<T>> iterator() {
-		return new Iterator<List<T>>() {
+	public Iterator<T[]> iterator() {
+		return new Iterator<T[]>() {
 
-			private List<T> current;
+			private T[] current;
 
 			@Override
 			public boolean hasNext() {
-				if (current == null) {
-					current = nextPermuation();
-				}
-
-				return current != null;
+				return hasNext;
 			}
 
 			@Override
-			public List<T> next() {
-				List<T> next = current;
+			public T[] next() {
+				T[] next = current;
 				current = null;
 
 				if (next == null) {
 					next = nextPermuation();
+
 					if (next == null) {
-						throw new NoSuchElementException("No more CSV records available");
+						throw new NoSuchElementException("No more permutations available");
 					}
 				}
 
@@ -116,33 +130,30 @@ public class Permutation<T> implements Iterable<List<T>> {
 		};
 	}
 
-	private List<T> nextPermuation() {
-		permutation.clear();
-		permutation.addAll(0, elements.subList(0, r));
+	private T[] nextPermuation() {
+		System.arraycopy(elements, 0, permutation, 0, r);
 
-		if (!computeNext()) {
-			return null;
-		}
+		computeNext();
 
 		return permutation;
 	}
 
-	private void reverseRightOf(final int start) {
+	private void reverseRightOf(int start) {
 		int i = start + 1;
 		int j = n - 1;
 
 		while (i < j) {
 			swap(i, j);
 
-			++i;
-			--j;
+			i++;
+			j--;
 		}
 	}
 
-	private void swap(final int x, final int y) {
-		T t = elements.get(x);
+	private void swap(int x, int y) {
+		T t = elements[x];
 
-		elements.set(x, elements.get(y));
-		elements.set(y, t);
+		elements[x] = elements[y];
+		elements[y] = t;
 	}
 }

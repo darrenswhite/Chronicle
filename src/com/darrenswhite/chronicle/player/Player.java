@@ -1,6 +1,7 @@
 package com.darrenswhite.chronicle.player;
 
 import com.darrenswhite.chronicle.card.Card;
+import com.darrenswhite.chronicle.equipment.Weapon;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,17 +15,16 @@ import java.util.function.Predicate;
 public class Player {
 
 	private final List<Card> cards = new ArrayList<>();
-	public int base;
+	public int attack;
 	public int gold;
-	public int health;
 	public int armour;
-	public int weaponAttack;
-	public int weaponDurability;
+	public Weapon weapon;
 	public int maxHealth = 30;
 	public int temporaryAttack;
+	private int health;
 
-	public Player(int base, int gold, int health, int armour) {
-		this.base = base;
+	public Player(int attack, int gold, int health, int armour) {
+		this.attack = attack;
 		this.gold = gold;
 		this.health = health;
 		this.armour = armour;
@@ -34,6 +34,10 @@ public class Player {
 		if (cards.size() < 10) {
 			cards.add(c);
 		}
+	}
+
+	public void addHealth(int amount) {
+		health = Math.min(maxHealth, health + amount);
 	}
 
 	public void dealDamage(int amount) {
@@ -57,11 +61,15 @@ public class Player {
 		return cards;
 	}
 
-	public int getTotalAttack() {
-		int total = base + temporaryAttack;
+	public int getHealth() {
+		return health;
+	}
 
-		if (weaponDurability > 0) {
-			total += weaponAttack;
+	public int getTotalAttack() {
+		int total = attack + temporaryAttack;
+
+		if (weapon != null && weapon.getDurability() > 0) {
+			total += weapon.getAttack();
 		}
 
 		return total;
@@ -96,26 +104,34 @@ public class Player {
 		this.health = Math.min(maxHealth, health);
 	}
 
+	public void stealHealth(Player p, int amount) {
+		int startHealth = health;
+		int endHealth = Math.min(startHealth + amount, maxHealth);
+		int steal = endHealth - startHealth;
+
+		p.removeHealth(steal);
+		setHealth(endHealth);
+	}
+
 	@Override
 	public String toString() {
 		return "Player{" +
-				"base=" + base +
+				"attack=" + attack +
 				", gold=" + gold +
 				", health=" + health +
 				", armour=" + armour +
-				", weaponAttack=" + weaponAttack +
-				", weaponDurability=" + weaponDurability +
+				", weapon=" + weapon +
 				", maxHealth=" + maxHealth +
-				", temporaryAttack=" + temporaryAttack +
+				", totalAttack=" + getTotalAttack() +
 				'}';
 	}
 
 	public void updateWeapon() {
-		if (weaponDurability > 0) {
-			weaponDurability--;
+		if (weapon != null && weapon.getDurability() > 0) {
+			weapon.setDurability(weapon.getDurability() - 1);
 
-			if (weaponDurability == 0) {
-				weaponAttack = 0;
+			if (weapon.getDurability() == 0) {
+				weapon = null;
 			}
 		}
 	}
