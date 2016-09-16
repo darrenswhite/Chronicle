@@ -8,6 +8,7 @@ import com.darrenswhite.chronicle.player.Player;
 import com.darrenswhite.chronicle.rewards.Reward;
 import com.darrenswhite.chronicle.rewards.StatReward;
 import com.darrenswhite.chronicle.rewards.WeaponReward;
+import com.darrenswhite.chronicle.stats.Healable;
 import org.apache.commons.csv.CSVRecord;
 
 import java.util.LinkedList;
@@ -17,7 +18,7 @@ import java.util.Map;
 /**
  * @author Darren White
  */
-public class Card extends ConfigTemplate implements Cloneable {
+public class Card extends ConfigTemplate implements Cloneable, Healable {
 
 	private final List<Reward> rewards = new LinkedList<>();
 	private final int id;
@@ -153,6 +154,11 @@ public class Card extends ConfigTemplate implements Cloneable {
 		return legend;
 	}
 
+	@Override
+	public int getMaxHealth() {
+		return Integer.MAX_VALUE;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -204,6 +210,17 @@ public class Card extends ConfigTemplate implements Cloneable {
 		}
 
 		rewards.add(reward);
+	}
+
+	public void removeHealth(int amount) {
+		if (type == Type.COMBAT) {
+			health -= amount;
+		}
+	}
+
+	@Override
+	public void setHealth(int health) {
+		this.health = health;
 	}
 
 	@Override

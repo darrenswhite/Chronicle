@@ -32,4 +32,9 @@ public class Weapon {
 	public void setDurability(int durability) {
 		this.durability = Math.max(0, durability);
 	}
+
+	@Override
+	public String toString() {
+		return attack + "/" + durability;
+	}
 }

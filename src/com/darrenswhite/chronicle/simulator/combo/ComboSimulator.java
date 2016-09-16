@@ -70,7 +70,7 @@ public class ComboSimulator {
 	public static void main(String[] args) {
 		ComboSimulator sim = new ComboSimulator();
 
-		sim.addCards("Ali Morrisane", "Alpha Werewolf", "Gorge");
+		sim.addCards("Rolo the Stout", "Count Draynor", "White Wolf");
 		sim.simulate();
 
 		/*System.out.println();
@@ -98,6 +98,10 @@ public class ComboSimulator {
 	}
 
 	public void simulate(int index) {
+		if (combos.get(index).isEmpty()) {
+			return;
+		}
+
 		System.out.println("Player: " + game.getPlayer());
 		System.out.println("Rival: " + game.getRival());
 		System.out.println();

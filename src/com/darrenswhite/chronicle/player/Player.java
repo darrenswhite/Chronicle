@@ -2,6 +2,7 @@ package com.darrenswhite.chronicle.player;
 
 import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.equipment.Weapon;
+import com.darrenswhite.chronicle.stats.Healable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import java.util.function.Predicate;
 /**
  * @author Darren White
  */
-public class Player {
+public class Player implements Healable {
 
 	private final List<Card> cards = new ArrayList<>();
 	public int attack;
@@ -61,8 +62,14 @@ public class Player {
 		return cards;
 	}
 
+	@Override
 	public int getHealth() {
 		return health;
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 
 	public int getTotalAttack() {
@@ -94,23 +101,9 @@ public class Player {
 		}
 	}
 
-	public void removeHealth(int amount) {
-		if (amount > 0) {
-			health = Math.max(0, health - amount);
-		}
-	}
-
+	@Override
 	public void setHealth(int health) {
 		this.health = Math.min(maxHealth, health);
-	}
-
-	public void stealHealth(Player p, int amount) {
-		int startHealth = health;
-		int endHealth = Math.min(startHealth + amount, maxHealth);
-		int steal = endHealth - startHealth;
-
-		p.removeHealth(steal);
-		setHealth(endHealth);
 	}
 
 	@Override

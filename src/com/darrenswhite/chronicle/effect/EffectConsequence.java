@@ -1,11 +1,13 @@
 package com.darrenswhite.chronicle.effect;
 
 import com.darrenswhite.chronicle.Game;
+import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.config.ConfigTemplate;
 import org.apache.commons.csv.CSVRecord;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Darren White
@@ -30,6 +32,9 @@ public class EffectConsequence extends ConfigTemplate {
 			case 3: // Steal health
 				g.getPlayer().stealHealth(g.getRival(), consequenceValue0);
 				break;
+			case 5: // Deal damage to player
+				g.getPlayer().dealDamage(consequenceValue0);
+				break;
 			case 8: // Deal damage to rival
 				g.getRival().dealDamage(consequenceValue0);
 				break;
@@ -46,6 +51,11 @@ public class EffectConsequence extends ConfigTemplate {
 				break;
 			case 53: // AP gain
 				g.getPlayer().attack += consequenceValue0;
+				break;
+			case 114: // Steal health from next creature
+				Optional<Card> next = g.getNextCard(c -> c.getType() == Card.Type.COMBAT);
+
+				next.ifPresent(c -> g.getPlayer().stealHealth(c, consequenceValue0));
 				break;
 			case 208: // Exhaust
 				g.getPlayer().temporaryAttack = -g.getPlayer().attack + 1;
