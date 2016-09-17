@@ -1,9 +1,7 @@
 package com.darrenswhite.chronicle.config;
 
 import com.darrenswhite.chronicle.card.Card;
-import com.darrenswhite.chronicle.effect.EffectCondition;
-import com.darrenswhite.chronicle.effect.EffectConditionLink;
-import com.darrenswhite.chronicle.effect.EffectConsequence;
+import com.darrenswhite.chronicle.effect.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -29,14 +27,18 @@ public class ConfigProvider {
 
 	private static final CSVFormat format = CSVFormat.DEFAULT.withDelimiter('\t').withFirstRecordAsHeader();
 	private static final String CARDS_PATH = "csv/cards.csv";
-	private static final String CONDITIONS_PATH = "csv/conditionlink.csv";
-	private static final String LINKS_PATH = "csv/conditiontoconsequencelink.csv";
-	private static final String CONSEQUENCES_PATH = "csv/consequencelink.csv";
+	private static final String CONDITION_LINK_PATH = "csv/conditionlink.csv";
+	private static final String CONDITION_CONSEQUENCE_LINK_PATH = "csv/conditiontoconsequencelink.csv";
+	private static final String CONSEQUENCE_LINK_PATH = "csv/consequencelink.csv";
+	private static final String EFFECT_CONDITIONS_PATH = "csv/effectconditions.csv";
+	private static final String EFFECT_CONSEQUENCES_PATH = "csv/effectconsequences.csv";
 	private static ConfigProvider instance;
 	private List<Card> cards;
-	private List<EffectCondition> conditions;
-	private List<EffectConditionLink> links;
-	private List<EffectConsequence> consequences;
+	private List<ConditionLink> conditionLinks;
+	private List<ConditionConsequenceLink> conditionConsequenceLinks;
+	private List<ConsequenceLink> consequenceLinks;
+	private List<EffectCondition> effectConditions;
+	private List<EffectConsequence> effectConsequences;
 
 	private ConfigProvider() {
 	}
@@ -45,16 +47,51 @@ public class ConfigProvider {
 		return cards.stream().filter(filter).findAny();
 	}
 
+	public Optional<Card> get(int cardId) {
+		return cards.stream().filter(c -> c.getId() == cardId).findFirst();
+	}
+
 	public List<Card> getAll(Predicate<Card> filter) {
 		return cards.stream().filter(filter).collect(Collectors.toList());
 	}
 
+	public List<ConditionConsequenceLink> getConditionConsequenceLinks(int cardId) {
+		return conditionConsequenceLinks.stream().filter(c -> c.getCardId() == cardId).collect(Collectors.toCollection(LinkedList::new));
+	}
+
+	private List<ConditionLink> getConditionLinks(int cardId) {
+		return conditionLinks.stream().filter(c -> c.getCardId() == cardId).collect(Collectors.toCollection(LinkedList::new));
+	}
+
 	public List<EffectCondition> getConditions(int cardId) {
-		return conditions.stream().filter(c -> c.getCardId() == cardId).collect(Collectors.toCollection(LinkedList::new));
+		List<EffectCondition> conditions = new LinkedList<>();
+
+		for (ConditionLink conditionLink : getConditionLinks(cardId)) {
+			effectConditions.stream().filter(c -> c.getId() == conditionLink.getConditionId()).forEach(c -> {
+				c.setValue(conditionLink.getConditionValue());
+				conditions.add(c.copy());
+			});
+		}
+
+		return conditions;
+	}
+
+	private List<ConsequenceLink> getConsequenceLinks(int cardId) {
+		return consequenceLinks.stream().filter(c -> c.getCardId() == cardId).collect(Collectors.toCollection(LinkedList::new));
 	}
 
 	public List<EffectConsequence> getConsequences(int cardId) {
-		return consequences.stream().filter(c -> c.getCardId() == cardId).collect(Collectors.toCollection(LinkedList::new));
+		List<EffectConsequence> consequences = new LinkedList<>();
+
+		for (ConsequenceLink consequenceLink : getConsequenceLinks(cardId)) {
+			effectConsequences.stream().filter(c -> c.getId() == consequenceLink.getConsequenceId()).forEach(c -> {
+				c.setValue0(consequenceLink.getConsequenceValue0());
+				c.setValue1(consequenceLink.getConsequenceValue1());
+				consequences.add(c.copy());
+			});
+		}
+
+		return consequences;
 	}
 
 	public static ConfigProvider getInstance() {
@@ -66,14 +103,12 @@ public class ConfigProvider {
 		return instance;
 	}
 
-	public List<EffectConditionLink> getLinks(int cardId) {
-		return links.stream().filter(c -> c.getCardId() == cardId).collect(Collectors.toCollection(LinkedList::new));
-	}
-
 	private void init() {
-		conditions = parse(Paths.get(CONDITIONS_PATH), EffectCondition::new);
-		links = parse(Paths.get(LINKS_PATH), EffectConditionLink::new);
-		consequences = parse(Paths.get(CONSEQUENCES_PATH), EffectConsequence::new);
+		conditionLinks = parse(Paths.get(CONDITION_LINK_PATH), ConditionLink::new);
+		conditionConsequenceLinks = parse(Paths.get(CONDITION_CONSEQUENCE_LINK_PATH), ConditionConsequenceLink::new);
+		consequenceLinks = parse(Paths.get(CONSEQUENCE_LINK_PATH), ConsequenceLink::new);
+		effectConditions = parse(Paths.get(EFFECT_CONDITIONS_PATH), EffectCondition::new);
+		effectConsequences = parse(Paths.get(EFFECT_CONSEQUENCES_PATH), EffectConsequence::new);
 		cards = parse(Paths.get(CARDS_PATH), Card::new);
 	}
 

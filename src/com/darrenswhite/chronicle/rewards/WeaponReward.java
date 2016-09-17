@@ -16,11 +16,21 @@ public class WeaponReward implements Reward {
 
 	@Override
 	public void apply(Player p) {
-		p.weapon = weapon == null ? null : weapon.copy();
+		p.setWeapon(weapon == null ? null : weapon.copy());
+	}
+
+	@Override
+	public int getStat() {
+		return -1;
 	}
 
 	@Override
 	public Type getType() {
 		return Type.WEAPON;
+	}
+
+	@Override
+	public Weapon getWeapon() {
+		return weapon;
 	}
 }

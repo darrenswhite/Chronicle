@@ -17,11 +17,7 @@ public class RankedBracket {
 		this.internalName = internalName;
 	}
 
-	public boolean CanBePromoted() {
-		return this != RankedBracket.DIAMOND;
-	}
-
-	public static int ClientBracketPoints(int rating) {
+	public static int clientBracketPoints(int rating) {
 		if (rating > RankedBracket.DIAMOND.max) {
 			rating = RankedBracket.DIAMOND.max;
 		}
@@ -30,67 +26,7 @@ public class RankedBracket {
 			rating = RankedBracket.BRONZE.min;
 		}
 
-		return RankedBracket.FromAbsoluteRating(rating).max + 1 - rating;
-	}
-
-	public static RankedBracket FromAbsoluteRating(int rating) {
-		if (rating <= RankedBracket.BRONZE.max) {
-			return RankedBracket.BRONZE;
-		}
-		if (rating <= RankedBracket.SILVER.max) {
-			return RankedBracket.SILVER;
-		}
-		if (rating <= RankedBracket.GOLD.max) {
-			return RankedBracket.GOLD;
-		}
-		if (rating <= RankedBracket.PLATINUM.max) {
-			return RankedBracket.PLATINUM;
-		}
-		return RankedBracket.DIAMOND;
-	}
-
-	public static RankedBracket[] GetAllBrackets() {
-		return new RankedBracket[]{RankedBracket.BRONZE, RankedBracket.SILVER, RankedBracket.GOLD, RankedBracket.PLATINUM, RankedBracket.DIAMOND};
-	}
-
-	public RankedBracket GetHigherBracket() {
-		if (this == RankedBracket.BRONZE) {
-			return RankedBracket.SILVER;
-		}
-		if (this == RankedBracket.SILVER) {
-			return RankedBracket.GOLD;
-		}
-		if (this == RankedBracket.GOLD) {
-			return RankedBracket.PLATINUM;
-		}
-		return RankedBracket.DIAMOND;
-	}
-
-	public RankedBracket GetLowerBracket() {
-		if (this == RankedBracket.BRONZE || this == RankedBracket.SILVER) {
-			return RankedBracket.BRONZE;
-		}
-		if (this == RankedBracket.GOLD) {
-			return RankedBracket.SILVER;
-		}
-		if (this == RankedBracket.PLATINUM) {
-			return RankedBracket.GOLD;
-		}
-		RankedBracket rankedBracket = this;
-		RankedBracket diamond = RankedBracket.DIAMOND;
-		return RankedBracket.PLATINUM;
-	}
-
-	public static int MaxAchievableRating() {
-		return RankedBracket.DIAMOND.max;
-	}
-
-	public static int MaxHistoricRating() {
-		return 150;
-	}
-
-	public static int MinAchievableRating() {
-		return RankedBracket.BRONZE.min;
+		return fromAbsoluteRating(rating).max + 1 - rating;
 	}
 
 	@Override
@@ -104,6 +40,22 @@ public class RankedBracket {
 
 		RankedBracket that = (RankedBracket) o;
 		return max == that.max && min == that.min && internalName.equals(that.internalName);
+	}
+
+	public static RankedBracket fromAbsoluteRating(int rating) {
+		if (rating <= RankedBracket.BRONZE.max) {
+			return RankedBracket.BRONZE;
+		}
+		if (rating <= RankedBracket.SILVER.max) {
+			return RankedBracket.SILVER;
+		}
+		if (rating <= RankedBracket.GOLD.max) {
+			return RankedBracket.GOLD;
+		}
+		if (rating <= RankedBracket.PLATINUM.max) {
+			return RankedBracket.PLATINUM;
+		}
+		return RankedBracket.DIAMOND;
 	}
 
 	public static RankedBracket fromInternalName(String name) {
@@ -123,6 +75,10 @@ public class RankedBracket {
 			return RankedBracket.BRONZE;
 		}
 		return RankedBracket.DIAMOND;
+	}
+
+	public static RankedBracket[] getAllBrackets() {
+		return new RankedBracket[]{RankedBracket.BRONZE, RankedBracket.SILVER, RankedBracket.GOLD, RankedBracket.PLATINUM, RankedBracket.DIAMOND};
 	}
 
 	@Override

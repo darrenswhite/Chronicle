@@ -1,10 +1,9 @@
 package com.darrenswhite.chronicle.effect;
 
-import com.darrenswhite.chronicle.Game;
 import com.darrenswhite.chronicle.config.ConfigProvider;
+import com.darrenswhite.chronicle.game.Game;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,20 +14,14 @@ public class Effect {
 
 	private final List<EffectCondition> conditions;
 	private final List<EffectConsequence> consequences;
-	private final List<EffectConditionLink> conditionLinks;
+	private final List<ConditionConsequenceLink> conditionConsequenceLinks;
 
 	private Effect(List<EffectCondition> conditions,
 	               List<EffectConsequence> consequences,
-	               List<EffectConditionLink> conditionLinks) {
+	               List<ConditionConsequenceLink> conditionConsequenceLinks) {
 		this.conditions = conditions;
 		this.consequences = consequences;
-		this.conditionLinks = conditionLinks;
-	}
-
-	public Effect(Effect copy) {
-		conditions = new LinkedList<>(copy.conditions);
-		consequences = new LinkedList<>(copy.consequences);
-		conditionLinks = new LinkedList<>(copy.conditionLinks);
+		this.conditionConsequenceLinks = conditionConsequenceLinks;
 	}
 
 	public void apply(Game g) {
@@ -39,7 +32,7 @@ public class Effect {
 			for (int i = 0; i < conditions.size(); i++) {
 				EffectCondition condition = conditions.get(i);
 
-				if (condition.apply(g)) {
+				if (condition.assess(g)) {
 					conditionResults.put(i, true);
 					validConditions++;
 				} else {
@@ -48,7 +41,7 @@ public class Effect {
 			}
 		}
 
-		if (conditionLinks.isEmpty()) {
+		if (conditionConsequenceLinks.isEmpty()) {
 			if (validConditions == conditions.size()) {
 				if (consequences.size() > 0) {
 					for (EffectConsequence consequence : consequences) {
@@ -56,18 +49,16 @@ public class Effect {
 							break;
 						}
 
-						consequence.accept(g);
+						consequence.apply(g);
 					}
 				}
 			}
 		} else if (consequences != null && consequences.size() > 0) {
-			int num2 = 0;
-
 			for (int i = 0; i < consequences.size(); i++) {
 				EffectConsequence consequence = consequences.get(i);
 				boolean valid = true;
 
-				for (EffectConditionLink link : conditionLinks) {
+				for (ConditionConsequenceLink link : conditionConsequenceLinks) {
 					if (link.getConsequenceNum() - 1 == i) {
 						valid = link.test(conditionResults);
 					}
@@ -78,7 +69,7 @@ public class Effect {
 				}
 
 				if (valid) {
-					consequence.accept(g);
+					consequence.apply(g);
 				}
 			}
 		}
@@ -92,8 +83,33 @@ public class Effect {
 		}
 
 		List<EffectCondition> conditions = ConfigProvider.getInstance().getConditions(cardId);
-		List<EffectConditionLink> links = ConfigProvider.getInstance().getLinks(cardId);
+		List<ConditionConsequenceLink> links = ConfigProvider.getInstance().getConditionConsequenceLinks(cardId);
 
 		return new Effect(conditions, consequences, links);
+	}
+
+	public List<EffectConsequence> getConsequences() {
+		return consequences;
+	}
+
+	public static boolean intAssessment(int target, EffectEvalInt eval, int value) {
+		switch (eval) {
+			case EQUALS:
+				return target == value;
+			case NOT_EQUALS:
+				return target != value;
+			case GREATER_THAN:
+				return target > value;
+			case LESS_THAN:
+				return target < value;
+			case GREATER_OR_EQUAL:
+				return target >= value;
+			case SMALLER_OR_EQUAL:
+				return target <= value;
+			case NONE:
+				return true;
+			default:
+				return false;
+		}
 	}
 }

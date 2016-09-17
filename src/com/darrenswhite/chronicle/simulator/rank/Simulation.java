@@ -10,9 +10,9 @@ public class Simulation implements Runnable {
 	private static final double OPPONENT_RISING_STAR = 0.1;
 	private final Random rnd = new Random();
 
-	private PlayerRank startRank;
+	private final PlayerRank startRank;
+	private final PlayerRank endRank;
 	private PlayerRank currRank;
-	private PlayerRank endRank;
 	private double winRate;
 	private int games;
 
@@ -31,10 +31,6 @@ public class Simulation implements Runnable {
 		return currRank;
 	}
 
-	public int getLosses() {
-		return losses;
-	}
-
 	public int getRandomELO() {
 		return rnd.nextInt(100);
 	}
@@ -45,10 +41,6 @@ public class Simulation implements Runnable {
 
 	public double getWinRate() {
 		return winRate;
-	}
-
-	public int getWins() {
-		return wins;
 	}
 
 	private void reset() {
@@ -83,10 +75,6 @@ public class Simulation implements Runnable {
 					break;
 			}
 		}
-	}
-
-	public void setCurrentRank(PlayerRank currRank) {
-		this.currRank = currRank;
 	}
 
 	private boolean shouldRun() {

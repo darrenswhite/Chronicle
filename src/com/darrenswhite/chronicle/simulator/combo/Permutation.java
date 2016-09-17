@@ -14,7 +14,7 @@ public class Permutation<T> implements Iterable<T[]> {
 	private final T[] elements;
 	private final int n;
 	private final int r;
-	private Comparator<? super T> cmp;
+	private final Comparator<? super T> cmp;
 	private boolean hasNext = true;
 
 	public Permutation(T[] elements, int r) {

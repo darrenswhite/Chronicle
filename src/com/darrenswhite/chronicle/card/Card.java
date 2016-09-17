@@ -1,9 +1,9 @@
 package com.darrenswhite.chronicle.card;
 
-import com.darrenswhite.chronicle.Game;
 import com.darrenswhite.chronicle.config.ConfigTemplate;
-import com.darrenswhite.chronicle.effect.Effect;
+import com.darrenswhite.chronicle.effect.*;
 import com.darrenswhite.chronicle.equipment.Weapon;
+import com.darrenswhite.chronicle.game.Game;
 import com.darrenswhite.chronicle.player.Player;
 import com.darrenswhite.chronicle.rewards.Reward;
 import com.darrenswhite.chronicle.rewards.StatReward;
@@ -14,11 +14,13 @@ import org.apache.commons.csv.CSVRecord;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Darren White
  */
-public class Card extends ConfigTemplate implements Cloneable, Healable {
+public class Card extends ConfigTemplate implements Cloneable, Healable, IEffectTarget {
 
 	private final List<Reward> rewards = new LinkedList<>();
 	private final int id;
@@ -30,6 +32,7 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 	private final Source source;
 	private final boolean aggressive;
 	private final Effect effect;
+	private final int initialHealth;
 	private int attack;
 	private int health;
 	private int goldCost;
@@ -42,21 +45,31 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 		type = parseEnum(Type.class, record.get(headers.get("type")));
 		family = parseEnum(Family.class, record.get(headers.get("family")));
 		attack = parseInt(record.get(headers.get("attack")));
-		health = parseInt(record.get(headers.get("health")));
+		initialHealth = health = parseInt(record.get(headers.get("health")));
 		goldCost = parseInt(record.get(headers.get("goldcost")));
-		parseReward("reward0type", record.get(headers.get("reward0type")),
-				"reward0value0", record.get(headers.get("reward0value0")),
-				"reward0value1", record.get(headers.get("reward0value1")));
-		parseReward("reward1type", record.get(headers.get("reward1type")),
-				"reward1value0", record.get(headers.get("reward1value0")),
-				"reward1value1", record.get(headers.get("reward1value1")));
-		parseReward("reward2type", record.get(headers.get("reward2type")),
-				"reward2value0", record.get(headers.get("reward2value0")),
-				"reward2value1", record.get(headers.get("reward2value1")));
+		parseReward(record.get(headers.get("reward0type")),
+				record.get(headers.get("reward0value0")),
+				record.get(headers.get("reward0value1")));
+		parseReward(record.get(headers.get("reward1type")),
+				record.get(headers.get("reward1value0")),
+				record.get(headers.get("reward1value1")));
+		parseReward(record.get(headers.get("reward2type")),
+				record.get(headers.get("reward2value0")),
+				record.get(headers.get("reward2value1")));
 		rarity = parseEnum(Rarity.class, record.get(headers.get("rarity")));
 		source = parseEnum(Source.class, record.get(headers.get("source")));
 		aggressive = parseBoolean(record.get(headers.get("aggressive")));
 		effect = Effect.create(id);
+	}
+
+	@Override
+	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, int value, int value2) {
+
+	}
+
+	@Override
+	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, Weapon weapon) {
+
 	}
 
 	public Card copy() {
@@ -68,8 +81,6 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 	}
 
 	public void encounter(Game g) {
-		Player p = g.getPlayer();
-
 		switch (type) {
 			case COMBAT:
 				if (!encounterCreature(g)) {
@@ -96,7 +107,6 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 
 	private boolean encounterCreature(Game g) {
 		Player p = g.getPlayer();
-		int armour, hit;
 		int hits = 0;
 
 		while (health > 0) {
@@ -119,15 +129,7 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 	}
 
 	private boolean encounterSupport(Game g) {
-		Player p = g.getPlayer();
-
-		if (p.gold < goldCost) {
-			return false;
-		}
-
-		p.gold -= goldCost;
-
-		return true;
+		return g.getPlayer().spendGold(goldCost);
 	}
 
 	public int getAttack() {
@@ -150,17 +152,171 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 		return id;
 	}
 
+	public int getInitialHealth() {
+		return initialHealth;
+	}
+
 	public Legend getLegend() {
 		return legend;
 	}
 
-	@Override
-	public int getMaxHealth() {
-		return Integer.MAX_VALUE;
-	}
-
 	public String getName() {
 		return name;
+	}
+
+	@Override
+	public int getPropertyValue(EffectProperty property, List<CardPredicate> cardPredicates, int maxValue) {
+		if (cardPredicates != null && cardPredicates.size() > 0) {
+			for (CardPredicate cardPredicate : cardPredicates) {
+				if (cardPredicate.getType() != CardPredicateType.NONE && cardPredicate.getPredicate() != null && !cardPredicate.predicate(this)) {
+					return 0;
+				}
+			}
+		}
+
+		int val2 = 0;
+
+		switch (property) {
+			case HEALTH:
+				if (getType() == Type.COMBAT) {
+					val2 = health;
+				} else {
+					val2 = 0;
+				}
+				break;
+			case MAX_HEALTH:
+				val2 = -1;
+				break;
+			case ATTACK:
+				if (getType() == Type.COMBAT) {
+					val2 = attack;
+				} else {
+					val2 = 0;
+				}
+				break;
+			case COST:
+				if (getType() == Type.NONCOMBAT) {
+					val2 = goldCost;
+				} else {
+					val2 = 0;
+				}
+				break;
+			case REWARD_ATTACK:
+				if (rewards != null) {
+					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.ATTACK).findFirst();
+					if (reward.isPresent()) {
+						val2 = reward.get().getStat();
+					}
+				}
+				break;
+			case REWARD_GOLD:
+				if (rewards != null) {
+					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.GOLD).findFirst();
+					if (reward.isPresent()) {
+						val2 = reward.get().getStat();
+					}
+				}
+				break;
+			case REWARD_HEALTH:
+				if (rewards != null) {
+					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.HEALTH).findFirst();
+					if (reward.isPresent()) {
+						val2 = reward.get().getStat();
+					}
+				}
+				break;
+			case REWARD_EQUIPMENT_COUNT:
+				if (rewards != null) {
+					List<Reward> all = rewards.stream().filter(x ->
+							x.getType() == Reward.Type.WEAPON || x.getType() == Reward.Type.ARMOUR).collect(Collectors.toList());
+					if (all != null && all.size() > 0) {
+						val2 = all.size();
+					}
+				}
+				break;
+			case REWARD_ARMOUR_COUNT:
+				if (rewards != null) {
+					List<Reward> all = rewards.stream().filter(x -> x.getType() == Reward.Type.ARMOUR).collect(Collectors.toList());
+					if (all != null && all.size() > 0) {
+						val2 = all.size();
+					}
+				}
+				break;
+			case REWARD_ARMOUR:
+				if (rewards != null) {
+					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.ARMOUR).findFirst();
+					if (reward != null) {
+						Weapon weapon = reward.get().getWeapon();
+						if (weapon != null) {
+							val2 = weapon.durability;
+						}
+					}
+				}
+				break;
+			case REWARD_WEAPON_COUNT:
+				if (rewards != null) {
+					List<Reward> all = rewards.stream().filter(x -> x.getType() == Reward.Type.WEAPON).collect(Collectors.toList());
+					if (all != null && all.size() > 0) {
+						val2 = all.size();
+					}
+				}
+				break;
+			case REWARD_WEAPON_ATTACK:
+				if (rewards != null) {
+					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.WEAPON).findFirst();
+					if (reward != null) {
+						Weapon weapon = reward.get().getWeapon();
+						if (weapon != null) {
+							val2 = weapon.attack;
+						}
+					}
+				}
+				break;
+			case REWARD_WEAPON_DURABILITY:
+				if (rewards != null) {
+					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.WEAPON).findFirst();
+					if (reward != null) {
+						Weapon weapon = reward.get().getWeapon();
+						if (weapon != null) {
+							val2 = weapon.durability;
+						}
+					}
+				}
+				break;
+			case CARD_ID:
+				val2 = id;
+				break;
+			case AGGRESSIVE:
+				val2 = aggressive ? 1 : 0;
+				break;
+			case COUNT:
+				val2 = 1;
+				break;
+			case EFFECT_EXHAUST:
+				val2 = 0;
+				if (effect != null) {
+					for (EffectConsequence consequence : effect.getConsequences()) {
+						if (consequence.getTargetProperty() == EffectProperty.EXHAUST) {
+							val2 = 1;
+						}
+					}
+				}
+				break;
+			default:
+				val2 = 0;
+				break;
+		}
+
+		if (maxValue <= 0) {
+			return val2;
+		}
+
+		return Math.min(maxValue, val2);
+	}
+
+	@Override
+	public Weapon getPropertyValueWeapon() {
+		return null;
 	}
 
 	public Rarity getRarity() {
@@ -175,11 +331,7 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 		return type;
 	}
 
-	public boolean isAggressive() {
-		return aggressive;
-	}
-
-	private void parseReward(String rewardTypeHeader, String rewardTypeString, String reward0Header, String reward0String, String reward1Header, String reward1String) {
+	private void parseReward(String rewardTypeString, String reward0String, String reward1String) {
 		if (rewardTypeString.isEmpty() || reward0String.isEmpty()) {
 			return;
 		}
@@ -226,71 +378,5 @@ public class Card extends ConfigTemplate implements Cloneable, Healable {
 	@Override
 	public String toString() {
 		return name;
-	}
-
-	public enum Family {
-
-		NONE,
-		BEAST,
-		DEMON,
-		DRAGON,
-		LOCATION,
-		EQUIPMENT,
-		FAMILIAR,
-		GIANT,
-		GOBLIN,
-		KALPHITE,
-		OGRE,
-		ORK,
-		PIRATE,
-		POTION,
-		SHIP,
-		SLAYER_TASK,
-		SPELL,
-		TROLL,
-		TZHAAR,
-		UNDEAD,
-		ALLY,
-		MAHJARRAT,
-		VAMPYRE,
-		ACTION,
-	}
-
-	public enum Legend {
-
-		ALL,
-		LINZA,
-		RAPTOR,
-		ARIANE,
-		OZAN,
-		VANESCULA,
-		MORVRAN,
-	}
-
-	public enum Rarity {
-
-		BASIC,
-		SAPPHIRE,
-		EMERALD,
-		RUBY,
-		DIAMOND
-	}
-
-	public enum Source {
-
-		NONE,
-		STARTER,
-		UNLOCK,
-		PURCHASE,
-		FROM_EFFECT,
-		PAGE_CARD,
-	}
-
-	public enum Type {
-
-		OPEN_ROAD,
-		NONCOMBAT,
-		COMBAT,
-		ANY,
 	}
 }

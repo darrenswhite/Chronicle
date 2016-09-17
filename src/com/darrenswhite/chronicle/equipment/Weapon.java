@@ -5,8 +5,8 @@ package com.darrenswhite.chronicle.equipment;
  */
 public class Weapon {
 
-	private int attack;
-	private int durability;
+	public int attack;
+	public int durability;
 
 	public Weapon(int attack, int durability) {
 		this.attack = attack;
@@ -15,22 +15,6 @@ public class Weapon {
 
 	public Weapon copy() {
 		return new Weapon(attack, durability);
-	}
-
-	public int getAttack() {
-		return attack;
-	}
-
-	public int getDurability() {
-		return durability;
-	}
-
-	public void setAttack(int attack) {
-		this.attack = Math.max(Math.min(this.attack, 0), attack);
-	}
-
-	public void setDurability(int durability) {
-		this.durability = Math.max(0, durability);
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package com.darrenswhite.chronicle.simulator.combo;
 
-import com.darrenswhite.chronicle.Game;
 import com.darrenswhite.chronicle.card.Card;
+import com.darrenswhite.chronicle.card.Legend;
+import com.darrenswhite.chronicle.card.Rarity;
+import com.darrenswhite.chronicle.card.Source;
 import com.darrenswhite.chronicle.config.ConfigProvider;
-import com.darrenswhite.chronicle.player.Player;
+import com.darrenswhite.chronicle.game.Game;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +23,6 @@ public class ComboMaker implements Runnable {
 		}
 
 		Game game = new Game();
-		Player p = game.getPlayer();
-		Player rival = game.getRival();
 
 		game.addCards(combo);
 		game.start();
@@ -30,21 +30,27 @@ public class ComboMaker implements Runnable {
 		return game;
 	}
 
-	private Card[] getAllCards() {
+	private Card[] getAllCards(Legend legend) {
 		List<Card> allCards = new ArrayList<>();
 		List<Card> cards = ConfigProvider.getInstance().getAll(c -> true);
 
 		cards.forEach(c -> {
-			Card.Source s = c.getSource();
-			if (s == Card.Source.NONE ||
-					s == Card.Source.FROM_EFFECT ||
-					s == Card.Source.PAGE_CARD) {
+			Source s = c.getSource();
+			Legend l = c.getLegend();
+
+			if (s == Source.NONE ||
+					s == Source.FROM_EFFECT ||
+					s == Source.PAGE_CARD) {
+				return;
+			}
+
+			if (legend != Legend.ALL && l != Legend.ALL && l != legend) {
 				return;
 			}
 
 			allCards.add(c);
 
-			if (c.getRarity() != Card.Rarity.DIAMOND) {
+			if (c.getRarity() != Rarity.SUPER_RARE) {
 				allCards.add(c);
 			}
 		});
@@ -71,12 +77,12 @@ public class ComboMaker implements Runnable {
 	}
 
 	private static boolean isComboValid(Card[] combo) {
-		Card.Legend legend = null;
+		Legend legend = null;
 
 		for (Card c : combo) {
-			Card.Legend l = c.getLegend();
+			Legend l = c.getLegend();
 
-			if (l == Card.Legend.ALL) {
+			if (l == Legend.ALL) {
 				continue;
 			}
 
@@ -98,13 +104,14 @@ public class ComboMaker implements Runnable {
 
 	@Override
 	public void run() {
+		Legend legend = Legend.ALL;
 		int priority = ComboComparator.DAMAGE;
 		int minHealth = 1;
 		int limit = 10;
-		int numCards = 2;
+		int numCards = 3;
 
 		TreeSet<Game> games = new TreeSet<>(new ComboComparator(priority, minHealth));
-		Card[] cards = getAllCards();
+		Card[] cards = getAllCards(legend);
 		Permutation<Card> permutation = new Permutation<>(cards, numCards, (o1, o2) -> o1.getName().compareTo(o2.getName()));
 
 		for (Card[] combo : permutation) {

@@ -1,10 +1,11 @@
-package com.darrenswhite.chronicle;
+package com.darrenswhite.chronicle.game;
 
 import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.player.Player;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * @author Darren White
@@ -12,13 +13,16 @@ import java.util.function.Predicate;
 public class Game {
 
 	private final List<Card> cards = new LinkedList<>();
+	private final List<Card> cardHistory = new LinkedList<>();
+	private final Stack<Integer> temporaryAttack = new Stack<>();
 	private final int base;
 	private final int gold;
 	private final int health;
 	private final int armour;
-	private Player player;
+	private Player p;
 	private Player rival;
-	private int index;
+	private int currentSlot;
+	private int decay;
 
 	public Game() {
 		this(2, 0, 30, 0);
@@ -47,48 +51,36 @@ public class Game {
 		cards.forEach(this::addCard);
 	}
 
-	public int getArmour() {
-		return armour;
-	}
-
-	public int getBase() {
-		return base;
+	public Stream<Card> getCardHistory(Predicate<Card> filter) {
+		return cardHistory.stream().filter(filter);
 	}
 
 	public List<Card> getCards() {
 		return cards;
 	}
 
-	public int getGold() {
-		return gold;
+	public Card getCurrentCard() {
+		return cards.get(currentSlot);
 	}
 
-	public int getHealth() {
-		return health;
-	}
-
-	public <T extends Card> Optional<T> getNextCard() {
-		return getNextCard(card -> true);
-	}
-
-	@SuppressWarnings("unchecked")
-	public <T extends Card> Optional<T> getNextCard(Predicate<Card> predicate) {
+	public List<Card> getNextCards(Predicate<Card> predicate) {
+		List<Card> matches = new LinkedList<>();
 		Iterator<Card> it = cards.iterator();
 		int i = 0;
 
 		while (it.hasNext()) {
 			Card next = it.next();
 
-			if (i++ > index && predicate.test(next)) {
-				return Optional.of((T) next);
+			if (i++ > currentSlot && predicate.test(next)) {
+				matches.add(next);
 			}
 		}
 
-		return Optional.empty();
+		return matches;
 	}
 
 	public Player getPlayer() {
-		return player;
+		return p;
 	}
 
 	public Player getRival() {
@@ -96,17 +88,21 @@ public class Game {
 	}
 
 	public void reset() {
-		player = new Player(base, gold, health, armour);
+		p = new Player(base, gold, health, armour);
 		rival = new Player(base, gold, health, armour);
 		cards.clear();
+		cardHistory.clear();
+		temporaryAttack.clear();
 	}
 
 	public void start() {
 		Iterator<Card> it = cards.iterator();
 
-		index = 0;
+		temporaryAttack.add(0);
+		decay = 0;
+		currentSlot = 0;
 
-		while (player.getHealth() > 0 && it.hasNext()) {
+		while (p.getHealth() > 0 && it.hasNext()) {
 			Card c = it.next();
 
 			if (c == null) {
@@ -115,15 +111,29 @@ public class Game {
 
 			c.encounter(this);
 
-			if (player.temporaryAttack > 0) {
-				player.temporaryAttack = 0;
-			}
-
-			if (player.getHealth() <= 0 || rival.getHealth() <= 0) {
+			if (p.getHealth() <= 0 || rival.getHealth() <= 0) {
 				break;
 			}
 
-			index++;
+			updateTemporaryAttack();
+
+			cardHistory.add(c);
+			currentSlot++;
+		}
+	}
+
+	private void updateTemporaryAttack() {
+		if (p.getTemporaryAttack() != 0) {
+			decay++;
+		}
+
+		if (decay > 0 && decay % 2 == 0) {
+			p.removeTemporaryAttack(temporaryAttack.pop());
+			decay -= 2;
+		}
+
+		if (p.getTemporaryAttack() != temporaryAttack.lastElement()) {
+			temporaryAttack.push(p.getTemporaryAttack() - temporaryAttack.lastElement());
 		}
 	}
 }

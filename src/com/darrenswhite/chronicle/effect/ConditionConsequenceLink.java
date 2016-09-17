@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author Darren White
  */
-public class EffectConditionLink extends ConfigTemplate {
+public class ConditionConsequenceLink extends ConfigTemplate {
 
 	private final int cardId;
 	private final int consequenceNum;
@@ -16,7 +16,7 @@ public class EffectConditionLink extends ConfigTemplate {
 	private final int conditionId1;
 	private final int linkType;
 
-	public EffectConditionLink(Map<String, Integer> headers, CSVRecord record) {
+	public ConditionConsequenceLink(Map<String, Integer> headers, CSVRecord record) {
 		super(headers, record);
 		cardId = parseInt(record.get(headers.get("card_id")));
 		consequenceNum = parseInt(record.get(headers.get("consequence_num")));
@@ -36,13 +36,12 @@ public class EffectConditionLink extends ConfigTemplate {
 	public boolean test(Map<Integer, Boolean> conditionResults) {
 		boolean flag1 = conditionResults.get(conditionId0);
 		boolean flag2 = conditionResults.get(conditionId1);
-		boolean flag3 = conditionResults.containsKey(conditionId0);
-		boolean flag4 = conditionResults.containsKey(conditionId1);
+		boolean flag3 = conditionResults.containsKey(conditionId1);
 		boolean result = false;
 
 		switch (linkType) {
 			case 0:
-				if (flag4) {
+				if (flag3) {
 					if (flag1 | flag2) {
 						result = true;
 						break;
@@ -55,7 +54,7 @@ public class EffectConditionLink extends ConfigTemplate {
 				}
 				break;
 			case 1:
-				if (flag4) {
+				if (flag3) {
 					if (flag1 & flag2) {
 						result = true;
 						break;
@@ -68,7 +67,7 @@ public class EffectConditionLink extends ConfigTemplate {
 				}
 				break;
 			case 2:
-				if (flag4) {
+				if (flag3) {
 					if (!flag1 || !flag2) {
 						result = true;
 						break;
@@ -81,7 +80,7 @@ public class EffectConditionLink extends ConfigTemplate {
 				}
 				break;
 			case 3:
-				if (flag4) {
+				if (flag3) {
 					if (!flag1 && !flag2) {
 						result = true;
 						break;

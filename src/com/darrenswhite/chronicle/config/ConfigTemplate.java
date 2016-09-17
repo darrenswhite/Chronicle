@@ -1,8 +1,6 @@
 package com.darrenswhite.chronicle.config;
 
 import org.apache.commons.csv.CSVRecord;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.Map;
 
@@ -39,6 +37,14 @@ public abstract class ConfigTemplate {
 		}
 	}
 
+	protected final double parseDoubleOr(String s, double or) {
+		try {
+			return Double.parseDouble(s);
+		} catch (NumberFormatException e) {
+			return or;
+		}
+	}
+
 	protected final <T extends Enum<?>> T parseEnum(Class<? extends T> clazz, String s) {
 		try {
 			return clazz.getEnumConstants()[Integer.parseInt(s)];
@@ -47,7 +53,7 @@ public abstract class ConfigTemplate {
 		}
 	}
 
-	protected final double parseFloat(String s) {
+	protected final float parseFloat(String s) {
 		try {
 			return Float.parseFloat(s);
 		} catch (NumberFormatException e) {
@@ -60,14 +66,6 @@ public abstract class ConfigTemplate {
 			return Integer.parseInt(s);
 		} catch (NumberFormatException e) {
 			return 0;
-		}
-	}
-
-	protected final Object parseJSON(String s) {
-		try {
-			return new JSONParser().parse(s);
-		} catch (ParseException e) {
-			return null;
 		}
 	}
 }

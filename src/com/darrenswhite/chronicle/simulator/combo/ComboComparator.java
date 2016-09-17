@@ -1,6 +1,6 @@
 package com.darrenswhite.chronicle.simulator.combo;
 
-import com.darrenswhite.chronicle.Game;
+import com.darrenswhite.chronicle.game.Game;
 import com.darrenswhite.chronicle.player.Player;
 
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import java.util.Comparator;
 public class ComboComparator implements Comparator<Game> {
 
 	public static final int ARMOUR = 0;
-	public static final int BASE = 1;
+	public static final int ATTACK = 1;
 	public static final int DAMAGE = 2;
 	public static final int GOLD = 3;
 
@@ -41,16 +41,16 @@ public class ComboComparator implements Comparator<Game> {
 
 		switch (priority) {
 			case ARMOUR:
-				compare = Integer.compare(p2.armour, p1.armour);
+				compare = Integer.compare(p2.getArmour(), p1.getArmour());
 				break;
-			case BASE:
-				compare = Integer.compare(p2.attack, p1.attack);
+			case ATTACK:
+				compare = Integer.compare(p2.getBaseAttack(), p1.getBaseAttack());
 				break;
 			case DAMAGE:
 				compare = Integer.compare(g1.getRival().getHealth(), g2.getRival().getHealth());
 				break;
 			case GOLD:
-				compare = Integer.compare(p2.gold, p1.gold);
+				compare = Integer.compare(p2.getGold(), p1.getGold());
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown priority value: " + priority);

@@ -1,5 +1,6 @@
 package com.darrenswhite.chronicle.rewards;
 
+import com.darrenswhite.chronicle.equipment.Weapon;
 import com.darrenswhite.chronicle.player.Player;
 
 /**
@@ -9,7 +10,11 @@ public interface Reward {
 
 	void apply(Player p);
 
+	int getStat();
+
 	Type getType();
+
+	Weapon getWeapon();
 
 	enum Type {
 

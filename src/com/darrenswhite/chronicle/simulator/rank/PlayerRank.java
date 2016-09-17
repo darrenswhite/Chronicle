@@ -22,7 +22,7 @@ public class PlayerRank implements Cloneable {
 
 	public PlayerRank(List<Boolean> matchHistory, int absoluteRating, int elo, int promotionWins, int winStreak) {
 		this.matchHistory = matchHistory;
-		this.bracket = RankedBracket.FromAbsoluteRating(absoluteRating);
+		this.bracket = RankedBracket.fromAbsoluteRating(absoluteRating);
 		this.bracketPoints = absoluteRating - bracket.min;
 		this.elo = elo;
 		this.promotionWins = promotionWins;
@@ -39,7 +39,7 @@ public class PlayerRank implements Cloneable {
 	}
 
 	public int clientBracketPoints() {
-		return RankedBracket.ClientBracketPoints(bracketPoints + bracket.min);
+		return RankedBracket.clientBracketPoints(bracketPoints + bracket.min);
 	}
 
 	public PlayerRank createClone() {
@@ -74,10 +74,6 @@ public class PlayerRank implements Cloneable {
 		return myRating;
 	}
 
-	public boolean isRisingStar() {
-		return winStreak >= 3;
-	}
-
 	public PlayerRank newRankFromMatchResult(MatchOutcome outcome, boolean opponentRisingStar, int opponentElo) {
 		int len = matchHistory.size();
 		List<Boolean> history = new ArrayList<>(matchHistory).subList(Math.max(0, len - 10), len);
@@ -89,7 +85,7 @@ public class PlayerRank implements Cloneable {
 		int promotionWins = this.promotionWins;
 
 		if (bracket == RankedBracket.PLATINUM || bracket == RankedBracket.DIAMOND) {
-			elo = getNewELO(elo, opponentElo, outcome, 20);
+			elo = getNewELO(elo, opponentElo, outcome, K_VALUE);
 		}
 
 		if (outcome != MatchOutcome.WIN) {

@@ -1,8 +1,8 @@
 package com.darrenswhite.chronicle.simulator.combo;
 
-import com.darrenswhite.chronicle.Game;
 import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.config.ConfigProvider;
+import com.darrenswhite.chronicle.game.Game;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -39,16 +39,6 @@ public class ComboSimulator {
 		}
 	}
 
-	public void addCards(Collection<Card> cards) {
-		cards.forEach(this::addCard);
-	}
-
-	public void addCards(Card... cards) {
-		for (Card c : cards) {
-			addCard(c);
-		}
-	}
-
 	private String getCardsString(Collection<Card> cards) {
 		StringBuilder sb = new StringBuilder();
 
@@ -70,7 +60,7 @@ public class ComboSimulator {
 	public static void main(String[] args) {
 		ComboSimulator sim = new ComboSimulator();
 
-		sim.addCards("Rolo the Stout", "Count Draynor", "White Wolf");
+		sim.addCards("Penguin Sheep", "Dragon Warhammer"/*, "Corporeal Beast"*/);
 		sim.simulate();
 
 		/*System.out.println();

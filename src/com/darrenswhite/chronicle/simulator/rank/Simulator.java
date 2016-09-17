@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Darren White
@@ -18,9 +17,9 @@ public class Simulator implements Runnable {
 	private final int runs;
 	private final Prediction prediction;
 	private final AtomicInteger index = new AtomicInteger();
-	private PlayerRank endRank;
-	private double winRate;
-	private int games;
+	private final PlayerRank endRank;
+	private final double winRate;
+	private final int games;
 	private int averageGames;
 	private int averageRank;
 	private double averageWinRate;
@@ -74,6 +73,7 @@ public class Simulator implements Runnable {
 				break;
 			case END_RANK:
 				sb.append("Result,End Rank").append('\n');
+				sb.append("Average,").append(getAverageRank()).append('\n');
 				sb.append("Minimum,").append(getPercentileRank(0.00)).append('\n');
 				sb.append("Maximum,").append(getPercentileRank(1.00)).append('\n');
 				sb.append("10%,").append(getPercentileRank(0.10)).append('\n');
@@ -113,6 +113,7 @@ public class Simulator implements Runnable {
 				sb.append("90%: ").append(getPercentileGames(0.90)).append('\n');
 				break;
 			case END_RANK:
+				sb.append("Average: ").append(getAverageRank()).append('\n');
 				sb.append("Minimum: ").append(getPercentileRank(0.00)).append('\n');
 				sb.append("Maximum: ").append(getPercentileRank(1.00)).append('\n');
 				sb.append("10%: ").append(getPercentileRank(0.90)).append('\n');
@@ -171,7 +172,6 @@ public class Simulator implements Runnable {
 		AtomicInteger totalGames = new AtomicInteger();
 		AtomicInteger totalRank = new AtomicInteger();
 		AtomicReference<Double> totalWinRate = new AtomicReference<>(0D);
-		ReentrantLock lock = new ReentrantLock();
 
 		for (int i = 0; i < runs; i++) {
 			Simulation s = new Simulation(startRank, endRank, winRate, games);

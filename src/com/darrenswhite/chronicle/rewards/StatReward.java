@@ -1,5 +1,6 @@
 package com.darrenswhite.chronicle.rewards;
 
+import com.darrenswhite.chronicle.equipment.Weapon;
 import com.darrenswhite.chronicle.player.Player;
 
 /**
@@ -19,22 +20,32 @@ public class StatReward implements Reward {
 	public void apply(Player p) {
 		switch (type) {
 			case ATTACK:
-				p.attack += amount;
+				p.addAttack(amount);
 				break;
 			case GOLD:
-				p.gold += amount;
+				p.addGold(amount);
 				break;
 			case HEALTH:
 				p.addHealth(amount);
 				break;
 			case ARMOUR:
-				p.armour += amount;
+				p.addArmour(amount);
 				break;
 		}
 	}
 
 	@Override
+	public int getStat() {
+		return amount;
+	}
+
+	@Override
 	public Type getType() {
 		return type;
+	}
+
+	@Override
+	public Weapon getWeapon() {
+		return null;
 	}
 }
