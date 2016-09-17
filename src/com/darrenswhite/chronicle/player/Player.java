@@ -231,8 +231,7 @@ public class Player implements Healable, IEffectTarget {
 	}
 
 	@Override
-	public void applyToProperty(EffectProperty property, EffectAction
-			action, List<CardPredicate> predicates, Weapon weapon) {
+	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, Weapon weapon) {
 		if (property != EffectProperty.WEAPON) {
 			return;
 		}

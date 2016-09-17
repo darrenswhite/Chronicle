@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * // TODO Equipment consequence
+ *
  * @author Darren White
  */
 public class EffectConsequence extends EffectComponent {

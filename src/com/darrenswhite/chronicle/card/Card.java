@@ -64,12 +64,12 @@ public class Card extends ConfigTemplate implements Cloneable, Healable, IEffect
 
 	@Override
 	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, int value, int value2) {
-
+		// TODO
 	}
 
 	@Override
 	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, Weapon weapon) {
-
+		// TODO
 	}
 
 	public Card copy() {

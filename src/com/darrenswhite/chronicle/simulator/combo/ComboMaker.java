@@ -104,7 +104,7 @@ public class ComboMaker implements Runnable {
 
 	@Override
 	public void run() {
-		Legend legend = Legend.ALL;
+		Legend legend = Legend.VANESCULA;
 		int priority = ComboComparator.DAMAGE;
 		int minHealth = 1;
 		int limit = 10;
