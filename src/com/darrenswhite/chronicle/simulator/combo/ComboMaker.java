@@ -6,11 +6,17 @@ import com.darrenswhite.chronicle.card.Rarity;
 import com.darrenswhite.chronicle.card.Source;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
+import com.darrenswhite.chronicle.player.Player;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeSet;
 
 /**
  * @author Darren White
@@ -51,7 +57,7 @@ public class ComboMaker implements Runnable {
 			allCards.add(c);
 
 			if (c.getRarity() != Rarity.SUPER_RARE) {
-				allCards.add(c);
+				allCards.add(c.copy());
 			}
 		});
 
@@ -104,35 +110,59 @@ public class ComboMaker implements Runnable {
 
 	@Override
 	public void run() {
-		Legend legend = Legend.VANESCULA;
-		int priority = ComboComparator.DAMAGE;
-		int minHealth = 1;
-		int limit = 10;
+		Legend legend = Legend.ALL;
 		int numCards = 3;
 
-		TreeSet<Game> games = new TreeSet<>(new ComboComparator(priority, minHealth));
 		Card[] cards = getAllCards(legend);
-		Permutation<Card> permutation = new Permutation<>(cards, numCards, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+		Permutation<Card> permutations = new Permutation<>(cards, numCards, (c1, c2) -> c1.getName().compareTo(c2.getName()));
+		Path path = Paths.get("combos_" + numCards + ".csv");
 
-		for (Card[] combo : permutation) {
-			Game game = executeCombo(combo);
-
-			if (game == null) {
-				continue;
+		try (PrintWriter out = new PrintWriter(Files.newOutputStream(path))) {
+			for (int i = 0; i < numCards; i++) {
+				out.print("card" + i + "\t");
 			}
 
-			games.add(game);
+			out.println("attack0\tgold0\thealth0\tarmour0\tweapon0\tmaxHealth0\tattack1\tgold1\thealth1\tarmour1\tweapon1\tmaxHealth1");
+			out.flush();
 
-			if (games.size() > limit) {
-				games.pollLast();
+			for (Card[] perm : permutations) {
+				Card[] combo = Arrays.copyOf(perm, perm.length);
+
+				Game g = executeCombo(combo);
+
+				if (g != null) {
+					writeGame(g, out);
+				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void writeGame(Game g, PrintWriter out) {
+		StringBuilder sb = new StringBuilder();
+		Player p = g.getPlayer();
+		Player r = g.getRival();
+
+		for (Card card : g.getCards()) {
+			sb.append(card.getName()).append('\t');
 		}
 
-		games.forEach(g -> {
-			System.out.println(getCardsString(g.getCards()));
-			System.out.println("Player: " + g.getPlayer());
-			System.out.println("Rival: " + g.getRival());
-			System.out.println();
-		});
+		sb.append(p.getAttack()).append('\t');
+		sb.append(p.getGold()).append('\t');
+		sb.append(p.getHealth()).append('\t');
+		sb.append(p.getArmour()).append('\t');
+		sb.append(p.getWeapon() != null ? p.getWeapon() : "").append('\t');
+		sb.append(p.getMaxHealth()).append('\t');
+
+		sb.append(r.getAttack()).append('\t');
+		sb.append(r.getGold()).append('\t');
+		sb.append(r.getHealth()).append('\t');
+		sb.append(r.getArmour()).append('\t');
+		sb.append(r.getWeapon() != null ? r.getWeapon() : "").append('\t');
+		sb.append(r.getMaxHealth()).append('\t');
+
+		out.println(sb.toString());
+		out.flush();
 	}
 }

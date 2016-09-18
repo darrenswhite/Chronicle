@@ -44,7 +44,7 @@ public class Simulation implements Runnable {
 	}
 
 	private void reset() {
-		currRank = startRank.createClone();
+		currRank = startRank.copy();
 		winRate = rnd.nextDouble();
 		total = 0;
 		wins = 0;
@@ -57,7 +57,7 @@ public class Simulation implements Runnable {
 			winRate = rnd.nextDouble();
 		}
 
-		currRank = startRank.createClone();
+		currRank = startRank.copy();
 
 		while (shouldRun()) {
 			MatchOutcome outcome = rnd.nextDouble() <= winRate ? MatchOutcome.WIN : MatchOutcome.LOSS;

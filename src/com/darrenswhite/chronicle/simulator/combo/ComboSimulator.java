@@ -60,7 +60,7 @@ public class ComboSimulator {
 	public static void main(String[] args) {
 		ComboSimulator sim = new ComboSimulator();
 
-		sim.addCards("Penguin Sheep", "Dragon Warhammer"/*, "Corporeal Beast"*/);
+		sim.addCards("Captain Rovin", "Death", "Khnum", "To'Kash");
 		sim.simulate();
 
 		/*System.out.println();
@@ -99,7 +99,7 @@ public class ComboSimulator {
 		game.addCards(combos.get(index));
 		game.start();
 
-		System.out.println(getCardsString(game.getCards()));
+		System.out.println(getCardsString(game.getCardHistory()));
 		System.out.println();
 		System.out.println("Player: " + game.getPlayer());
 		System.out.println("Rival: " + game.getRival());

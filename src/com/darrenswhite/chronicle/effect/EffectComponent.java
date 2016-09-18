@@ -11,11 +11,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Darren White
@@ -35,7 +35,7 @@ public abstract class EffectComponent extends ConfigTemplate {
 				Card current = g.getCurrentCard();
 
 				for (CardPredicate cp : predicates) {
-					cp.predicate(current);
+					cp.test(current);
 				}
 
 				effectTargetList.add(current);
@@ -53,7 +53,7 @@ public abstract class EffectComponent extends ConfigTemplate {
 				break;
 			case PREVIOUS:
 			case PREVIOUS_GAME:
-				List<Card> previous = g.getCardHistory(all).collect(Collectors.toList());
+				List<Card> previous = g.getCardHistory(all);
 
 				for (int i = 0; i < previous.size(); i++) {
 					Card c = previous.get(i);
@@ -81,7 +81,7 @@ public abstract class EffectComponent extends ConfigTemplate {
 					EffectEvalInt operand = jobject.containsKey("eval") ? parseEnum(EffectEvalInt.class, String.valueOf(jobject.get("eval"))) : EffectEvalInt.NONE;
 					int num = parseInt(String.valueOf(jobject.get("value")));
 
-					predicates.add(CardPredicate.generate(type, operand, num));
+					predicates.add(Card.generatePredicate(type, operand, num));
 				}
 			}
 		} catch (ParseException e) {
@@ -114,7 +114,7 @@ public abstract class EffectComponent extends ConfigTemplate {
 						return effectTargetList;
 					}
 
-					return getCards(g, slot, numberOfCards, predicates);
+					return new ArrayList<>();
 				}
 
 				effectTargetList.add(g.getRival());

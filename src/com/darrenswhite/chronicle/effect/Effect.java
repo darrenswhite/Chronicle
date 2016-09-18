@@ -4,6 +4,7 @@ import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -110,6 +111,20 @@ public class Effect {
 				return true;
 			default:
 				return false;
+		}
+	}
+
+	public void removeProperty(EffectProperty property) {
+		if (consequences == null) {
+			return;
+		}
+
+		Iterator<EffectConsequence> it = consequences.iterator();
+
+		while (it.hasNext()) {
+			if (it.next().getTargetProperty() == property) {
+				it.remove();
+			}
 		}
 	}
 }

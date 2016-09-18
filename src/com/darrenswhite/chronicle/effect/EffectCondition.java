@@ -10,25 +10,25 @@ import java.util.Map;
 /**
  * @author Darren White
  */
-public class EffectCondition extends EffectComponent {
+public abstract class EffectCondition extends EffectComponent {
 
-	private final int id;
-	private final EffectEvalInt eval;
-	private final EffectTarget target;
-	private final EffectProperty targetProp;
-	private final EffectTarget source;
-	private final EffectProperty sourceProp;
-	private final double multiplier;
-	private final int addend;
-	private final EffectSlot targetSlot;
-	private final EffectSlot sourceSlot;
-	private final EffectSubTarget subTarget;
-	private final EffectSubTarget subSource;
-	private final List<CardPredicate> targetPredicates;
-	private final List<CardPredicate> sourcePredicates;
-	private final int targetSlotCount;
-	private final int sourceSlotCount;
-	private int value;
+	protected final int id;
+	protected final EffectEvalInt eval;
+	protected final EffectTarget target;
+	protected final EffectProperty targetProp;
+	protected final EffectTarget source;
+	protected final EffectProperty sourceProp;
+	protected final double multiplier;
+	protected final int addend;
+	protected final EffectSlot targetSlot;
+	protected final EffectSlot sourceSlot;
+	protected final EffectSubTarget subTarget;
+	protected final EffectSubTarget subSource;
+	protected final List<CardPredicate> targetPredicates;
+	protected final List<CardPredicate> sourcePredicates;
+	protected final int targetSlotCount;
+	protected final int sourceSlotCount;
+	protected int value;
 
 	public EffectCondition(Map<String, Integer> headers, CSVRecord record) {
 		super(headers, record);
@@ -50,47 +50,17 @@ public class EffectCondition extends EffectComponent {
 		sourceSlotCount = parseInt(record.get(headers.get("sourceSlotCount")));
 	}
 
-	public boolean assess(Game g) {
-		List<IEffectTarget> targets = getTargets(g, target, subTarget, targetSlot, targetSlotCount, targetPredicates);
-		List<IEffectTarget> effectTargetList = getTargets(g, source, subSource, sourceSlot, sourceSlotCount, sourcePredicates);
+	public abstract boolean assess(Game g);
 
-		if (source == EffectTarget.SELF) {
-			effectTargetList = targets;
-		}
+	public abstract EffectCondition copy();
 
-		int sourceValue = 0;
-		int targetValue = 0;
-
-		if (effectTargetList.size() > 0) {
-			for (IEffectTarget effectTarget : effectTargetList) {
-				sourceValue += effectTarget.getPropertyValue(sourceProp, source == EffectTarget.SELF ? targetPredicates : sourcePredicates, value);
-			}
-		} else {
-			sourceValue = value;
-		}
-
-		sourceValue = (int) Math.round(multiplier * (double) sourceValue) + addend;
-
-		if (targets.size() > 0) {
-			for (IEffectTarget effectTarget : targets) {
-				targetValue += effectTarget.getPropertyValue(targetProp, targetPredicates, 0);
-			}
-		}
-
-		return Effect.intAssessment(targetValue, eval, sourceValue);
-	}
-
-	public EffectCondition copy() {
-		EffectCondition condition = new EffectCondition(getHeaders(), getRecord());
-		condition.value = value;
-		return condition;
+	public static EffectCondition create(Map<String, Integer> headers, CSVRecord record) {
+		return new EffectConditionInt(headers, record);
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public void setValue(int value) {
-		this.value = value;
-	}
+	public abstract void setValue(int value);
 }

@@ -8,34 +8,34 @@ import com.darrenswhite.chronicle.effect.EffectAction;
 import com.darrenswhite.chronicle.effect.EffectProperty;
 import com.darrenswhite.chronicle.effect.IEffectTarget;
 import com.darrenswhite.chronicle.equipment.Weapon;
-import com.darrenswhite.chronicle.stats.Healable;
+import com.darrenswhite.chronicle.game.Game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * @author Darren White
  */
-public class Player implements Healable, IEffectTarget {
+public class Player implements IEffectTarget {
 
 	private static final int MAX_HAND_SIZE = 10;
+
 	private final List<Card> hand = new ArrayList<>();
+	private final Queue<Integer> temporaryAttacks = new LinkedList<>();
+	private final Random rnd = new Random();
 	private int attack;
 	private int gold;
 	private int armour;
 	private Weapon weapon;
-	private int maxHealth = 30;
-	private int temporaryAttack;
+	private int maxHealth;
 	private int health;
 	private int pvpAttacks;
-	private Random rnd = new Random();
 
-	public Player(int attack, int gold, int health, int armour) {
+	public Player(int attack, int gold, int health, int maxHealth, int armour) {
 		this.attack = attack;
 		this.gold = gold;
 		this.health = health;
+		this.maxHealth = maxHealth;
 		this.armour = armour;
 	}
 
@@ -62,17 +62,17 @@ public class Player implements Healable, IEffectTarget {
 	}
 
 	public void addTemporaryAttack(int amount) {
-		temporaryAttack += amount;
+		temporaryAttacks.offer(amount);
 	}
 
 	@Override
-	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, int value, int value2) {
+	public void applyToProperty(Game g, EffectProperty property, EffectAction action, List<CardPredicate> predicates, int value, int value2) {
 		switch (property) {
 			case RANDOM_CARD_HAND:
 				if (action == EffectAction.ADD) {
 					List<Card> all = ConfigProvider.getInstance().getAll(c -> {
 						for (CardPredicate cardPredicate : predicates) {
-							if (!cardPredicate.predicate(c)) {
+							if (!cardPredicate.test(c)) {
 								return false;
 							}
 						}
@@ -124,11 +124,10 @@ public class Player implements Healable, IEffectTarget {
 			case TEMP_ATTACK:
 				if (action == EffectAction.ADD) {
 					addTemporaryAttack(value);
-					break;
 				}
 				break;
 			case EXHAUST:
-				setTemporaryAttack(-getAttack() + 1);
+				addTemporaryAttack(-getBaseAttack() + 1);
 				break;
 			case HEALTH:
 				switch (action) {
@@ -210,6 +209,9 @@ public class Player implements Healable, IEffectTarget {
 						weapon.durability -= value;
 						break;
 				}
+				if (weapon.durability <= 0) {
+					weapon = null;
+				}
 				break;
 			case WEAPON_ATTACK:
 				if (weapon == null) {
@@ -227,11 +229,21 @@ public class Player implements Healable, IEffectTarget {
 						break;
 				}
 				break;
+			case STRIKE:
+				Player other;
+				if (g.getPlayer() == this) {
+					other = g.getRival();
+				} else {
+					other = g.getPlayer();
+				}
+				other.dealDamage(getTotalAttack());
+				updateWeapon();
+				break;
 		}
 	}
 
 	@Override
-	public void applyToProperty(EffectProperty property, EffectAction action, List<CardPredicate> predicates, Weapon weapon) {
+	public void applyToProperty(Game g, EffectProperty property, EffectAction action, List<CardPredicate> predicates, Weapon weapon) {
 		if (property != EffectProperty.WEAPON) {
 			return;
 		}
@@ -239,7 +251,7 @@ public class Player implements Healable, IEffectTarget {
 		switch (action) {
 			case SET:
 			case ADD:
-				this.weapon = weapon;
+				this.weapon = weapon.copy();
 				break;
 			case REMOVE:
 				this.weapon = null;
@@ -265,7 +277,7 @@ public class Player implements Healable, IEffectTarget {
 	}
 
 	public int getAttack() {
-		return attack + temporaryAttack;
+		return attack + temporaryAttacks.stream().mapToInt(i -> i).sum();
 	}
 
 	public int getBaseAttack() {
@@ -276,108 +288,104 @@ public class Player implements Healable, IEffectTarget {
 		return gold;
 	}
 
-	@Override
 	public int getHealth() {
 		return health;
 	}
 
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
 	@Override
 	public int getPropertyValue(EffectProperty property, List<CardPredicate> predicates, int maxValue) {
-		int val1 = 0;
+		int value = 0;
 
 		switch (property) {
 			case ROUND_TIMER:
 			case INSTANT_CARD_DRAW:
 			case SPECIFIC_CARD_HAND:
 			case SPECIFIC_CARD_DECK:
-				val1 = maxValue;
+				value = maxValue;
 				break;
 			case DECK_SIZE:
-				val1 = maxValue;
+				value = maxValue;
 				break;
 			case HAND_SIZE:
 			case RANDOM_CARD_HAND:
 				if (predicates != null && predicates.size() > 0) {
 					List<Card> all = hand.stream().filter(c -> {
 						for (CardPredicate cardPredicate : predicates) {
-							if (!cardPredicate.predicate(c)) {
+							if (!cardPredicate.test(c)) {
 								return false;
 							}
 						}
 						return true;
 					}).collect(Collectors.toList());
-					val1 = all == null ? 0 : all.size();
+					value = all == null ? 0 : all.size();
 				} else {
-					val1 = hand.size();
+					value = hand.size();
 				}
 				break;
 			case PVP_ATTACK:
-				val1 = pvpAttacks;
+				value = pvpAttacks;
 				break;
 			case RANDOM_CARD_DECK:
-				val1 = maxValue;
+				value = maxValue;
 				break;
 			case DAMAGE:
-				val1 = maxValue;
+				value = maxValue;
 				break;
 			case OVERALL_ATTACK:
-				val1 = attack;
+				value = attack;
 
 				if (weapon != null) {
-					val1 += weapon.attack;
+					value += weapon.attack;
 					break;
 				}
 				break;
 			case HEALTH:
-				val1 = health;
+				value = health;
 				break;
 			case MAX_HEALTH:
-				val1 = maxHealth;
+				value = maxHealth;
 				break;
 			case ATTACK:
-				val1 = attack;
+				value = attack;
 				break;
 			case GOLD:
-				val1 = gold;
+				value = gold;
 				break;
 			case ARMOUR:
-				val1 = armour;
+				value = armour;
 				break;
 			case WEAPON_DURABILITY:
 				if (weapon != null) {
-					val1 = weapon.durability;
-					break;
+					value = weapon.durability;
 				}
 				break;
 			case WEAPON_ATTACK:
 				if (weapon != null) {
-					val1 = weapon.attack;
-					break;
+					value = weapon.attack;
 				}
 				break;
 			case WEAPON_COUNT:
-				val1 = weapon == null ? 0 : 1;
+				value = weapon == null ? 0 : 1;
 				break;
 		}
 
 		if (maxValue <= 0) {
-			return val1;
+			return value;
 		}
 
-		return Math.min(maxValue, val1);
+		return Math.min(maxValue, value);
 	}
 
-	@Override
-	public Weapon getPropertyValueWeapon() {
-		return weapon;
-	}
-
-	public int getTemporaryAttack() {
-		return temporaryAttack;
+	public Queue<Integer> getTemporaryAttacks() {
+		return temporaryAttacks;
 	}
 
 	public int getTotalAttack() {
-		int total = attack + temporaryAttack;
+		int total = getAttack();
 
 		if (weapon != null && weapon.durability > 0) {
 			total += weapon.attack;
@@ -386,19 +394,19 @@ public class Player implements Healable, IEffectTarget {
 		return total;
 	}
 
-	public void removeTemporaryAttack(int amount) {
+	@Override
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	private void removeHealth(int amount) {
 		if (amount > 0) {
-			temporaryAttack -= amount;
+			health -= amount;
 		}
 	}
 
-	@Override
 	public void setHealth(int health) {
 		this.health = Math.min(maxHealth, health);
-	}
-
-	public void setTemporaryAttack(int temporaryAttack) {
-		this.temporaryAttack = temporaryAttack;
 	}
 
 	public void setWeapon(Weapon weapon) {
@@ -428,10 +436,10 @@ public class Player implements Healable, IEffectTarget {
 	}
 
 	public void updateWeapon() {
-		if (weapon != null && weapon.durability > 0) {
+		if (weapon != null) {
 			weapon.durability--;
 
-			if (weapon.durability == 0) {
+			if (weapon.durability <= 0) {
 				weapon = null;
 			}
 		}

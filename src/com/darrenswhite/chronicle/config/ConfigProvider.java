@@ -68,8 +68,9 @@ public class ConfigProvider {
 
 		for (ConditionLink conditionLink : getConditionLinks(cardId)) {
 			effectConditions.stream().filter(c -> c.getId() == conditionLink.getConditionId()).forEach(c -> {
-				c.setValue(conditionLink.getConditionValue());
-				conditions.add(c.copy());
+				EffectCondition condition = c.copy();
+				condition.setValue(conditionLink.getConditionValue());
+				conditions.add(condition);
 			});
 		}
 
@@ -85,9 +86,9 @@ public class ConfigProvider {
 
 		for (ConsequenceLink consequenceLink : getConsequenceLinks(cardId)) {
 			effectConsequences.stream().filter(c -> c.getId() == consequenceLink.getConsequenceId()).forEach(c -> {
-				c.setValue0(consequenceLink.getConsequenceValue0());
-				c.setValue1(consequenceLink.getConsequenceValue1());
-				consequences.add(c.copy());
+				EffectConsequence consequence = c.copy();
+				consequence.setValue(consequenceLink.getConsequenceValue0(), consequenceLink.getConsequenceValue1());
+				consequences.add(consequence);
 			});
 		}
 
@@ -107,8 +108,8 @@ public class ConfigProvider {
 		conditionLinks = parse(Paths.get(CONDITION_LINK_PATH), ConditionLink::new);
 		conditionConsequenceLinks = parse(Paths.get(CONDITION_CONSEQUENCE_LINK_PATH), ConditionConsequenceLink::new);
 		consequenceLinks = parse(Paths.get(CONSEQUENCE_LINK_PATH), ConsequenceLink::new);
-		effectConditions = parse(Paths.get(EFFECT_CONDITIONS_PATH), EffectCondition::new);
-		effectConsequences = parse(Paths.get(EFFECT_CONSEQUENCES_PATH), EffectConsequence::new);
+		effectConditions = parse(Paths.get(EFFECT_CONDITIONS_PATH), EffectCondition::create);
+		effectConsequences = parse(Paths.get(EFFECT_CONSEQUENCES_PATH), EffectConsequence::create);
 		cards = parse(Paths.get(CARDS_PATH), Card::new);
 	}
 

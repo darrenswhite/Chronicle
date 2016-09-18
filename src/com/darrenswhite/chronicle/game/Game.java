@@ -3,9 +3,12 @@ package com.darrenswhite.chronicle.game;
 import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.player.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * @author Darren White
@@ -14,10 +17,10 @@ public class Game {
 
 	private final List<Card> cards = new LinkedList<>();
 	private final List<Card> cardHistory = new LinkedList<>();
-	private final Stack<Integer> temporaryAttack = new Stack<>();
 	private final int base;
 	private final int gold;
 	private final int health;
+	private final int maxHealth;
 	private final int armour;
 	private Player p;
 	private Player rival;
@@ -25,13 +28,14 @@ public class Game {
 	private int decay;
 
 	public Game() {
-		this(2, 0, 30, 0);
+		this(2, 0, 30, 30, 0);
 	}
 
-	public Game(int base, int gold, int health, int armour) {
+	public Game(int base, int gold, int health, int maxHealth, int armour) {
 		this.base = base;
 		this.gold = gold;
 		this.health = health;
+		this.maxHealth = maxHealth;
 		this.armour = armour;
 
 		reset();
@@ -51,8 +55,12 @@ public class Game {
 		cards.forEach(this::addCard);
 	}
 
-	public Stream<Card> getCardHistory(Predicate<Card> filter) {
-		return cardHistory.stream().filter(filter);
+	public List<Card> getCardHistory() {
+		return cardHistory;
+	}
+
+	public List<Card> getCardHistory(Predicate<Card> filter) {
+		return cardHistory.stream().filter(filter).collect(Collectors.toList());
 	}
 
 	public List<Card> getCards() {
@@ -88,17 +96,15 @@ public class Game {
 	}
 
 	public void reset() {
-		p = new Player(base, gold, health, armour);
-		rival = new Player(base, gold, health, armour);
+		p = new Player(base, gold, health, maxHealth, armour);
+		rival = new Player(base, gold, health, maxHealth, armour);
 		cards.clear();
 		cardHistory.clear();
-		temporaryAttack.clear();
 	}
 
 	public void start() {
 		Iterator<Card> it = cards.iterator();
 
-		temporaryAttack.add(0);
 		decay = 0;
 		currentSlot = 0;
 
@@ -111,29 +117,29 @@ public class Game {
 
 			c.encounter(this);
 
+			updateTemporaryAttack();
+
+			cardHistory.add(c);
+
 			if (p.getHealth() <= 0 || rival.getHealth() <= 0) {
 				break;
 			}
 
-			updateTemporaryAttack();
-
-			cardHistory.add(c);
 			currentSlot++;
 		}
 	}
 
 	private void updateTemporaryAttack() {
-		if (p.getTemporaryAttack() != 0) {
-			decay++;
+		if (p.getTemporaryAttacks().size() > 0) {
+			decay += p.getTemporaryAttacks().size();
 		}
 
-		if (decay > 0 && decay % 2 == 0) {
-			p.removeTemporaryAttack(temporaryAttack.pop());
+		if (decay != 0 && decay - 2 >= 0) {
+			do {
+				p.getTemporaryAttacks().poll();
+			} while (p.getTemporaryAttacks().size() > 1);
+
 			decay -= 2;
-		}
-
-		if (p.getTemporaryAttack() != temporaryAttack.lastElement()) {
-			temporaryAttack.push(p.getTemporaryAttack() - temporaryAttack.lastElement());
 		}
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * @author Darren White
  */
-public class PlayerRank implements Cloneable {
+public class PlayerRank {
 
 	public static final int BRONZE_PROMOTION_WINS = 2;
 	public static final int SILVER_PROMOTION_WINS = 3;
@@ -42,12 +42,8 @@ public class PlayerRank implements Cloneable {
 		return RankedBracket.clientBracketPoints(bracketPoints + bracket.min);
 	}
 
-	public PlayerRank createClone() {
-		try {
-			return (PlayerRank) clone();
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
+	public PlayerRank copy() {
+		return new PlayerRank(matchHistory, getAbsoluteRating(), elo, promotionWins, winStreak);
 	}
 
 	public int getAbsoluteRating() {

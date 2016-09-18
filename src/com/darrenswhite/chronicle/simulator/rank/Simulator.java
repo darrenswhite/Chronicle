@@ -168,7 +168,7 @@ public class Simulator implements Runnable {
 
 	@Override
 	public void run() {
-		ExecutorService executor = Executors.newWorkStealingPool();
+		ExecutorService executor = Executors.newCachedThreadPool();
 		AtomicInteger totalGames = new AtomicInteger();
 		AtomicInteger totalRank = new AtomicInteger();
 		AtomicReference<Double> totalWinRate = new AtomicReference<>(0D);
