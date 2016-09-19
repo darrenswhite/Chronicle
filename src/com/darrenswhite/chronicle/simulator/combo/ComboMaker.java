@@ -7,21 +7,32 @@ import com.darrenswhite.chronicle.card.Source;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
 import com.darrenswhite.chronicle.player.Player;
+import org.apache.commons.compress.compressors.CompressorException;
+import org.apache.commons.compress.compressors.CompressorStreamFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @author Darren White
  */
 public class ComboMaker implements Runnable {
+
+	private final int numCards;
+	private final int nThreads;
+
+	public ComboMaker(int numCards, int nThreads) {
+		this.numCards = numCards;
+		this.nThreads = nThreads;
+	}
 
 	private Game executeCombo(Card[] combo) {
 		if (!isComboValid(combo)) {
@@ -103,7 +114,33 @@ public class ComboMaker implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		ComboMaker combos = new ComboMaker();
+		if (args.length == 0) {
+			return;
+		}
+
+		int numCards = Integer.parseInt(args[args.length - 1]);
+		int nThreads = 1;
+
+		for (int i = 0; i < args.length - 1; i++) {
+			String arg = args[i];
+			String value = i < args.length - 1 ? args[i + 1] : null;
+			String value2 = i < args.length - 2 ? args[i + 2] : null;
+
+			switch (arg) {
+				case "-t":
+				case "--num-threads":
+					if (value != null) {
+						nThreads = Integer.parseInt(value);
+						i++;
+					}
+					break;
+				default:
+					System.err.println("Unknown option: " + arg);
+					return;
+			}
+		}
+
+		ComboMaker combos = new ComboMaker(numCards, nThreads);
 
 		combos.run();
 	}
@@ -111,30 +148,64 @@ public class ComboMaker implements Runnable {
 	@Override
 	public void run() {
 		Legend legend = Legend.ALL;
-		int numCards = 3;
 
+		Map<Integer, Future<Game>> queue = new HashMap<>();
 		Card[] cards = getAllCards(legend);
 		Permutation<Card> permutations = new Permutation<>(cards, numCards, (c1, c2) -> c1.getName().compareTo(c2.getName()));
-		Path path = Paths.get("combos_" + numCards + ".csv");
+		Path path = Paths.get("combos_" + numCards + ".csv.bz2");
+		ExecutorService executor = Executors.newFixedThreadPool(nThreads);
 
-		try (PrintWriter out = new PrintWriter(Files.newOutputStream(path))) {
+		try (PrintWriter out = new PrintWriter(new CompressorStreamFactory()
+				.createCompressorOutputStream(CompressorStreamFactory.BZIP2, Files.newOutputStream(path)), true)) {
+			new Thread(() -> {
+				int index = 0;
+
+				while (!executor.isTerminated() || !queue.isEmpty()) {
+					synchronized (queue) {
+						if (!queue.containsKey(index)) {
+							continue;
+						}
+
+						try {
+							Game g = queue.remove(index).get();
+
+							if (g != null) {
+								writeGame(g, out);
+							}
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
+
+						index++;
+					}
+				}
+			}).start();
+
 			for (int i = 0; i < numCards; i++) {
 				out.print("card" + i + "\t");
 			}
 
 			out.println("attack0\tgold0\thealth0\tarmour0\tweapon0\tmaxHealth0\tattack1\tgold1\thealth1\tarmour1\tweapon1\tmaxHealth1");
-			out.flush();
 
-			for (Card[] perm : permutations) {
-				Card[] combo = Arrays.copyOf(perm, perm.length);
+			int i = 0;
 
-				Game g = executeCombo(combo);
+			for (Card[] combo : permutations) {
+				synchronized (queue) {
+					Future<Game> g = executor.submit(() -> executeCombo(combo));
 
-				if (g != null) {
-					writeGame(g, out);
+					queue.put(i++, g);
 				}
 			}
-		} catch (IOException e) {
+
+			executor.shutdown();
+
+			while (!executor.isTerminated()) {
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException ignored) {
+				}
+			}
+		} catch (CompressorException | IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -163,6 +234,5 @@ public class ComboMaker implements Runnable {
 		sb.append(r.getMaxHealth()).append('\t');
 
 		out.println(sb.toString());
-		out.flush();
 	}
 }

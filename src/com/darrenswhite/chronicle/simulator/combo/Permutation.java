@@ -110,6 +110,7 @@ public class Permutation<T> implements Iterable<T[]> {
 			@Override
 			public T[] next() {
 				T[] next = current;
+
 				current = null;
 
 				if (next == null) {
@@ -120,7 +121,7 @@ public class Permutation<T> implements Iterable<T[]> {
 					}
 				}
 
-				return next;
+				return Arrays.copyOf(next, next.length);
 			}
 
 			@Override
