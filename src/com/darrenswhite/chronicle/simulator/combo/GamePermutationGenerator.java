@@ -34,7 +34,6 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 		this.consumer = consumer;
 		executor = Executors.newWorkStealingPool(parallelism);
 		cards = getAllCards(legend);
-		System.out.println(cards.length);
 	}
 
 	private Card[] getAllCards(Legend legend) {
