@@ -4,7 +4,6 @@ import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +26,7 @@ public class ComboSimulator {
 	}
 
 	public void addCard(String name) {
-		Optional<Card> card = ConfigProvider.getInstance().get(c -> c.getName().equalsIgnoreCase(name) ||
+		Optional<Card> card = ConfigProvider.getInstance().getCard(c -> c.getName().equalsIgnoreCase(name) ||
 				c.getName().toLowerCase().startsWith(name.toLowerCase()));
 
 		card.ifPresent(this::addCard);
@@ -37,24 +36,6 @@ public class ComboSimulator {
 		for (String name : names) {
 			addCard(name);
 		}
-	}
-
-	private String getCardsString(Collection<Card> cards) {
-		StringBuilder sb = new StringBuilder();
-
-		for (Card c : cards) {
-			if (sb.length() > 0) {
-				sb.append(" -> ");
-			}
-
-			if (c != null) {
-				sb.append(c.getName());
-			} else {
-				sb.append('_');
-			}
-		}
-
-		return sb.toString();
 	}
 
 	public static void main(String[] args) {
@@ -99,7 +80,7 @@ public class ComboSimulator {
 		game.addCards(combos.get(index));
 		game.start();
 
-		System.out.println(getCardsString(game.getCardHistory()));
+		System.out.println(game.getCardHistoryString());
 		System.out.println();
 		System.out.println("Player: " + game.getPlayer());
 		System.out.println("Rival: " + game.getRival());

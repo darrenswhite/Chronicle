@@ -10,6 +10,7 @@
         <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/commons-csv-1.4/commons-csv-1.4.jar" path-in-jar="/" />
         <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/commons-io-2.5/commons-io-2.5.jar" path-in-jar="/" />
         <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/json_simple-1.1.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/commons-compress-1.12/commons-compress-1.12.jar" path-in-jar="/" />
       </element>
     </root>
   </artifact>

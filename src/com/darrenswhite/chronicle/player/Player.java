@@ -70,7 +70,7 @@ public class Player implements IEffectTarget {
 		switch (property) {
 			case RANDOM_CARD_HAND:
 				if (action == EffectAction.ADD) {
-					List<Card> all = ConfigProvider.getInstance().getAll(c -> {
+					List<Card> all = ConfigProvider.getInstance().getCards(c -> {
 						for (CardPredicate cardPredicate : predicates) {
 							if (!cardPredicate.test(c)) {
 								return false;
@@ -102,7 +102,7 @@ public class Player implements IEffectTarget {
 
 						for (int index = 0; index < cardIDs.length; index++) {
 							if (success[index]) {
-								ConfigProvider.getInstance().get(cardIDs[index]).ifPresent(hand::add);
+								ConfigProvider.getInstance().getCard(cardIDs[index]).ifPresent(hand::add);
 							}
 						}
 					}

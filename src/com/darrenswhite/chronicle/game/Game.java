@@ -63,6 +63,24 @@ public class Game {
 		return cardHistory.stream().filter(filter).collect(Collectors.toList());
 	}
 
+	public String getCardHistoryString() {
+		StringBuilder sb = new StringBuilder();
+
+		for (Card c : cardHistory) {
+			if (sb.length() > 0) {
+				sb.append(" -> ");
+			}
+
+			if (c != null) {
+				sb.append(c.getName());
+			} else {
+				sb.append('_');
+			}
+		}
+
+		return sb.toString();
+	}
+
 	public List<Card> getCards() {
 		return cards;
 	}

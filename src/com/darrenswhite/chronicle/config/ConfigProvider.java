@@ -43,15 +43,15 @@ public class ConfigProvider {
 	private ConfigProvider() {
 	}
 
-	public Optional<Card> get(Predicate<Card> filter) {
+	public Optional<Card> getCard(int cardId) {
+		return getCard(c -> c.getId() == cardId);
+	}
+
+	public Optional<Card> getCard(Predicate<Card> filter) {
 		return cards.stream().filter(filter).findAny();
 	}
 
-	public Optional<Card> get(int cardId) {
-		return cards.stream().filter(c -> c.getId() == cardId).findFirst();
-	}
-
-	public List<Card> getAll(Predicate<Card> filter) {
+	public List<Card> getCards(Predicate<Card> filter) {
 		return cards.stream().filter(filter).collect(Collectors.toList());
 	}
 

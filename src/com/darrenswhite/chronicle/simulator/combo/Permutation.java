@@ -13,20 +13,20 @@ public class Permutation<T> implements Iterable<T[]> {
 	private final T[] permutation;
 	private final T[] elements;
 	private final int n;
-	private final int r;
+	private final int k;
 	private final Comparator<? super T> cmp;
 	private boolean hasNext = true;
 
-	public Permutation(T[] elements, int r) {
-		this(elements, r, null);
+	public Permutation(T[] elements, int k) {
+		this(elements, k, null);
 	}
 
-	public Permutation(T[] elements, int r, Comparator<? super T> cmp) {
+	public Permutation(T[] elements, int k, Comparator<? super T> cmp) {
 		this.elements = Arrays.copyOf(elements, elements.length);
 		this.n = elements.length;
-		this.r = r;
+		this.k = k;
 		this.cmp = cmp;
-		permutation = Arrays.copyOf(elements, r);
+		permutation = Arrays.copyOf(elements, k);
 
 		Arrays.parallelSort(this.elements, cmp);
 
@@ -34,8 +34,8 @@ public class Permutation<T> implements Iterable<T[]> {
 			throw new IllegalArgumentException("Need at least 1 element!");
 		}
 
-		if (r < 0 || r > n) {
-			throw new IllegalArgumentException("0 < r <= n!");
+		if (k < 0 || k > n) {
+			throw new IllegalArgumentException("0 < k <= n!");
 		}
 	}
 
@@ -50,10 +50,10 @@ public class Permutation<T> implements Iterable<T[]> {
 	}
 
 	private void computeNext() {
-		int i = r - 1;
-		int j = r;
+		int i = k - 1;
+		int j = k;
 
-		// Find the smallest j > r - 1 where a[j] > a[r - 1]
+		// Find the smallest j > k - 1 where a[j] > a[k - 1]
 		while (j < n && compare(elements[i], elements[j]) >= 0) {
 			j++;
 		}
@@ -132,7 +132,7 @@ public class Permutation<T> implements Iterable<T[]> {
 	}
 
 	private T[] nextPermuation() {
-		System.arraycopy(elements, 0, permutation, 0, r);
+		System.arraycopy(elements, 0, permutation, 0, k);
 
 		computeNext();
 
