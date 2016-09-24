@@ -72,7 +72,11 @@ public class EffectConsequenceEquipment extends EffectConsequence {
 
 	@Override
 	public EffectConsequenceEquipment copy() {
-		return new EffectConsequenceEquipment(getHeaders(), getRecord());
+		try {
+			return (EffectConsequenceEquipment) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 	@Override

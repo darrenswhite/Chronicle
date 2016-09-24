@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author Darren White
  */
-public abstract class ConfigTemplate {
+public abstract class ConfigTemplate implements Cloneable {
 
 	private final Map<String, Integer> headers;
 	private final CSVRecord record;
@@ -16,6 +16,8 @@ public abstract class ConfigTemplate {
 		this.headers = headers;
 		this.record = record;
 	}
+
+	public abstract ConfigTemplate copy();
 
 	public Map<String, Integer> getHeaders() {
 		return headers;

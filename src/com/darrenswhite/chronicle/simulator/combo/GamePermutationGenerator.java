@@ -6,12 +6,16 @@ import com.darrenswhite.chronicle.card.Rarity;
 import com.darrenswhite.chronicle.card.Source;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
+import com.darrenswhite.chronicle.permutation.PermutationConsumer;
+import com.darrenswhite.chronicle.permutation.PermutationGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -26,17 +30,16 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 	private final ExecutorService executor;
 	private final Card[] cards;
 
-	public GamePermutationGenerator(int numCards, Legend legend,
-	                                PermutationConsumer<Game> consumer,
-	                                int parallelism) {
-		super((c1, c2) -> Integer.compare(c1.getId(), c2.getId()));
+	public GamePermutationGenerator(int numCards, int parallelism, PermutationConsumer<Game> consumer) {
 		this.numCards = numCards;
 		this.consumer = consumer;
 		executor = Executors.newWorkStealingPool(parallelism);
-		cards = getAllCards(legend);
+		cards = getAllCards();
+
+		Arrays.sort(cards, getComparator());
 	}
 
-	private Card[] getAllCards(Legend legend) {
+	private Card[] getAllCards() {
 		List<Card> allCards = new ArrayList<>();
 		List<Card> cards = ConfigProvider.getInstance().getCards(c -> {
 			Source s = c.getSource();
@@ -44,10 +47,7 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 
 			return s != Source.NONE &&
 					s != Source.FROM_EFFECT &&
-					s != Source.PAGE_CARD &&
-					(legend == Legend.ALL ||
-							l == Legend.ALL ||
-							l == legend);
+					s != Source.PAGE_CARD;
 		});
 
 		cards.forEach(c -> {
@@ -59,6 +59,11 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 		});
 
 		return allCards.toArray(new Card[allCards.size()]);
+	}
+
+	@Override
+	public Comparator<? super Card> getComparator() {
+		return (c1, c2) -> Integer.compare(c1.getId(), c2.getId());
 	}
 
 	@Override
@@ -107,9 +112,8 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 		}
 
 		int numCards = Integer.parseInt(args[args.length - 1]);
-		Legend legend = Legend.ALL;
 		int parallelism = 1;
-		Path path = Paths.get("permutations", numCards + ".csv.bz2");
+		Path out = Paths.get("permutations", numCards + ".csv.bz2");
 
 		for (int i = 0; i < args.length - 1; i++) {
 			String arg = args[i];
@@ -117,20 +121,11 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 			String value2 = i < args.length - 2 ? args[i + 2] : null;
 
 			switch (arg) {
-				case "-l":
-				case "--legend":
-					if (value != null) {
-						legend = Legend.valueOf(value);
-						i++;
-					} else {
-						throw new IllegalArgumentException(arg +
-								" option specified with no value!");
-					}
-					break;
 				case "-o":
 				case "--output-file":
 					if (value != null) {
-						path = Paths.get(value);
+						out = Paths.get(value);
+						i++;
 					} else {
 						throw new IllegalArgumentException(arg +
 								" option specified with no value!");
@@ -153,15 +148,16 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 		}
 
 		try {
-			Files.createDirectories(path.getParent());
+			Files.createDirectories(out.getParent());
 		} catch (IOException e) {
 			System.err.println("Unable to create directories: " +
 					e.getMessage());
 			return;
 		}
 
+		PermutationConsumer<Game> consumer = new GamePermutationConsumer(out, numCards);
 		GamePermutationGenerator combos = new GamePermutationGenerator(numCards,
-				legend, new GamePermutationConsumer(path, numCards), parallelism);
+				parallelism, consumer);
 
 		combos.run();
 	}
@@ -176,6 +172,10 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 
 		game.addCards(permutation);
 		game.start();
+
+		if (game.getPlayer().getHealth() <= 0) {
+			return null;
+		}
 
 		return game;
 	}

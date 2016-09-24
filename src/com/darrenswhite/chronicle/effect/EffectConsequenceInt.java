@@ -130,7 +130,11 @@ public class EffectConsequenceInt extends EffectConsequence {
 
 	@Override
 	public EffectConsequenceInt copy() {
-		return new EffectConsequenceInt(getHeaders(), getRecord());
+		try {
+			return (EffectConsequenceInt) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 	@Override

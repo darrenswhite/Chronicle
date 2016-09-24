@@ -48,7 +48,11 @@ public class EffectConditionInt extends EffectCondition {
 
 	@Override
 	public EffectConditionInt copy() {
-		return new EffectConditionInt(getHeaders(), getRecord());
+		try {
+			return (EffectConditionInt) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 	@Override

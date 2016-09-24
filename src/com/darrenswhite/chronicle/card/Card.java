@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * @author Darren White
  */
-public class Card extends ConfigTemplate implements IEffectTarget {
+public class Card extends ConfigTemplate implements Cloneable, IEffectTarget {
 
 	private final List<Reward> rewards = new LinkedList<>();
 	private final int id;
@@ -30,8 +30,8 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 	private final Family family;
 	private final Rarity rarity;
 	private final Source source;
-	private final Effect effect;
 	private final int initialHealth;
+	private Effect effect;
 	private boolean aggressive;
 	private int attack;
 	private int health;
@@ -130,7 +130,13 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 	}
 
 	public Card copy() {
-		return new Card(getHeaders(), getRecord());
+		try {
+			Card copy = (Card) clone();
+			copy.effect = Effect.create(id);
+			return copy;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 	public void encounter(Game g) {
@@ -183,6 +189,20 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 
 	private boolean encounterSupport(Game g) {
 		return g.getPlayer().spendGold(goldCost);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Card card = (Card) o;
+
+		return id == card.id;
 	}
 
 	public static CardPredicate generatePredicate(CardPredicateType type, EffectEvalInt operand, int value) {
@@ -305,38 +325,38 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 			}
 		}
 
-		int val2 = 0;
+		int value = 0;
 
 		switch (property) {
 			case HEALTH:
 				if (getType() == Type.COMBAT) {
-					val2 = health;
+					value = health;
 				} else {
-					val2 = 0;
+					value = 0;
 				}
 				break;
 			case MAX_HEALTH:
-				val2 = -1;
+				value = -1;
 				break;
 			case ATTACK:
 				if (getType() == Type.COMBAT) {
-					val2 = attack;
+					value = attack;
 				} else {
-					val2 = 0;
+					value = 0;
 				}
 				break;
 			case COST:
 				if (getType() == Type.NONCOMBAT) {
-					val2 = goldCost;
+					value = goldCost;
 				} else {
-					val2 = 0;
+					value = 0;
 				}
 				break;
 			case REWARD_ATTACK:
 				if (rewards != null) {
 					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.ATTACK).findFirst();
 					if (reward.isPresent()) {
-						val2 = reward.get().getStat();
+						value = reward.get().getStat();
 					}
 				}
 				break;
@@ -344,7 +364,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 				if (rewards != null) {
 					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.GOLD).findFirst();
 					if (reward.isPresent()) {
-						val2 = reward.get().getStat();
+						value = reward.get().getStat();
 					}
 				}
 				break;
@@ -352,7 +372,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 				if (rewards != null) {
 					Optional<Reward> reward = rewards.stream().filter(c -> c.getType() == Reward.Type.HEALTH).findFirst();
 					if (reward.isPresent()) {
-						val2 = reward.get().getStat();
+						value = reward.get().getStat();
 					}
 				}
 				break;
@@ -361,7 +381,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 					List<Reward> all = rewards.stream().filter(x ->
 							x.getType() == Reward.Type.WEAPON || x.getType() == Reward.Type.ARMOUR).collect(Collectors.toList());
 					if (all != null && all.size() > 0) {
-						val2 = all.size();
+						value = all.size();
 					}
 				}
 				break;
@@ -369,7 +389,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 				if (rewards != null) {
 					List<Reward> all = rewards.stream().filter(x -> x.getType() == Reward.Type.ARMOUR).collect(Collectors.toList());
 					if (all != null && all.size() > 0) {
-						val2 = all.size();
+						value = all.size();
 					}
 				}
 				break;
@@ -379,7 +399,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 					if (reward != null) {
 						Weapon weapon = reward.get().getWeapon();
 						if (weapon != null) {
-							val2 = weapon.durability;
+							value = weapon.durability;
 						}
 					}
 				}
@@ -388,7 +408,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 				if (rewards != null) {
 					List<Reward> all = rewards.stream().filter(x -> x.getType() == Reward.Type.WEAPON).collect(Collectors.toList());
 					if (all != null && all.size() > 0) {
-						val2 = all.size();
+						value = all.size();
 					}
 				}
 				break;
@@ -398,7 +418,7 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 					if (reward != null) {
 						Weapon weapon = reward.get().getWeapon();
 						if (weapon != null) {
-							val2 = weapon.attack;
+							value = weapon.attack;
 						}
 					}
 				}
@@ -409,40 +429,40 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 					if (reward != null) {
 						Weapon weapon = reward.get().getWeapon();
 						if (weapon != null) {
-							val2 = weapon.durability;
+							value = weapon.durability;
 						}
 					}
 				}
 				break;
 			case CARD_ID:
-				val2 = id;
+				value = id;
 				break;
 			case AGGRESSIVE:
-				val2 = aggressive ? 1 : 0;
+				value = aggressive ? 1 : 0;
 				break;
 			case COUNT:
-				val2 = 1;
+				value = 1;
 				break;
 			case EFFECT_EXHAUST:
-				val2 = 0;
+				value = 0;
 				if (effect != null) {
 					for (EffectConsequence consequence : effect.getConsequences()) {
 						if (consequence.getTargetProperty() == EffectProperty.EXHAUST) {
-							val2 = 1;
+							value = 1;
 						}
 					}
 				}
 				break;
 			default:
-				val2 = 0;
+				value = 0;
 				break;
 		}
 
 		if (maxValue <= 0) {
-			return val2;
+			return value;
 		}
 
-		return Math.min(maxValue, val2);
+		return Math.min(maxValue, value);
 	}
 
 	public Rarity getRarity() {
@@ -479,6 +499,11 @@ public class Card extends ConfigTemplate implements IEffectTarget {
 	@Override
 	public Weapon getWeapon() {
 		return null;
+	}
+
+	@Override
+	public int hashCode() {
+		return id;
 	}
 
 	public boolean isAggressive() {

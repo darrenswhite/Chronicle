@@ -1,4 +1,4 @@
-package com.darrenswhite.chronicle.simulator.combo;
+package com.darrenswhite.chronicle.permutation;
 
 import java.util.Comparator;
 import java.util.concurrent.*;
@@ -9,15 +9,8 @@ import java.util.concurrent.*;
 public abstract class PermutationGenerator<T, R> implements Runnable {
 
 	private final BlockingQueue<Future<R>> queue = new LinkedBlockingQueue<>();
-	private final Comparator<? super T> cmp;
 
-	public PermutationGenerator() {
-		this(null);
-	}
-
-	public PermutationGenerator(Comparator<? super T> cmp) {
-		this.cmp = cmp;
-	}
+	public abstract Comparator<? super T> getComparator();
 
 	public abstract PermutationConsumer<R> getConsumer();
 
@@ -32,15 +25,16 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 	@Override
 	public void run() {
 		T[] elements = getElements();
-		int r = getSamples();
+		int k = getSamples();
+		Comparator<? super T> cmp = getComparator();
 		ExecutorService executor = getExecutor();
-		Permutation<T> permutations = new Permutation<>(elements, r, cmp);
+		LexicographicPermutation<T> permutations = new LexicographicPermutation<>(elements, k, cmp);
 
 		startConsumerThread();
 
-		for (T[] combo : permutations) {
+		for (T[] perm : permutations) {
 			synchronized (queue) {
-				queue.offer(executor.submit(() -> process(combo)));
+				queue.offer(executor.submit(() -> process(perm)));
 			}
 		}
 

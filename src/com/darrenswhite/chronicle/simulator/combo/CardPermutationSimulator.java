@@ -11,13 +11,13 @@ import java.util.Optional;
 /**
  * @author Darren White
  */
-public class ComboSimulator {
+public class CardPermutationSimulator {
 
 	private final Game game = new Game();
 	private final List<List<Card>> combos = new LinkedList<>();
 	private int index = 0;
 
-	public ComboSimulator() {
+	public CardPermutationSimulator() {
 		reset();
 	}
 
@@ -39,9 +39,9 @@ public class ComboSimulator {
 	}
 
 	public static void main(String[] args) {
-		ComboSimulator sim = new ComboSimulator();
+		CardPermutationSimulator sim = new CardPermutationSimulator();
 
-		sim.addCards("Captain Rovin", "Death", "Khnum", "To'Kash");
+		sim.addCards("Captain Rovin", "Death", "Khnum", "Skeleton Champion", "Snap Shot", "Snap Shot");
 		sim.simulate();
 
 		/*System.out.println();

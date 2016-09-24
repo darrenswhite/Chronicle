@@ -1,14 +1,13 @@
-package com.darrenswhite.chronicle.simulator.combo;
+package com.darrenswhite.chronicle.permutation;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * @author Darren White
  */
-public class Permutation<T> implements Iterable<T[]> {
+public class LexicographicPermutation<T> implements Iterable<T[]> {
 
 	private final T[] permutation;
 	private final T[] elements;
@@ -17,18 +16,16 @@ public class Permutation<T> implements Iterable<T[]> {
 	private final Comparator<? super T> cmp;
 	private boolean hasNext = true;
 
-	public Permutation(T[] elements, int k) {
+	public LexicographicPermutation(T[] elements, int k) {
 		this(elements, k, null);
 	}
 
-	public Permutation(T[] elements, int k, Comparator<? super T> cmp) {
+	public LexicographicPermutation(T[] elements, int k, Comparator<? super T> cmp) {
 		this.elements = Arrays.copyOf(elements, elements.length);
 		this.n = elements.length;
 		this.k = k;
 		this.cmp = cmp;
 		permutation = Arrays.copyOf(elements, k);
-
-		Arrays.parallelSort(this.elements, cmp);
 
 		if (n < 1) {
 			throw new IllegalArgumentException("Need at least 1 element!");
@@ -100,8 +97,6 @@ public class Permutation<T> implements Iterable<T[]> {
 	public Iterator<T[]> iterator() {
 		return new Iterator<T[]>() {
 
-			private T[] current;
-
 			@Override
 			public boolean hasNext() {
 				return hasNext;
@@ -109,19 +104,7 @@ public class Permutation<T> implements Iterable<T[]> {
 
 			@Override
 			public T[] next() {
-				T[] next = current;
-
-				current = null;
-
-				if (next == null) {
-					next = nextPermuation();
-
-					if (next == null) {
-						throw new NoSuchElementException("No more permutations available");
-					}
-				}
-
-				return Arrays.copyOf(next, next.length);
+				return Arrays.copyOf(nextPermuation(), k);
 			}
 
 			@Override

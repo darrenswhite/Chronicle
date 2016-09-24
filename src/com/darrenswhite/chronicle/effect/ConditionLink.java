@@ -21,6 +21,15 @@ public class ConditionLink extends ConfigTemplate {
 		conditionValue = parseInt(record.get(headers.get("condition_value")));
 	}
 
+	@Override
+	public ConditionLink copy() {
+		try {
+			return (ConditionLink) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
 	public int getCardId() {
 		return cardId;
 	}

@@ -23,6 +23,15 @@ public class ConsequenceLink extends ConfigTemplate {
 		consequenceValue1 = parseInt(record.get(headers.get("consequence_value_1")));
 	}
 
+	@Override
+	public ConsequenceLink copy() {
+		try {
+			return (ConsequenceLink) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
 	public int getCardId() {
 		return cardId;
 	}

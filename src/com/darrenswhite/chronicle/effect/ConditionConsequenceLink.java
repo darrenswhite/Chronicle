@@ -25,6 +25,15 @@ public class ConditionConsequenceLink extends ConfigTemplate {
 		linkType = parseInt(record.get(headers.get("link_type")));
 	}
 
+	@Override
+	public ConditionConsequenceLink copy() {
+		try {
+			return (ConditionConsequenceLink) clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
 	public int getCardId() {
 		return cardId;
 	}

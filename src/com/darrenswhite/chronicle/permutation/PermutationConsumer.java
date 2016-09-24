@@ -1,4 +1,4 @@
-package com.darrenswhite.chronicle.simulator.combo;
+package com.darrenswhite.chronicle.permutation;
 
 import java.util.function.Consumer;
 
