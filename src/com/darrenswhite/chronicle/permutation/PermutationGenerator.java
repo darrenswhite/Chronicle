@@ -8,7 +8,25 @@ import java.util.concurrent.*;
  */
 public abstract class PermutationGenerator<T, R> implements Runnable {
 
-	private final BlockingQueue<Future<R>> queue = new LinkedBlockingQueue<>();
+	public static final int QUEUE_CAPACITY = (int) Math.pow(2, 15);
+
+	private final BlockingQueue<Future<R>> queue = new ArrayBlockingQueue<>(1024);
+
+	private Runnable createConsumerRunnable(PermutationConsumer<R> consumer) {
+		return () -> {
+			while (consumer.isRunning() || !queue.isEmpty()) {
+				try {
+					Future<R> f = queue.take();
+
+					if (f != null) {
+						consumer.accept(f.get());
+					}
+				} catch (ExecutionException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+	}
 
 	public abstract Comparator<? super T> getComparator();
 
@@ -29,50 +47,36 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 		Comparator<? super T> cmp = getComparator();
 		ExecutorService executor = getExecutor();
 		LexicographicPermutation<T> permutations = new LexicographicPermutation<>(elements, k, cmp);
+		PermutationConsumer<R> consumer = getConsumer();
 
-		startConsumerThread();
+		if (!consumer.start()) {
+			System.err.println("Consumer failed to start!");
+			return;
+		}
+
+		Thread t = new Thread(createConsumerRunnable(consumer));
+
+		t.setPriority(Thread.MAX_PRIORITY);
+		t.start();
 
 		for (T[] perm : permutations) {
-			synchronized (queue) {
-				queue.offer(executor.submit(() -> process(perm)));
+			try {
+				queue.put(executor.submit(() -> process(perm)));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 
+		consumer.setRunning(false);
 		executor.shutdown();
 
-		while (!executor.isTerminated()) {
+		while (consumer.isRunning() || !executor.isTerminated()) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException ignored) {
 			}
 		}
-	}
 
-	private void startConsumerThread() {
-		new Thread(() -> {
-			PermutationConsumer<R> consumer = getConsumer();
-			ExecutorService executor = getExecutor();
-
-			if (!consumer.start()) {
-				System.err.println("Consumer start failed!");
-				return;
-			}
-
-			while (!executor.isTerminated() || !queue.isEmpty()) {
-				synchronized (queue) {
-					try {
-						Future<R> f = queue.poll(100, TimeUnit.MILLISECONDS);
-
-						if (f != null) {
-							consumer.accept(f.get());
-						}
-					} catch (ExecutionException | InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			consumer.stop();
-		}).start();
+		consumer.stop();
 	}
 }

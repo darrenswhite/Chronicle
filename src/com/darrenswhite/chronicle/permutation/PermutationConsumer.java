@@ -5,9 +5,24 @@ import java.util.function.Consumer;
 /**
  * @author Darren White
  */
-public interface PermutationConsumer<T> extends Consumer<T> {
+public abstract class PermutationConsumer<T> implements Consumer<T> {
 
-	boolean start();
+	private volatile boolean running = false;
 
-	void stop();
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public boolean start() {
+		running = true;
+
+		return true;
+	}
+
+	public void stop() {
+	}
 }

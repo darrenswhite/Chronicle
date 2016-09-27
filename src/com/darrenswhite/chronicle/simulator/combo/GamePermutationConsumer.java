@@ -15,7 +15,7 @@ import java.nio.file.Path;
 /**
  * @author Darren White
  */
-public class GamePermutationConsumer implements PermutationConsumer<Game> {
+public class GamePermutationConsumer extends PermutationConsumer<Game> {
 
 	private final Path path;
 	private final int numCards;
@@ -61,6 +61,8 @@ public class GamePermutationConsumer implements PermutationConsumer<Game> {
 
 	@Override
 	public boolean start() {
+		super.start();
+
 		try {
 			out = new PrintWriter(new CompressorStreamFactory()
 					.createCompressorOutputStream(CompressorStreamFactory.BZIP2,
@@ -80,6 +82,7 @@ public class GamePermutationConsumer implements PermutationConsumer<Game> {
 
 	@Override
 	public void stop() {
+		super.stop();
 		out.close();
 	}
 }

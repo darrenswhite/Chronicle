@@ -41,7 +41,7 @@ public class CardPermutationSimulator {
 	public static void main(String[] args) {
 		CardPermutationSimulator sim = new CardPermutationSimulator();
 
-		sim.addCards("Captain Rovin", "Death", "Khnum", "Skeleton Champion", "Snap Shot", "Snap Shot");
+		sim.addCards("Count Draynor", "Skeleton Champion", "Shug", "Undead Dragon");
 		sim.simulate();
 
 		/*System.out.println();
