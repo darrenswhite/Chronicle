@@ -10,10 +10,12 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 
 	public static final int QUEUE_CAPACITY = (int) Math.pow(2, 15);
 
-	private final BlockingQueue<Future<R>> queue = new ArrayBlockingQueue<>(1024);
+	private final BlockingQueue<Future<R>> queue = new ArrayBlockingQueue<>(QUEUE_CAPACITY);
 
 	private Runnable createConsumerRunnable(PermutationConsumer<R> consumer) {
 		return () -> {
+			System.out.println("Consumer has been started and is accepting items.");
+
 			while (consumer.isRunning() || !queue.isEmpty()) {
 				try {
 					Future<R> f = queue.take();
@@ -25,6 +27,8 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 					e.printStackTrace();
 				}
 			}
+
+			System.out.println("Consumer stopped and queue empty.");
 		};
 	}
 
@@ -49,15 +53,23 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 		LexicographicPermutation<T> permutations = new LexicographicPermutation<>(elements, k, cmp);
 		PermutationConsumer<R> consumer = getConsumer();
 
+		System.out.println("Starting consumer...");
+
 		if (!consumer.start()) {
-			System.err.println("Consumer failed to start!");
+			System.err.println("Consumer failed to start.");
 			return;
 		}
 
+		System.out.println("Consumer started successfully.");
+
 		Thread t = new Thread(createConsumerRunnable(consumer));
+
+		System.out.println("Starting consumer thread...");
 
 		t.setPriority(Thread.MAX_PRIORITY);
 		t.start();
+
+		System.out.println("Iterating permutations...");
 
 		for (T[] perm : permutations) {
 			try {
@@ -67,7 +79,12 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 			}
 		}
 
-		consumer.setRunning(false);
+		System.out.println("Shutting down consumer...");
+
+		consumer.shutdown();
+
+		System.out.println("Shutting down executor...");
+
 		executor.shutdown();
 
 		while (consumer.isRunning() || !executor.isTerminated()) {
@@ -77,6 +94,10 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 			}
 		}
 
+		System.out.println("Stopping consumer...");
+
 		consumer.stop();
+
+		System.out.println("Consumer stopped successfully.");
 	}
 }

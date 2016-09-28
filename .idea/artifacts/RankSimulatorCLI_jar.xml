@@ -1,14 +1,11 @@
 <component name="ArtifactManager">
-  <artifact build-on-make="true" name="RankSimulatorCLI:jar">
-    <output-path>$PROJECT_DIR$/RankSimulatorCLI</output-path>
-    <root id="root">
-      <element id="archive" name="RankSimulatorCLI.jar">
-        <element id="module-output" name="Chronicle" />
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/RankSimulatorCLI_jar/META-INF/MANIFEST.MF" />
-          <element id="file-copy" path="$PROJECT_DIR$/RankSimulatorCLI/META-INF/MANIFEST.MF" />
-        </element>
+  <artifact type="jar" build-on-make="true" name="RankSimulatorCLI:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RankSimulatorCLI_jar</output-path>
+    <root id="archive" name="RankSimulatorCLI.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/RankSimulatorCLI_jar/META-INF/MANIFEST.MF" />
       </element>
+      <element id="module-output" name="Chronicle" />
     </root>
   </artifact>
 </component>

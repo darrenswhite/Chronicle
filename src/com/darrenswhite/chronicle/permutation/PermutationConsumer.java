@@ -9,12 +9,12 @@ public abstract class PermutationConsumer<T> implements Consumer<T> {
 
 	private volatile boolean running = false;
 
-	public boolean isRunning() {
+	public final boolean isRunning() {
 		return running;
 	}
 
-	public void setRunning(boolean running) {
-		this.running = running;
+	public final void shutdown() {
+		running = false;
 	}
 
 	public boolean start() {

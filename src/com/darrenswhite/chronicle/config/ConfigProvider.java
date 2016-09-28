@@ -8,9 +8,9 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
@@ -104,19 +104,33 @@ public class ConfigProvider {
 		return instance;
 	}
 
-	private void init() {
-		conditionLinks = parse(Paths.get(CONDITION_LINK_PATH), ConditionLink::new);
-		conditionConsequenceLinks = parse(Paths.get(CONDITION_CONSEQUENCE_LINK_PATH), ConditionConsequenceLink::new);
-		consequenceLinks = parse(Paths.get(CONSEQUENCE_LINK_PATH), ConsequenceLink::new);
-		effectConditions = parse(Paths.get(EFFECT_CONDITIONS_PATH), EffectCondition::create);
-		effectConsequences = parse(Paths.get(EFFECT_CONSEQUENCES_PATH), EffectConsequence::create);
-		cards = parse(Paths.get(CARDS_PATH), Card::new);
+	private InputStream getResource(String name) {
+		InputStream in = getClass().getResourceAsStream('/' + name);
+
+		if (in == null) {
+			try {
+				in = Files.newInputStream(Paths.get(name));
+			} catch (IOException e) {
+				return null;
+			}
+		}
+
+		return in;
 	}
 
-	private <T extends ConfigTemplate> List<T> parse(Path path, BiFunction<Map<String, Integer>, CSVRecord, T> f) {
+	private void init() {
+		conditionLinks = parse(getResource(CONDITION_LINK_PATH), ConditionLink::new);
+		conditionConsequenceLinks = parse(getResource(CONDITION_CONSEQUENCE_LINK_PATH), ConditionConsequenceLink::new);
+		consequenceLinks = parse(getResource(CONSEQUENCE_LINK_PATH), ConsequenceLink::new);
+		effectConditions = parse(getResource(EFFECT_CONDITIONS_PATH), EffectCondition::create);
+		effectConsequences = parse(getResource(EFFECT_CONSEQUENCES_PATH), EffectConsequence::create);
+		cards = parse(getResource(CARDS_PATH), Card::new);
+	}
+
+	private <T extends ConfigTemplate> List<T> parse(InputStream in, BiFunction<Map<String, Integer>, CSVRecord, T> f) {
 		List<T> data = new LinkedList<>();
 
-		try (CSVParser parser = new CSVParser(new InputStreamReader(new BOMInputStream(Files.newInputStream(path))), format)) {
+		try (CSVParser parser = new CSVParser(new InputStreamReader(new BOMInputStream(in)), format)) {
 
 			for (CSVRecord r : parser) {
 				try {

@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="CardPermutationSimulator:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/CardPermutationSimulator_jar</output-path>
+    <root id="archive" name="CardPermutationSimulator.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/CardPermutationSimulator_jar/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="Chronicle" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/commons-io-2.5/commons-io-2.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/commons-compress-1.12/commons-compress-1.12.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/commons-csv-1.4/commons-csv-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Lib/json_simple-1.1.jar" path-in-jar="/" />
+      <element id="directory" name="csv">
+        <element id="dir-copy" path="$PROJECT_DIR$/csv" />
+      </element>
+    </root>
+  </artifact>
+</component>

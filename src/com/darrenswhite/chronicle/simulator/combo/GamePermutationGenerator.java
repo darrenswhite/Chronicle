@@ -108,9 +108,11 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 
 	public static void main(String[] args) {
 		if (args.length == 0) {
+			System.err.println("No number of cards parameter specified.");
 			return;
 		}
 
+		long t = System.currentTimeMillis();
 		int numCards = Integer.parseInt(args[args.length - 1]);
 		int parallelism = 1;
 		Path out = Paths.get("permutations", numCards + ".csv.bz2");
@@ -160,6 +162,8 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 				parallelism, consumer);
 
 		combos.run();
+
+		System.out.println("Finished in: " + (System.currentTimeMillis() - t) + "ms.");
 	}
 
 	@Override
