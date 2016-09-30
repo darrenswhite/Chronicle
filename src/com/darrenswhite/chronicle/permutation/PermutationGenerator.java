@@ -61,13 +61,9 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 		}
 
 		System.out.println("Consumer started successfully.");
-
-		Thread t = new Thread(createConsumerRunnable(consumer));
-
 		System.out.println("Starting consumer thread...");
 
-		t.setPriority(Thread.MAX_PRIORITY);
-		t.start();
+		executor.execute(createConsumerRunnable(consumer));
 
 		System.out.println("Iterating permutations...");
 
