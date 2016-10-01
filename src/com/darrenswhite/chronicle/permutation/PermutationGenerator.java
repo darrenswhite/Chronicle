@@ -1,16 +1,17 @@
 package com.darrenswhite.chronicle.permutation;
 
 import java.util.Comparator;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * @author Darren White
  */
 public abstract class PermutationGenerator<T, R> implements Runnable {
 
-	public static final int QUEUE_CAPACITY = (int) Math.pow(2, 15);
-
-	private final BlockingQueue<Future<R>> queue = new ArrayBlockingQueue<>(QUEUE_CAPACITY);
+	private final BlockingQueue<Future<R>> queue = new ArrayBlockingQueue<>(128);
 
 	private Runnable createConsumerRunnable(PermutationConsumer<R> consumer) {
 		return () -> {
@@ -18,12 +19,8 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 
 			while (consumer.isRunning() || !queue.isEmpty()) {
 				try {
-					Future<R> f = queue.take();
-
-					if (f != null) {
-						consumer.accept(f.get());
-					}
-				} catch (ExecutionException | InterruptedException e) {
+					consumer.accept(queue.take());
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -63,7 +60,7 @@ public abstract class PermutationGenerator<T, R> implements Runnable {
 		System.out.println("Consumer started successfully.");
 		System.out.println("Starting consumer thread...");
 
-		executor.execute(createConsumerRunnable(consumer));
+		new Thread(createConsumerRunnable(consumer)).start();
 
 		System.out.println("Iterating permutations...");
 
