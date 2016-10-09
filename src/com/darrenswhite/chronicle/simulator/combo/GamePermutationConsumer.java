@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @author Darren White
@@ -29,15 +27,9 @@ public class GamePermutationConsumer extends PermutationConsumer<Game> {
 	}
 
 	@Override
-	public void accept(Future<Game> f) {
-		try {
-			Game g = f.get();
-
-			if (g != null) {
-				printGame(g);
-			}
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
+	public void accept(Game g) {
+		if (g != null) {
+			printGame(g);
 		}
 	}
 

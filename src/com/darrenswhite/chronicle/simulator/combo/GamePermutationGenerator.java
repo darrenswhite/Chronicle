@@ -6,6 +6,8 @@ import com.darrenswhite.chronicle.card.Rarity;
 import com.darrenswhite.chronicle.card.Source;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
+import com.darrenswhite.chronicle.permutation.LexicographicPermutation;
+import com.darrenswhite.chronicle.permutation.ParallelPermutationGenerator;
 import com.darrenswhite.chronicle.permutation.PermutationConsumer;
 import com.darrenswhite.chronicle.permutation.PermutationGenerator;
 
@@ -14,29 +16,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author Darren White
  */
-public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
+public class GamePermutationGenerator implements Runnable {
 
-	private final BlockingQueue<Future<Game>> queue = new LinkedBlockingQueue<>();
 	private final int numCards;
+	private final int parallelism;
 	private final PermutationConsumer<Game> consumer;
-	private final ExecutorService executor;
-	private final Card[] cards;
 
 	public GamePermutationGenerator(int numCards, int parallelism, PermutationConsumer<Game> consumer) {
 		this.numCards = numCards;
+		this.parallelism = parallelism;
 		this.consumer = consumer;
-		executor = Executors.newWorkStealingPool(parallelism);
-		cards = getAllCards();
-
-		Arrays.sort(cards, getComparator());
 	}
 
 	private Card[] getAllCards() {
@@ -58,32 +55,9 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 			}
 		});
 
+		allCards.sort(Card::compareTo);
+
 		return allCards.toArray(new Card[allCards.size()]);
-	}
-
-	@Override
-	public Comparator<? super Card> getComparator() {
-		return (c1, c2) -> Integer.compare(c1.getId(), c2.getId());
-	}
-
-	@Override
-	public PermutationConsumer<Game> getConsumer() {
-		return consumer;
-	}
-
-	@Override
-	public Card[] getElements() {
-		return cards;
-	}
-
-	@Override
-	public ExecutorService getExecutor() {
-		return executor;
-	}
-
-	@Override
-	public int getSamples() {
-		return numCards;
 	}
 
 	private boolean isPermutationValid(Card[] permutation) {
@@ -166,21 +140,56 @@ public class GamePermutationGenerator extends PermutationGenerator<Card, Game> {
 		System.out.println("Finished in: " + (System.currentTimeMillis() - t) + "ms.");
 	}
 
-	@Override
-	public Game process(Card[] permutation) {
+	private Game process(Card[] permutation) {
 		if (!isPermutationValid(permutation)) {
 			return null;
 		}
 
-		Game game = new Game();
+		Game g = new Game();
 
-		game.addCards(permutation);
-		game.start();
+		g.addCards(permutation);
+		g.start();
 
-		if (game.getPlayer().getHealth() <= 0) {
+		if (g.getPlayer().getHealth() <= 0) {
 			return null;
 		}
 
-		return game;
+		return g;
+	}
+
+	@Override
+	public void run() {
+		Iterator<Card[]> it = new LexicographicPermutation<>(getAllCards(), numCards).iterator();
+		PermutationGenerator<Card, Game> generator;
+
+		if (parallelism > 1) {
+			ExecutorService executor = Executors.newWorkStealingPool(parallelism);
+			generator = new ParallelPermutationGenerator<>(it, this::process, executor, parallelism);
+		} else {
+			generator = new PermutationGenerator<>(it, this::process);
+		}
+
+		System.out.println("Starting consumer...");
+
+		if (!consumer.start()) {
+			System.err.println("Consumer failed to start.");
+			return;
+		}
+
+		System.out.println("Consumer started successfully.");
+
+		System.out.println("Iterating permutations...");
+
+		while (generator.hasNext()) {
+			consumer.accept(generator.next());
+		}
+
+		System.out.println("Iteration completed successfully.");
+
+		System.out.println("Stopping consumer...");
+
+		consumer.stop();
+
+		System.out.println("Consumer stopped successfully.");
 	}
 }

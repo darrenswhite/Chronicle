@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * @author Darren White
  */
-public class Card extends ConfigTemplate implements Cloneable, IEffectTarget {
+public class Card extends ConfigTemplate implements Cloneable, Comparable<Card>, IEffectTarget {
 
 	private final List<Reward> rewards = new LinkedList<>();
 	private final int id;
@@ -127,6 +127,11 @@ public class Card extends ConfigTemplate implements Cloneable, IEffectTarget {
 
 	@Override
 	public void applyToProperty(Game g, EffectProperty property, EffectAction action, List<CardPredicate> predicates, Weapon weapon) {
+	}
+
+	@Override
+	public int compareTo(Card c) {
+		return Integer.compare(getId(), c.getId());
 	}
 
 	public Card copy() {
