@@ -33,7 +33,9 @@ public class ParallelPermutationGenerator<T, R> extends PermutationGenerator<T, 
 						e.printStackTrace();
 					}
 				}
-			} else if (queue.isEmpty() && !it.hasNext() && !executor.isShutdown()) {
+			}
+
+			if (queue.isEmpty() && !it.hasNext() && !executor.isShutdown()) {
 				System.out.println("Shutting down executor...");
 				executor.shutdown();
 			}
