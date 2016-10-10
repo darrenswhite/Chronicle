@@ -6,10 +6,10 @@ import com.darrenswhite.chronicle.card.Rarity;
 import com.darrenswhite.chronicle.card.Source;
 import com.darrenswhite.chronicle.config.ConfigProvider;
 import com.darrenswhite.chronicle.game.Game;
-import com.darrenswhite.chronicle.permutation.LexicographicPermutation;
-import com.darrenswhite.chronicle.permutation.ParallelPermutationGenerator;
-import com.darrenswhite.chronicle.permutation.PermutationConsumer;
-import com.darrenswhite.chronicle.permutation.PermutationGenerator;
+import com.darrenswhite.permutation.LexicographicPermutation;
+import com.darrenswhite.permutation.ParallelPermutationGenerator;
+import com.darrenswhite.permutation.PermutationConsumer;
+import com.darrenswhite.permutation.PermutationGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;

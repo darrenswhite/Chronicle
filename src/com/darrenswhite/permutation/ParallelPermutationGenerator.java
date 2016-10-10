@@ -1,6 +1,7 @@
-package com.darrenswhite.chronicle.permutation;
+package com.darrenswhite.permutation;
 
-import java.util.ArrayList;
+import com.darrenswhite.io.FixedArrayList;
+
 import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -12,31 +13,31 @@ import java.util.function.Function;
  */
 public class ParallelPermutationGenerator<T, R> extends PermutationGenerator<T, R> {
 
-	private final ArrayList<Future<R>> queue;
+	private final FixedArrayList<Future<R>> queue;
 	private final ExecutorService executor;
-	private final int capacity;
 	private R next = null;
 
 	public ParallelPermutationGenerator(Iterator<T[]> it, Function<T[], R> f, PermutationConsumer<R> consumer, ExecutorService executor, int capacity) {
 		super(it, f, consumer);
 		this.executor = executor;
-		queue = new ArrayList<>(this.capacity = capacity);
+		queue = new FixedArrayList<>(capacity);
 	}
 
 	private void consumeQueue() {
-		Iterator<Future<R>> it = queue.iterator();
+		Future<R> f;
 
-		while (it.hasNext()) {
-			Future<R> f = it.next();
+		Iterator<Future<R>> i = queue.iterator();
+		while (i.hasNext()) {
+			f = i.next();
 
 			if (f.isDone()) {
-				it.remove();
-
 				try {
 					consumer.accept(f.get());
-				} catch (InterruptedException | ExecutionException e) {
+				} catch (ExecutionException | InterruptedException e) {
 					e.printStackTrace();
 				}
+
+				i.remove();
 			}
 		}
 	}
@@ -54,8 +55,8 @@ public class ParallelPermutationGenerator<T, R> extends PermutationGenerator<T, 
 
 		System.out.println("Iterating permutations...");
 
-		while (it.hasNext() || !queue.isEmpty()) {
-			if (queue.size() < capacity) {
+		while (it.hasNext()) {
+			if (!queue.isFull()) {
 				T[] next = it.next();
 				queue.add(executor.submit(() -> f.apply(next)));
 			}

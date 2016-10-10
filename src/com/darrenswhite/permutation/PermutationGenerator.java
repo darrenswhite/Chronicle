@@ -1,4 +1,4 @@
-package com.darrenswhite.chronicle.permutation;
+package com.darrenswhite.permutation;
 
 import java.util.Iterator;
 import java.util.function.Function;

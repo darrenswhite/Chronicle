@@ -2,8 +2,8 @@ package com.darrenswhite.chronicle.simulator.combo;
 
 import com.darrenswhite.chronicle.card.Card;
 import com.darrenswhite.chronicle.game.Game;
-import com.darrenswhite.chronicle.permutation.PermutationConsumer;
 import com.darrenswhite.chronicle.player.Player;
+import com.darrenswhite.permutation.PermutationConsumer;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 
