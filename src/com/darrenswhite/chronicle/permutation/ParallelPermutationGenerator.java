@@ -1,8 +1,10 @@
 package com.darrenswhite.chronicle.permutation;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
 /**
@@ -10,55 +12,79 @@ import java.util.function.Function;
  */
 public class ParallelPermutationGenerator<T, R> extends PermutationGenerator<T, R> {
 
+	private final ArrayList<Future<R>> queue;
 	private final ExecutorService executor;
-	private final BlockingQueue<Future<R>> queue;
-	private Future<R> next = null;
+	private final int capacity;
+	private R next = null;
 
-	public ParallelPermutationGenerator(Iterator<T[]> it, Function<T[], R> f, ExecutorService executor, int capacity) {
-		super(it, f);
+	public ParallelPermutationGenerator(Iterator<T[]> it, Function<T[], R> f, PermutationConsumer<R> consumer, ExecutorService executor, int capacity) {
+		super(it, f, consumer);
 		this.executor = executor;
-		queue = new ArrayBlockingQueue<>(capacity);
+		queue = new ArrayList<>(this.capacity = capacity);
 	}
 
-	@Override
-	public boolean hasNext() {
-		while (next == null && (it.hasNext() || !queue.isEmpty() || !executor.isTerminated())) {
-			next = queue.poll();
+	private void consumeQueue() {
+		Iterator<Future<R>> it = queue.iterator();
 
-			if (next == null) {
-				if (it.hasNext()) {
-					try {
-						queue.put(executor.submit(() -> f.apply(it.next())));
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+		while (it.hasNext()) {
+			Future<R> f = it.next();
+
+			if (f.isDone()) {
+				it.remove();
+
+				try {
+					consumer.accept(f.get());
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
 				}
 			}
-
-			if (queue.isEmpty() && !it.hasNext() && !executor.isShutdown()) {
-				System.out.println("Shutting down executor...");
-				executor.shutdown();
-			}
 		}
-
-		return next != null;
 	}
 
 	@Override
-	public R next() {
-		Future<R> n = next;
+	public void run() {
+		System.out.println("Starting consumer...");
 
-		if (n != null) {
-			next = null;
-		} else {
-			throw new NoSuchElementException();
+		if (!consumer.start()) {
+			System.err.println("Consumer failed to start.");
+			return;
 		}
 
-		try {
-			return n.get();
-		} catch (ExecutionException | InterruptedException e) {
-			e.printStackTrace();
-			return null;
+		System.out.println("Consumer started successfully.");
+
+		System.out.println("Iterating permutations...");
+
+		while (it.hasNext() || !queue.isEmpty()) {
+			if (queue.size() < capacity) {
+				T[] next = it.next();
+				queue.add(executor.submit(() -> f.apply(next)));
+			}
+
+			consumeQueue();
 		}
+
+		while (!queue.isEmpty()) {
+			consumeQueue();
+		}
+
+		System.out.println("Iteration completed successfully.");
+
+		System.out.println("Shutting down executor service...");
+
+		executor.shutdown();
+
+		while (!executor.isTerminated()) {
+			try {
+				Thread.sleep(500L);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("Stopping consumer...");
+
+		consumer.stop();
+
+		System.out.println("Consumer stopped successfully.");
 	}
 }

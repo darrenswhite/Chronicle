@@ -33,7 +33,7 @@ public class GamePermutationConsumer extends PermutationConsumer<Game> {
 		}
 	}
 
-	private void printGame(Game g) {
+	private synchronized void printGame(Game g) {
 		StringBuilder sb = new StringBuilder();
 		Player p = g.getPlayer();
 		Player r = g.getRival();

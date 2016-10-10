@@ -164,32 +164,11 @@ public class GamePermutationGenerator implements Runnable {
 
 		if (parallelism > 1) {
 			ExecutorService executor = Executors.newWorkStealingPool(parallelism);
-			generator = new ParallelPermutationGenerator<>(it, this::process, executor, parallelism);
+			generator = new ParallelPermutationGenerator<>(it, this::process, consumer, executor, parallelism);
 		} else {
-			generator = new PermutationGenerator<>(it, this::process);
+			generator = new PermutationGenerator<>(it, this::process, consumer);
 		}
 
-		System.out.println("Starting consumer...");
-
-		if (!consumer.start()) {
-			System.err.println("Consumer failed to start.");
-			return;
-		}
-
-		System.out.println("Consumer started successfully.");
-
-		System.out.println("Iterating permutations...");
-
-		while (generator.hasNext()) {
-			consumer.accept(generator.next());
-		}
-
-		System.out.println("Iteration completed successfully.");
-
-		System.out.println("Stopping consumer...");
-
-		consumer.stop();
-
-		System.out.println("Consumer stopped successfully.");
+		generator.run();
 	}
 }
