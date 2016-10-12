@@ -42,14 +42,14 @@ public class GamePermutationConsumer extends PermutationConsumer<Game> {
 			sb.append(card.getId()).append('\t');
 		}
 
-		sb.append(p.getAttack()).append('\t');
+		sb.append(p.getBaseAttack()).append('\t');
 		sb.append(p.getGold()).append('\t');
 		sb.append(p.getHealth()).append('\t');
 		sb.append(p.getArmour()).append('\t');
 		sb.append(p.getWeapon() != null ? p.getWeapon() : "").append('\t');
 		sb.append(p.getMaxHealth()).append('\t');
 
-		sb.append(r.getAttack()).append('\t');
+		sb.append(r.getBaseAttack()).append('\t');
 		sb.append(r.getGold()).append('\t');
 		sb.append(r.getHealth()).append('\t');
 		sb.append(r.getArmour()).append('\t');

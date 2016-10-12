@@ -3,11 +3,12 @@ package com.darrenswhite.permutation;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author Darren White
  */
-public class LexicographicPermutation<T> implements Iterable<T[]> {
+public class LexicographicPermutation<T> implements Iterator<T[]> {
 
 	private final T[] permutation;
 	private final T[] elements;
@@ -94,24 +95,17 @@ public class LexicographicPermutation<T> implements Iterable<T[]> {
 	}
 
 	@Override
-	public Iterator<T[]> iterator() {
-		return new Iterator<T[]>() {
+	public boolean hasNext() {
+		return hasNext;
+	}
 
-			@Override
-			public boolean hasNext() {
-				return hasNext;
-			}
+	@Override
+	public T[] next() {
+		if (!hasNext) {
+			throw new NoSuchElementException();
+		}
 
-			@Override
-			public T[] next() {
-				return Arrays.copyOf(nextPermuation(), k);
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-		};
+		return Arrays.copyOf(nextPermuation(), k);
 	}
 
 	private T[] nextPermuation() {
@@ -120,6 +114,11 @@ public class LexicographicPermutation<T> implements Iterable<T[]> {
 		computeNext();
 
 		return permutation;
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException();
 	}
 
 	private void reverseRightOf(int start) {

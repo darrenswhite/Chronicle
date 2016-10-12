@@ -102,7 +102,7 @@ public class Player implements IEffectTarget {
 
 						for (int index = 0; index < cardIDs.length; index++) {
 							if (success[index]) {
-								ConfigProvider.getInstance().getCard(cardIDs[index]).ifPresent(hand::add);
+								hand.add(ConfigProvider.getInstance().getCard(cardIDs[index]));
 							}
 						}
 					}
@@ -127,7 +127,7 @@ public class Player implements IEffectTarget {
 				}
 				break;
 			case EXHAUST:
-				addTemporaryAttack(-getBaseAttack() + 1);
+				addTemporaryAttack(-attack + 1);
 				break;
 			case HEALTH:
 				switch (action) {
@@ -276,12 +276,14 @@ public class Player implements IEffectTarget {
 		return armour;
 	}
 
-	public int getAttack() {
-		return attack + temporaryAttacks.stream().mapToInt(i -> i).sum();
-	}
-
 	public int getBaseAttack() {
-		return attack;
+		int base = attack;
+
+		for (int i : temporaryAttacks) {
+			base += i;
+		}
+
+		return base;
 	}
 
 	public int getGold() {
@@ -385,7 +387,7 @@ public class Player implements IEffectTarget {
 	}
 
 	public int getTotalAttack() {
-		int total = getAttack();
+		int total = getBaseAttack();
 
 		if (weapon != null && weapon.durability > 0) {
 			total += weapon.attack;
